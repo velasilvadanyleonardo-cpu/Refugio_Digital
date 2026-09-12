@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugio Digital - Rescate y Adopción</title>
+    <!-- Tailwind CSS para diseño rápido y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Navegación -->
+    <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center">🐾 Refugio Digital</h1>
+            <ul class="flex space-x-4 text-sm font-medium">
+                <li><a href="#adopta" class="hover:text-indigo-200 transition">Adoptar</a></li>
+                <li><a href="#reporta" class="hover:text-indigo-200 transition">Reportar</a></li>
+                <li><a href="#premium" class="bg-yellow-400 text-indigo-900 px-3 py-1 rounded-full hover:bg-yellow-300 transition">Premium</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sección: Adopción -->
+    <section id="adopta" class="container mx-auto p-6 mt-4">
+        <h2 class="text-3xl font-bold mb-6 text-center text-indigo-700">Encuentra a tu nuevo amigo</h2>
+        <!-- Contenedor donde JavaScript inyectará las mascotas -->
+        <div id="mascotas-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- Sección: Reportar -->
+    <section id="reporta" class="bg-white py-12 mt-12 border-t">
+        <div class="container mx-auto p-6 max-w-lg">
+            <h2 class="text-2xl font-bold mb-4 text-center text-red-500">🚨 Reportar Animal en Riesgo</h2>
+            <form id="form-reporte" class="flex flex-col space-y-4">
+                <!-- Se ajustó el placeholder para un ejemplo más local -->
+                <input type="text" id="ubicacion" placeholder="Ubicación (Ej: Plaza de Armas, Iquitos)" class="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                <textarea id="descripcion" placeholder="Describe el estado del animal..." class="border p-3 rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
+                <button type="submit" class="bg-red-500 text-white p-3 rounded-lg font-bold hover:bg-red-600 transition">Enviar Reporte (Gratis)</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Sección: Premium -->
+    <section id="premium" class="bg-indigo-900 text-white py-12 mt-12">
+        <div class="container mx-auto p-6 text-center max-w-2xl">
+            <h2 class="text-3xl font-bold mb-4 text-yellow-400">Premium 💛</h2>
+            <p class="mb-6 text-indigo-200">Apoya a los refugios con $3 al mes. Recibe actualizaciones en tiempo real de los animales rescatados. El 70% va directo al refugio.</p>
+            <button class="bg-yellow-400 text-indigo-900 px-6 py-3 rounded-full font-bold text-lg hover:bg-yellow-300 transition">Obtener Premium</button>
+        </div>
+    </section>
+
+    <!-- Lógica de la App (defer asegura que el HTML cargue primero) -->
+    <script src="app.js" defer></script>
+</body>
+</html>
+// app.js
+
+// 1. Datos simulados de la base de datos
+const mascotas = [
+    {
+        id: 1,
+        nombre: "Luna",
+        especie: "Perro",
+        edad: "2 años",
+        img: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80",
+        urgente: false
+    },
+    {
+        id: 2,
+        nombre: "Milo",
+        especie: "Gato",
+        edad: "6 meses",
+        img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80",
+        urgente: true
+    },
+    {
+        id: 3,
+        nombre: "Rex",
+        especie: "Perro",
+        edad: "5 años",
+        img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80",
+        urgente: false
+    }
+];
+
+// 2. Función altamente optimizada para renderizar la interfaz
+function cargarMascotas() {
+    const grid = document.getElementById('mascotas-grid');
+    grid.innerHTML = ''; 
+
+    // Optimización: DocumentFragment inyecta todo de una vez, mejorando el rendimiento
+    const fragmentoDOM = document.createDocumentFragment();
+
+    mascotas.forEach(mascota => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300";
+        
+        const badgeUrgente = mascota.urgente ? `<span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow">Caso Urgente</span>` : '';
+
+        card.innerHTML = `
+            <div class="relative">
+                <img src="${mascota.img}" alt="Foto de ${mascota.nombre}" class="w-full h-48 object-cover" loading="lazy">
+                ${badgeUrgente}
+            </div>
+            <div class="p-5">
+                <h3 class="text-xl font-bold text-gray-800">${mascota.nombre}</h3>
+                <p class="text-sm text-gray-500 mb-4">${mascota.especie} • ${mascota.edad}</p>
+                <div class="flex justify-between items-center">
+                    <button class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-semibold hover:bg-indigo-200 transition">Adoptar</button>
+                    <!-- Se actualizó el botón a Premium -->
+                    <button class="text-yellow-500 hover:text-yellow-600 font-medium text-sm">💖 Premium</button>
+                </div>
+            </div>
+        `;
+        fragmentoDOM.appendChild(card);
+    });
+    
+    // Insertamos todas las tarjetas de un solo golpe
+    grid.appendChild(fragmentoDOM);
+}
+
+// 3. Manejo de eventos del formulario
+document.getElementById('form-reporte').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    const ubicacion = document.getElementById('ubicacion').value.trim();
+    const descripcion = document.getElementById('descripcion').value.trim();
+    
+    // Validación básica para evitar envíos vacíos
+    if(ubicacion && descripcion) {
+        alert(`¡Gracias! Hemos registrado la alerta en: ${ubicacion}. Los rescatistas de la zona han sido notificados.`);
+        this.reset(); 
+    }
+});
+
+// 4. Inicializar la app
+document.addEventListener('DOMContentLoaded', cargarMascotas);
+# 🐾 Refugio Digital
+
+Plataforma MVP diseñada para conectar animales en abandono o riesgo con adoptantes, refugios y padrinos.
+
+## Características Principales
+* **Adopción Rápida:** Galería optimizada de mascotas en busca de un hogar seguro.
+* **Sistema de Reportes:** Formulario geo-referenciado para alertar sobre animales en la calle (100% gratuito).
+* **Función Premium:** Sistema ético de suscripción mensual para apoyar financieramente el trabajo de los refugios.
+
+## Tecnologías y Optimización
+* **HTML5 Semántico:** Estructura limpia y accesible.
+* **Tailwind CSS (CDN):** Interfaz moderna y 100% responsiva (Mobile-First) sin tiempos de compilación.
+* **JavaScript (Vanilla):** Lógica sin dependencias, utilizando `DocumentFragment` para renderizado de alto rendimiento en el DOM y carga diferida de scripts (`defer`).
