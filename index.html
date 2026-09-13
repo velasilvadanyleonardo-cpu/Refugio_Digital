@@ -4,52 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refugio Digital - Rescate y Adopción</title>
-    <!-- Tailwind CSS para diseño rápido y responsivo -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
     <!-- Navegación -->
     <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
             <h1 class="text-2xl font-bold flex items-center">🐾 Refugio Digital</h1>
-            <ul class="flex space-x-4 text-sm font-medium">
+            <ul class="flex space-x-4 text-sm font-medium mt-2 md:mt-0">
                 <li><a href="#adopta" class="hover:text-indigo-200 transition">Adoptar</a></li>
                 <li><a href="#reporta" class="hover:text-indigo-200 transition">Reportar</a></li>
-                <li><a href="#premium" class="bg-yellow-400 text-indigo-900 px-3 py-1 rounded-full hover:bg-yellow-300 transition">Premium</a></li>
+                <li><a href="#veterinarias" class="hover:text-indigo-200 transition">Veterinarias</a></li>
+                <li><a href="#perfiles" class="bg-white text-indigo-900 px-3 py-1 rounded-full hover:bg-gray-200 transition">Crear Perfil</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Sección: Adopción -->
+    <!-- Sección: Adopción (100% Libre) -->
     <section id="adopta" class="container mx-auto p-6 mt-4">
         <h2 class="text-3xl font-bold mb-6 text-center text-indigo-700">Encuentra a tu nuevo amigo</h2>
-        <!-- Contenedor donde JavaScript inyectará las mascotas -->
+        <!-- Contenedor dinámico -->
         <div id="mascotas-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
     </section>
 
+    <!-- Sección: Veterinarias Aliadas -->
+    <section id="veterinarias" class="container mx-auto p-6 mt-8">
+        <h2 class="text-3xl font-bold mb-6 text-center text-teal-700">🏥 Directorio de Veterinarias</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <!-- Veterinaria 1 -->
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-teal-500">
+                <h3 class="text-xl font-bold">Clínica Veterinaria Central</h3>
+                <p class="text-gray-600 text-sm mt-1">📍 Av. Próceres de la Independencia, SJL - Atención 24h</p>
+                <p class="text-gray-500 text-sm mt-2">Especialistas en rescate, rayos X y emergencias.</p>
+                <button class="mt-3 text-teal-600 font-semibold text-sm hover:underline">Ver Contacto</button>
+            </div>
+            <!-- Veterinaria 2 -->
+            <div class="bg-white p-5 rounded-xl shadow border-l-4 border-teal-500">
+                <h3 class="text-xl font-bold">VetSalud Lima</h3>
+                <p class="text-gray-600 text-sm mt-1">📍 Cercado de Lima - Cirugía y Vacunación</p>
+                <p class="text-gray-500 text-sm mt-2">Descuentos especiales para animales rescatados de la calle.</p>
+                <button class="mt-3 text-teal-600 font-semibold text-sm hover:underline">Ver Contacto</button>
+            </div>
+        </div>
+    </section>
+
     <!-- Sección: Reportar -->
-    <section id="reporta" class="bg-white py-12 mt-12 border-t">
+    <section id="reporta" class="bg-white py-12 mt-12 border-t border-b">
         <div class="container mx-auto p-6 max-w-lg">
             <h2 class="text-2xl font-bold mb-4 text-center text-red-500">🚨 Reportar Animal en Riesgo</h2>
             <form id="form-reporte" class="flex flex-col space-y-4">
-                <input type="text" id="ubicacion" placeholder="Ubicación (Ej: Plaza de Armas, Iquitos)" class="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                <input type="text" id="ubicacion" placeholder="Ubicación (Ej: Cerca de la estación del tren)" class="border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 <textarea id="descripcion" placeholder="Describe el estado del animal..." class="border p-3 rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
                 <button type="submit" class="bg-red-500 text-white p-3 rounded-lg font-bold hover:bg-red-600 transition">Enviar Reporte (Gratis)</button>
             </form>
         </div>
     </section>
 
-    <!-- Sección: Premium -->
-    <section id="premium" class="bg-indigo-900 text-white py-12 mt-12">
-        <div class="container mx-auto p-6 text-center max-w-2xl">
-            <h2 class="text-3xl font-bold mb-4 text-yellow-400">Premium 💛</h2>
-            <p class="mb-6 text-indigo-200">Apoya a los refugios con $3 al mes. Recibe actualizaciones en tiempo real de los animales rescatados. El 70% va directo al refugio.</p>
-            <button class="bg-yellow-400 text-indigo-900 px-6 py-3 rounded-full font-bold text-lg hover:bg-yellow-300 transition">Obtener Premium</button>
+    <!-- Sección: Creación de Perfiles -->
+    <section id="perfiles" class="bg-gray-100 py-12">
+        <div class="container mx-auto p-6 max-w-4xl">
+            <h2 class="text-3xl font-bold mb-8 text-center text-indigo-700">Únete a la Comunidad</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Perfil Normal -->
+                <div class="bg-white p-8 rounded-xl shadow-md flex flex-col items-center text-center">
+                    <div class="text-4xl mb-4">👤</div>
+                    <h3 class="text-2xl font-bold mb-2">Perfil Normal</h3>
+                    <p class="text-gray-600 mb-6 text-sm">Ideal para personas que buscan adoptar un amigo de cuatro patas, reportar animales o postularse como hogar temporal.</p>
+                    <button class="mt-auto bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-indigo-700 w-full transition">Crear Cuenta Normal</button>
+                </div>
+
+                <!-- Perfil Profesional -->
+                <div class="bg-white p-8 rounded-xl shadow-md flex flex-col items-center text-center border-2 border-indigo-600 relative">
+                    <span class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">Para Organizaciones</span>
+                    <div class="text-4xl mb-4">🏥</div>
+                    <h3 class="text-2xl font-bold mb-2 text-indigo-700">Perfil Profesional</h3>
+                    <p class="text-gray-600 mb-6 text-sm">Exclusivo para refugios, médicos veterinarios y ONGs. Permite publicar animales, recibir donaciones y gestionar fichas médicas.</p>
+                    <button class="mt-auto bg-indigo-100 text-indigo-700 px-6 py-3 rounded-lg font-bold hover:bg-indigo-200 w-full transition">Registro Profesional</button>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Lógica de la App (defer asegura que el HTML cargue primero) -->
+    <!-- Lógica de la App -->
     <script src="app.js" defer></script>
 </body>
 </html>
