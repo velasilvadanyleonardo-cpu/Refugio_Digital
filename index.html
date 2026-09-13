@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Paws & Swipe - App de Rescate y Adopción</title>
+    <title>Refugio Digital - Adopción y Rescate</title>
     <style>
-        /* --- VARIABLES Y RESET --- */
         :root {
-            --primary: #FF7043; /* Naranja amigable */
+            --primary: #FF7043;
             --primary-dark: #F4511E;
             --bg-color: #F5F7FA;
             --text-main: #2D3748;
@@ -18,592 +17,217 @@
             --border: #E2E8F0;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #CBD5E0; display: flex; justify-content: center; align-items: center; height: 100vh; }
 
-        body {
-            background-color: #CBD5E0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        /* --- CONTENEDOR MÓVIL --- */
         #app-container {
-            width: 100%;
-            max-width: 414px; /* Tamaño de un iPhone Max */
-            height: 100vh;
-            max-height: 896px;
-            background: var(--bg-color);
-            position: relative;
-            overflow: hidden;
+            width: 100%; max-width: 414px; height: 100vh; max-height: 896px;
+            background: var(--bg-color); position: relative; overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-
         @media (min-width: 415px) {
-            #app-container {
-                height: 90vh;
-                border-radius: 40px;
-                border: 8px solid #1A202C;
-            }
+            #app-container { height: 90vh; border-radius: 40px; border: 8px solid #1A202C; }
         }
 
-        /* --- PANTALLA DE LOGIN --- */
         #login-screen {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 40px 20px;
-            background: var(--white);
-            text-align: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100%; padding: 40px 20px; background: var(--white); text-align: center;
         }
-
-        .logo-box {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
+        .logo-box { font-size: 60px; margin-bottom: 20px; }
         h1 { color: var(--primary); font-size: 28px; margin-bottom: 10px; }
         .subtitle { color: var(--text-muted); margin-bottom: 40px; font-size: 15px; }
 
-        .form-group { width: 100%; margin-bottom: 30px; text-align: left; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+        .form-group { width: 100%; margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-main); font-size: 14px; }
         .form-group select, .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.3s;
+            width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; outline: none; transition: border-color 0.3s;
         }
-        .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--primary);
+        .form-group select:focus, .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
+
+        .btn-main {
+            background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px;
+            width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 6px rgba(255, 112, 67, 0.2);
         }
 
-        .btn-google {
-            background: #4285F4;
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 4px 6px rgba(66, 133, 244, 0.2);
-            transition: transform 0.1s;
-        }
-        .btn-google:active { transform: scale(0.98); }
-
-        /* --- APP PRINCIPAL Y VISTAS --- */
         #main-app { display: none; height: 100%; flex-direction: column; }
-        
         .header {
-            padding: 20px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 20px;
-            color: var(--text-main);
-            z-index: 10;
+            padding: 20px; background: var(--white); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 18px; color: var(--text-main); z-index: 10;
         }
 
-        .view {
-            display: none;
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            padding-bottom: 100px; /* Espacio para barra inferior */
-            animation: fadeIn 0.3s ease;
-        }
+        .view { display: none; flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; animation: fadeIn 0.3s ease; }
         .active-view { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- ZONA DE ADOPCIÓN (SWIPE) --- */
-        .card-container {
-            position: relative;
-            height: 400px;
-            width: 100%;
-            perspective: 1000px;
-        }
-        
+        .card-container { position: relative; height: 380px; width: 100%; }
         .pet-card {
-            background: var(--white);
-            border-radius: 20px;
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            background: var(--white); border-radius: 20px; height: 100%; width: 100%; position: absolute;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08); display: flex; flex-direction: column; overflow: hidden;
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
-
-        .pet-image-placeholder {
-            flex: 1;
-            background: #E2E8F0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 50px;
-        }
-
+        .pet-image-placeholder { flex: 1; background: #E2E8F0; display: flex; align-items: center; justify-content: center; font-size: 60px; }
         .pet-info { padding: 20px; }
-        .pet-info h2 { margin-bottom: 5px; font-size: 24px; color: var(--text-main); }
-        .pet-info p { color: var(--text-muted); font-size: 14px; }
+        .pet-info h2 { margin-bottom: 5px; font-size: 22px; color: var(--text-main); }
+        .pet-info p { color: var(--text-muted); font-size: 13px; line-height: 1.4; }
 
-        .action-buttons {
-            display: flex;
-            justify-content: space-evenly;
-            margin-top: 25px;
-        }
+        .action-buttons { display: flex; justify-content: space-evenly; margin-top: 20px; }
         .action-btn {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: none;
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            background: var(--white);
-            transition: transform 0.1s;
+            width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 26px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); background: var(--white); transition: transform 0.1s;
         }
         .action-btn:active { transform: scale(0.9); }
         .btn-pass { color: var(--danger); }
         .btn-like { color: var(--success); }
 
-        /* --- ZONA DE REPORTES --- */
-        .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(255, 112, 67, 0.3);
-        }
+        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-sm { background: var(--primary); color: var(--white); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; }
 
         .report-item {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--danger);
+            background: var(--white); border-radius: 16px; padding: 16px; margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid var(--danger);
         }
-        .report-tag {
-            display: inline-block;
-            background: #FED7D7;
-            color: #C53030;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        .report-item h4 { margin-bottom: 6px; font-size: 16px; }
+        .report-tag { display: inline-block; background: #FED7D7; color: #C53030; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-bottom: 8px; }
+        .report-item h4 { margin-bottom: 6px; font-size: 15px; color: var(--text-main); }
         .report-item p { color: var(--text-muted); font-size: 13px; margin-bottom: 10px; line-height: 1.4; }
         .report-meta { display: flex; justify-content: space-between; font-size: 11px; color: #A0AEC0; }
 
-        /* --- VENTANA MODAL (FORMULARIO REPORTE) --- */
         .modal-overlay {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 100;
-            justify-content: center;
-            align-items: flex-end; /* Aparece desde abajo */
+            display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: flex-end;
         }
         .modal-content {
-            background: var(--white);
-            width: 100%;
-            border-radius: 24px 24px 0 0;
-            padding: 24px;
-            animation: slideUp 0.3s ease;
-            max-height: 85%;
-            overflow-y: auto;
+            background: var(--white); width: 100%; border-radius: 24px 24px 0 0; padding: 24px;
+            animation: slideUp 0.3s ease; max-height: 85%; overflow-y: auto;
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center; }
         .close-btn { background: none; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; }
 
-        /* --- BARRA INFERIOR (BOTTOM NAV) --- */
+        .upload-area {
+            border: 2px dashed var(--primary); border-radius: 12px; padding: 20px; text-align: center;
+            background: #FFF5F2; color: var(--primary-dark); font-weight: bold; cursor: pointer; margin-bottom: 20px; font-size: 13px;
+        }
+        .upload-area input { display: none; }
+
         #bottom-nav {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: var(--white);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0 20px 0;
-            border-top: 1px solid var(--border);
-            z-index: 50;
+            position: absolute; bottom: 0; width: 100%; background: var(--white);
+            display: flex; justify-content: space-around; padding: 12px 0 20px 0; border-top: 1px solid var(--border); z-index: 50;
         }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .nav-item i { font-style: normal; font-size: 24px; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.6; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; }
+        .nav-item i { font-style: normal; font-size: 22px; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { color: var(--primary); }
         .nav-item.active i { filter: grayscale(0%); opacity: 1; }
-
-        /* --- BOTÓN DE SUBIR FOTO --- */
-        .upload-area {
-            border: 2px dashed var(--primary);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            background: #FFF5F2;
-            color: var(--primary-dark);
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .upload-area input[type="file"] { display: none; }
     </style>
 </head>
 <body>
 
     <div id="app-container">
-        
-        <!-- 1. PANTALLA DE INICIO DE SESIÓN -->
+        <!-- LOGIN -->
         <div id="login-screen">
             <div class="logo-box">🐾</div>
-            <h1>Paws & Swipe</h1>
-            <p class="subtitle">Adopta, rescata y salva vidas.</p>
+            <h1>Refugio Digital</h1>
+            <p class="subtitle">Conectando rescatistas y adoptantes.</p>
             
             <div class="form-group">
-                <label>Selecciona tu tipo de perfil para empezar:</label>
+                <label>Tipo de Cuenta</label>
                 <select id="user-role">
-                    <option value="normal">👤 Perfil Normal (Adoptar y Reportar)</option>
-                    <option value="profesional">🏥 Perfil Profesional (Refugios / Veterinarias)</option>
+                    <option value="normal">👤 Ciudadano / Adoptante</option>
+                    <option value="profesional">🏥 Refugio / Rescatista</option>
                 </select>
             </div>
 
-            <button class="btn-google" onclick="iniciarSesion()">
-                <span style="background: white; border-radius: 50%; padding: 2px 6px; color: #4285F4; font-weight: 900;">G</span> 
-                Continuar con Google
-            </button>
-            <p style="margin-top: 20px; font-size: 12px; color: var(--text-muted);">
-                Para mantener la comunidad segura, requerimos inicio de sesión verificado.
-            </p>
+            <button class="btn-main" onclick="iniciarSesion()">Ingresar a la Plataforma</button>
         </div>
 
-        <!-- 2. APLICACIÓN PRINCIPAL -->
+        <!-- APP PRINCIPAL -->
         <div id="main-app">
-            
-            <div class="header" id="app-header">
-                Paws & Swipe
-                <span style="font-size: 24px;">🐾</span>
-            </div>
+            <div class="header" id="app-header">Refugio Digital <span>🐾</span></div>
 
-            <!-- VISTA: ADOPTAR -->
+            <!-- ADOPTAR -->
             <div id="view-adoptar" class="view">
-                <div class="card-container" id="tarjeta-mascota">
-                    <!-- Tarjeta generada dinámicamente -->
-                    <div class="pet-card">
-                        <div class="pet-image-placeholder">🐕</div>
-                        <div class="pet-info">
-                            <h2>Max, 2 años</h2>
-                            <p>Mestizo • Tamaño Mediano</p>
-                            <p style="margin-top: 10px; font-size: 13px;">Rescatado hace un mes. Muy juguetón y lleno de energía. Se lleva bien con otros perros. Vacunado y desparasitado.</p>
-                        </div>
-                    </div>
+                <div class="card-container" id="tarjeta-contenedor">
+                    <!-- Renderizado dinámico desde app.js -->
                 </div>
-
-                <div class="action-buttons">
-                    <button class="action-btn btn-pass" onclick="siguienteMascota('izq')">✖</button>
-                    <button class="action-btn btn-like" onclick="siguienteMascota('der')">💚</button>
+                <div class="action-buttons" id="controles-swipe">
+                    <button class="action-btn btn-pass" onclick="manejarSwipe('izq')">✖</button>
+                    <button class="action-btn btn-like" onclick="manejarSwipe('der')">💚</button>
                 </div>
             </div>
 
-            <!-- VISTA: REPORTES -->
+            <!-- REPORTES -->
             <div id="view-reportes" class="view">
                 <div class="report-header">
                     <div>
-                        <h2 style="font-size: 20px; color: var(--text-main);">Alertas de la Comunidad</h2>
-                        <p style="font-size: 13px; color: var(--text-muted);">Ayuda a los que no tienen voz</p>
+                        <h2 style="font-size: 18px; color: var(--text-main);">Alertas Activas</h2>
+                        <p style="font-size: 12px; color: var(--text-muted);">Zona: San Juan de Lurigancho y Lima</p>
                     </div>
-                    <button class="btn-primary" onclick="abrirModalReporte()">+ Reportar</button>
+                    <button class="btn-sm" onclick="abrirModal()">+ Reportar</button>
                 </div>
-
-                <!-- Feed de Reportes -->
-                <div id="feed-reportes">
-                    <!-- Reporte de prueba 1 -->
-                    <div class="report-item">
-                        <span class="report-tag">Posible Abandono</span>
-                        <h4>📍 Parque Zonal Huiracocha (SJL)</h4>
-                        <p>Perrito mestizo color caramelo, parece desorientado. Está cerca de la puerta principal, no tiene collar.</p>
-                        <div class="report-meta">
-                            <span>Hace 15 min</span>
-                            <span>📸 Ver Foto adjunta</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Reporte de prueba 2 -->
-                    <div class="report-item" style="border-left-color: #DD6B20;">
-                        <span class="report-tag" style="background: #FEEBC8; color: #C05621;">Asustado</span>
-                        <h4>📍 Estación San Carlos</h4>
-                        <p>Gatito pequeño negro, maullando mucho debajo de los torniquetes de la estación. Alguien que pueda acercarse por favor.</p>
-                        <div class="report-meta">
-                            <span>Hace 42 min</span>
-                            <span>📸 Ver Foto adjunta</span>
-                        </div>
-                    </div>
-                </div>
+                <div id="feed-reportes"></div>
             </div>
 
-            <!-- VISTA: PUBLICAR (Exclusiva) -->
+            <!-- PUBLICAR (Solo Profesionales) -->
             <div id="view-publicar" class="view">
-                <h2 style="margin-bottom: 5px;">Publicar en Adopción</h2>
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Sube el perfil de una mascota lista para encontrar hogar. Herramienta exclusiva para rescatistas.</p>
+                <h2 style="margin-bottom: 5px; font-size: 20px;">Publicar Mascota</h2>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Añade un rescatado al sistema de adopción.</p>
                 
-                <div class="form-group">
-                    <label>Nombre de la mascota</label>
-                    <input type="text" placeholder="Ej. Firulais">
+                <div class="form-group"><label>Nombre</label><input type="text" id="pub-nombre" placeholder="Ej. Toby"></div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex:1;"><label>Especie</label><select id="pub-especie"><option>Perro</option><option>Gato</option></select></div>
+                    <div class="form-group" style="flex:1;"><label>Edad</label><input type="text" id="pub-edad" placeholder="Ej. 1 año"></div>
                 </div>
-                
-                <div style="display: flex; gap: 15px;">
-                    <div class="form-group" style="flex: 1;">
-                        <label>Especie</label>
-                        <select><option>Perro</option><option>Gato</option><option>Otro</option></select>
-                    </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label>Edad Aprox.</label>
-                        <input type="text" placeholder="Ej. 6 meses">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Descripción y Requisitos</label>
-                    <textarea rows="4" placeholder="Describe su personalidad y qué tipo de hogar necesita..."></textarea>
-                </div>
-                
-                <button class="btn-google" style="background: var(--primary);" onclick="alert('Mascota publicada en la zona de adopción con éxito')">
-                    Subir Mascota
-                </button>
+                <div class="form-group"><label>Historia / Descripción</label><textarea id="pub-desc" rows="3" placeholder="Detalles..."></textarea></div>
+                <button class="btn-main" onclick="publicarMascota()">Guardar y Publicar</button>
             </div>
 
-            <!-- VISTA: PERFIL -->
+            <!-- PERFIL -->
             <div id="view-perfil" class="view">
                 <div style="text-align: center; padding: 20px 0;">
-                    <div style="font-size: 60px; margin-bottom: 10px;">👤</div>
-                    <h2 id="nombre-usuario">Hola, Dany</h2>
-                    <span id="etiqueta-rol" style="background: #E2E8F0; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; color: var(--text-muted);">
-                        Usuario
-                    </span>
+                    <div style="font-size: 50px; margin-bottom: 10px;">👤</div>
+                    <h2 id="perfil-nombre" style="font-size: 20px;">Usuario</h2>
+                    <span id="perfil-rol-badge" style="background: #E2E8F0; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; color: var(--text-muted);">Rol</span>
                 </div>
-                
                 <div class="form-group" style="margin-top: 30px;">
-                    <button class="btn-google" style="background: #EDF2F7; color: var(--danger); box-shadow: none;" onclick="cerrarSesion()">
-                        Cerrar Sesión
-                    </button>
+                    <button class="btn-main" style="background: #EDF2F7; color: var(--danger); box-shadow: none;" onclick="cerrarSesion()">Cerrar Sesión</button>
                 </div>
             </div>
 
-            <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+            <!-- NAV INFERIOR -->
             <div id="bottom-nav">
-                <div class="nav-item active" id="btn-nav-adoptar" onclick="cambiarVista('view-adoptar', this, 'Adopta')">
-                    <i>🐶</i>Adoptar
-                </div>
-                <div class="nav-item" id="btn-nav-reportes" onclick="cambiarVista('view-reportes', this, 'Reportes')">
-                    <i>🚨</i>Reportar
-                </div>
-                <!-- Botón oculto por defecto -->
-                <div class="nav-item" id="nav-publicar" style="display:none;" onclick="cambiarVista('view-publicar', this, 'Publicar')">
-                    <i>📝</i>Publicar
-                </div>
-                <div class="nav-item" id="btn-nav-perfil" onclick="cambiarVista('view-perfil', this, 'Mi Perfil')">
-                    <i>👤</i>Perfil
-                </div>
+                <div class="nav-item active" onclick="cambiarVista('view-adoptar', this, 'Adopta')"><i>🐶</i>Adoptar</div>
+                <div class="nav-item" onclick="cambiarVista('view-reportes', this, 'Reportes')"><i>🚨</i>Reportar</div>
+                <div class="nav-item" id="nav-item-publicar" style="display:none;" onclick="cambiarVista('view-publicar', this, 'Publicar')"><i>📝</i>Publicar</div>
+                <div class="nav-item" onclick="cambiarVista('view-perfil', this, 'Perfil')"><i>👤</i>Perfil</div>
             </div>
-
         </div>
-        
-        <!-- MODAL PARA CREAR REPORTE (Flota sobre la app) -->
+
+        <!-- MODAL REPORTE -->
         <div class="modal-overlay" id="modal-reporte">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 style="color: var(--danger);">🚨 Nuevo Reporte</h3>
-                    <button class="close-btn" onclick="cerrarModalReporte()">×</button>
+                    <h3 style="color: var(--danger); font-size: 18px;">🚨 Nuevo Reporte</h3>
+                    <button class="close-btn" onclick="cerrarModal()">×</button>
                 </div>
-                
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">La foto es obligatoria para evitar confusiones.</p>
-                
                 <label class="upload-area">
                     <input type="file" accept="image/*">
-                    📸 Toca aquí para tomar foto
+                    📸 Adjuntar fotografía del animal
                 </label>
-
+                <div class="form-group"><label>Ubicación / Referencia (SJL)</label><input type="text" id="rep-ubi" placeholder="Ej. Estación Bayóvar"></div>
                 <div class="form-group">
-                    <label>Ubicación exacta / Referencia</label>
-                    <input type="text" id="rep-ubi" placeholder="Ej: Av. Próceres, frente al metro">
-                </div>
-
-                <div class="form-group">
-                    <label>Estado del animal</label>
+                    <label>Estado</label>
                     <select id="rep-estado">
-                        <option>Herido / Emergencia</option>
+                        <option>Herido / Urgente</option>
                         <option>Asustado / Desorientado</option>
                         <option>Posible Abandono</option>
                     </select>
                 </div>
-
-                <button class="btn-google" style="background: var(--danger);" onclick="enviarReporte()">
-                    Enviar Alerta a la Comunidad
-                </button>
+                <button class="btn-main" style="background: var(--danger);" onclick="enviarReporte()">Enviar Alerta</button>
             </div>
         </div>
-
     </div>
 
-    <!-- --- JAVASCRIPT: LÓGICA Y ANIMACIONES --- -->
-    <script>
-        // Variables globales
-        let rolUsuario = 'normal';
-
-        // 1. Iniciar Sesión
-        function iniciarSesion() {
-            rolUsuario = document.getElementById('user-role').value;
-            
-            // Configurar perfil dinámico
-            document.getElementById('nombre-usuario').innerText = "Hola, Dany";
-            
-            if(rolUsuario === 'profesional') {
-                document.getElementById('nav-publicar').style.display = 'flex';
-                document.getElementById('etiqueta-rol').innerText = "Rescatista Verificado";
-                document.getElementById('etiqueta-rol').style.background = "#C6F6D5";
-                document.getElementById('etiqueta-rol').style.color = "#276749";
-            } else {
-                document.getElementById('nav-publicar').style.display = 'none';
-                document.getElementById('etiqueta-rol').innerText = "Ciudadano / Adoptante";
-                document.getElementById('etiqueta-rol').style.background = "#E2E8F0";
-                document.getElementById('etiqueta-rol').style.color = "#4A5568";
-            }
-
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            cambiarVista('view-adoptar', document.getElementById('btn-nav-adoptar'), 'Adopta un amigo');
-        }
-
-        // 2. Cerrar Sesión
-        function cerrarSesion() {
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex';
-        }
-
-        // 3. Navegación
-        function cambiarVista(idVista, elementoMenu, tituloHeader) {
-            // Cambiar titulo
-            document.getElementById('app-header').innerHTML = `${tituloHeader} <span style="font-size: 24px;">🐾</span>`;
-
-            // Ocultar vistas
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
-            // Mostrar vista
-            document.getElementById(idVista).classList.add('active-view');
-
-            // Actualizar botones
-            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-            elementoMenu.classList.add('active');
-        }
-
-        // 4. Lógica de la Ventana Modal de Reportes
-        function abrirModalReporte() {
-            document.getElementById('modal-reporte').style.display = 'flex';
-        }
-
-        function cerrarModalReporte() {
-            document.getElementById('modal-reporte').style.display = 'none';
-        }
-
-        function enviarReporte() {
-            const ubi = document.getElementById('rep-ubi').value || "Ubicación desconocida";
-            const estado = document.getElementById('rep-estado').value;
-
-            // Crear una nueva tarjeta HTML de reporte
-            const nuevoHTML = `
-                <div class="report-item" style="border-left-color: #E53E3E; animation: fadeIn 0.5s;">
-                    <span class="report-tag" style="background: #FED7D7; color: #C53030;">${estado}</span>
-                    <h4>📍 ${ubi}</h4>
-                    <p>Reporte ciudadano subido recientemente. Pendiente de verificación fotográfica.</p>
-                    <div class="report-meta">
-                        <span>Hace 1 min</span>
-                        <span>📸 Ver Foto adjunta</span>
-                    </div>
-                </div>
-            `;
-            
-            // Insertar al inicio del feed
-            document.getElementById('feed-reportes').insertAdjacentHTML('afterbegin', nuevoHTML);
-            
-            // Cerrar modal y limpiar
-            document.getElementById('rep-ubi').value = '';
-            cerrarModalReporte();
-            alert('¡Reporte emitido! Gracias por ayudar a la comunidad.');
-        }
-
-        // 5. Animación de Swipe de Mascotas
-        function siguienteMascota(direccion) {
-            const tarjeta = document.querySelector('.pet-card');
-            
-            // Animación CSS temporal
-            if(direccion === 'izq') {
-                tarjeta.style.transform = 'translateX(-120%) rotate(-15deg)';
-            } else {
-                tarjeta.style.transform = 'translateX(120%) rotate(15deg)';
-            }
-            tarjeta.style.opacity = '0';
-
-            // Resetear tarjeta para simular una nueva después de 400ms
-            setTimeout(() => {
-                // Aquí podrías cambiar el nombre y datos de la mascota
-                tarjeta.querySelector('h2').innerText = "Luna, 1 año";
-                tarjeta.querySelector('.pet-image-placeholder').innerText = "🐈";
-                
-                // Quitar la animación para que vuelva al centro
-                tarjeta.style.transition = 'none';
-                tarjeta.style.transform = 'translateX(0) rotate(0)';
-                tarjeta.style.opacity = '1';
-                
-                // Devolverle la propiedad transition para el próximo swipe
-                setTimeout(() => tarjeta.style.transition = 'transform 0.4s ease, opacity 0.4s ease', 50);
-            }, 400);
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
