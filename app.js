@@ -37,13 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarAdopciones();
     renderizarReportes();
     
-    // Si ya había una sesión guardada, ingresa directo
     if(usuarioActual) {
         aplicarSesionUsuario();
     }
 });
 
-// Control de Google Login Modal
 function abrirGoogleModal() {
     document.getElementById('google-modal').style.display = 'flex';
 }
@@ -92,25 +90,25 @@ function aplicarSesionUsuario() {
     }
 
     document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('main-app').style.display = window.innerWidth >= 768 ? 'flex' : 'flex';
+    document.getElementById('main-app').style.display = 'flex';
+    document.getElementById('app-container').classList.add('logged-in');
 }
 
 function cerrarSesion() {
     localStorage.removeItem('refugio_usuario');
     usuarioActual = null;
+    document.getElementById('app-container').classList.remove('logged-in');
     document.getElementById('main-app').style.display = 'none';
     document.getElementById('login-screen').style.display = 'flex';
 }
 
-// Navegación Computadora (Sidebar)
-function cambiarVistaDesktop(idVista, elementoMenu, titulo) {
+function cambiarVistaDesktop(idVista, elementoMenu) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
     document.getElementById(idVista).classList.add('active-view');
     document.querySelectorAll('.desktop-nav-item').forEach(b => b.classList.remove('active'));
     elementoMenu.classList.add('active');
 }
 
-// Navegación Celular (Bottom Bar)
 function cambiarVistaMobile(idVista, elementoMenu, titulo) {
     document.getElementById('app-header').innerHTML = `${titulo} <span>🐾</span>`;
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
@@ -119,7 +117,6 @@ function cambiarVistaMobile(idVista, elementoMenu, titulo) {
     elementoMenu.classList.add('active');
 }
 
-// 1. Catálogo Libre de Adopción
 function renderizarAdopciones() {
     const feed = document.getElementById('feed-adoptar');
     
@@ -149,7 +146,6 @@ function renderizarAdopciones() {
     `).join('');
 }
 
-// 2. Renderizado de Reportes
 function renderizarReportes() {
     const feed = document.getElementById('feed-reportes');
     feed.innerHTML = reportes.map(r => `
@@ -175,7 +171,6 @@ function mostrarNombreArchivo(input) {
     }
 }
 
-// 3. Envío de Reporte
 function enviarReporte() {
     const ubi = document.getElementById('rep-ubi').value || "Ubicación en SJL";
     const estado = document.getElementById('rep-estado').value;
@@ -211,7 +206,6 @@ function enviarReporte() {
     }
 }
 
-// 4. Publicar Mascota
 function publicarMascota() {
     const nombre = document.getElementById('pub-nombre').value;
     const especie = document.getElementById('pub-especie').value;
