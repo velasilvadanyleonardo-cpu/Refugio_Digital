@@ -1,36 +1,101 @@
-<!-- PÁGINA DE BIENVENIDA (VIBRANTE Y HERMOSA) -->
-<div id="landing-screen">
-    <div>
-        <div class="landing-top-badge">✨ SJL & Lima, Perú</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugio Digital - SJL & Lima, Perú</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
         
-        <div class="landing-hero-box">
-            <div class="landing-emojis-row">
-                <span>🐶</span><span>🐱</span><span>❤️</span>
+        <!-- PANTALLA DE BIENVENIDA (VIBRANTE Y CALIDA) -->
+        <div id="landing-screen">
+            <div>
+                <div class="landing-top-badge">✨ SJL & Lima, Perú</div>
+                
+                <div class="landing-hero-box">
+                    <div class="landing-emojis-row">
+                        <span>🐶</span><span>🐱</span><span>❤️</span>
+                    </div>
+                    <h1>Refugio Digital</h1>
+                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal o ayuda a un peludito en situación de rescate.</p>
+                </div>
+
+                <div class="landing-features-grid">
+                    <div class="landing-feat-card">
+                        <span>🏡</span>
+                        <h4>Adopta con Amor</h4>
+                        <p>Dale un hogar seguro a perritos y gatitos.</p>
+                    </div>
+                    <div class="landing-feat-card">
+                        <span>🚨</span>
+                        <h4>Reporta Alertas</h4>
+                        <p>Salva vidas avisando de casos en tu zona.</p>
+                    </div>
+                </div>
             </div>
-            <h1>Refugio Digital</h1>
-            <p>Unimos corazones con patitas. Encuentra a tu compañero ideal o ayuda a un peludito en situación de rescate.</p>
+
+            <div class="landing-actions-vibrant">
+                <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">
+                    ✨ Comenzar Ahora con Google
+                </button>
+                <button class="btn-secundario" onclick="explorarSinCuenta()">
+                    👀 Explorar sin cuenta
+                </button>
+            </div>
         </div>
 
-        <div class="landing-features-grid">
-            <div class="landing-feat-card">
-                <span>🏡</span>
-                <h4>Adopta con Amor</h4>
-                <p>Dale un hogar seguro a perritos y gatitos.</p>
+        <!-- APLICACIÓN PRINCIPAL (OCULTA AL INICIO) -->
+        <div id="main-app">
+            <div class="header">
+                <span>🐾 Refugio Digital</span>
+                <button class="btn-sm" onclick="cerrarSesion()">Salir</button>
             </div>
-            <div class="landing-feat-card">
-                <span>🚨</span>
-                <h4>Reporta Alertas</h4>
-                <p>Salva vidas avisando de casos en tu zona.</p>
+            
+            <div class="desktop-content">
+                <div class="view active-view" id="home-view">
+                    <h2 style="margin-bottom: 16px; color: var(--text-main);">Mascotas buscando hogar</h2>
+                    <div class="grid-desktop">
+                        <div class="refugio-card">
+                            <span style="font-size: 30px;">🐕</span>
+                            <h4 style="margin: 8px 0 4px 0; color: var(--text-main);">Firulais</h4>
+                            <p style="color: var(--text-muted); font-size: 13px;">Un perrito muy alegre y cariñoso rescatado en SJL.</p>
+                        </div>
+                        <div class="refugio-card">
+                            <span style="font-size: 30px;">🐈</span>
+                            <h4 style="margin: 8px 0 4px 0; color: var(--text-main);">Michi</h4>
+                            <p style="color: var(--text-muted); font-size: 13px;">Gatito tierno y tranquilo buscando una familia que lo ame.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="bottom-nav">
+                <div class="nav-item active">
+                    <i>🏠</i><span>Inicio</span>
+                </div>
+                <div class="nav-item">
+                    <i>🚨</i><span>Reportes</span>
+                </div>
             </div>
         </div>
+
+        <!-- MODAL DE GOOGLE -->
+        <div id="google-modal">
+            <div class="google-box">
+                <h3 style="margin-bottom: 10px; color: var(--text-main);">Iniciar sesión</h3>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Conéctate con tu cuenta de Google para acceder a todas las funciones y reportar casos.</p>
+                <button class="btn-main" onclick="simularLoginGoogleExitoso()" style="margin-bottom: 10px;">Continuar con Google</button>
+                <button class="btn-secundario" onclick="cerrarGoogleModal()">Cancelar</button>
+            </div>
+        </div>
+
     </div>
 
-    <div class="landing-actions-vibrant">
-        <button class="btn-main" style="padding: 16px; font-size: 16px; border-radius: 16px; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);" onclick="abrirGoogleModalDesdeLanding()">
-            ✨ Comenzar Ahora con Google
-        </button>
-        <button class="btn-secundario" style="background: white; padding: 15px; font-size: 15px; border-radius: 16px; border: 1px solid var(--border);" onclick="explorarSinCuenta()">
-            👀 Explorar sin cuenta
-        </button>
-    </div>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>
