@@ -383,7 +383,6 @@ h1, h2, h3, h4 {
     cursor: pointer;
     transition: all 0.2s;
 }
-
 .role-option:hover {
     border-color: var(--primary);
     background: #F3EFE6;
