@@ -334,6 +334,24 @@ h1, h2, h3, h4 {
     overflow-y: auto;
 }
 
+.form-input {
+    width: 100%;
+    padding: 11px 14px;
+    background: #FAF6EE;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 13px;
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    border-color: var(--primary);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 .role-option {
     display: flex;
     align-items: center;
