@@ -18,20 +18,44 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #CBD5E0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        body { background-color: #CBD5E0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
         #app-container {
-            width: 100%; max-width: 414px; height: 100vh; max-height: 896px;
-            background: var(--bg-color); position: relative; overflow: hidden;
+            width: 100%; max-width: 414px; height: 100vh; background: var(--bg-color); position: relative; overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        @media (min-width: 415px) {
-            #app-container { height: 90vh; border-radius: 40px; border: 8px solid #1A202C; }
+
+        /* DISEÑO COMPUTADORA (Escritorio) */
+        @media (min-width: 768px) {
+            body { background-color: #1A202C; }
+            #app-container {
+                max-width: 1200px; height: 85vh; border-radius: 20px; border: none; display: flex; flex-direction: row; overflow: hidden;
+            }
+            #main-app { display: flex; flex-direction: row; width: 100%; height: 100%; }
+            .sidebar-desktop {
+                width: 260px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; padding: 24px; z-index: 50;
+            }
+            .desktop-nav-item {
+                display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; color: var(--text-muted); font-weight: 600; cursor: pointer; margin-bottom: 8px; transition: background 0.2s, color 0.2s;
+            }
+            .desktop-nav-item i { font-style: normal; font-size: 20px; }
+            .desktop-nav-item.active { background: #FFF5F2; color: var(--primary); }
+            .desktop-content { flex: 1; height: 100%; overflow-y: auto; background: var(--bg-color); padding: 30px; }
+            #bottom-nav { display: none !important; }
+            .header { display: none !important; }
+            .grid-desktop { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        }
+
+        /* DISEÑO CELULAR */
+        @media (max-width: 767px) {
+            .sidebar-desktop { display: none !important; }
+            .desktop-content { flex: 1; width: 100%; height: calc(100% - 130px); overflow-y: auto; padding: 20px; }
+            .grid-desktop { display: flex; flex-direction: column; gap: 16px; }
         }
 
         #login-screen {
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            height: 100%; padding: 40px 20px; background: var(--white); text-align: center;
+            height: 100%; width: 100%; padding: 40px 20px; background: var(--white); text-align: center; position: absolute; z-index: 100;
         }
         .logo-box { font-size: 60px; margin-bottom: 20px; }
         h1 { color: var(--primary); font-size: 28px; margin-bottom: 10px; }
@@ -62,9 +86,8 @@
             display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 18px; color: var(--text-main); z-index: 10;
         }
 
-        .view { display: none; height: calc(100% - 130px); overflow-y: auto; padding: 20px; animation: fadeIn 0.3s ease; }
+        .view { display: none; }
         .active-view { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .btn-sm { background: var(--primary); color: var(--white); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; }
@@ -104,12 +127,42 @@
         .nav-item i { font-style: normal; font-size: 22px; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { color: var(--primary); }
         .nav-item.active i { filter: grayscale(0%); opacity: 1; }
+
+        /* MODAL DE GOOGLE LOGIN SIMULADO */
+        #google-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .google-box {
+            background: white; width: 90%; max-width: 400px; border-radius: 16px; padding: 30px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease;
+        }
     </style>
 </head>
 <body>
 
     <div id="app-container">
-        <!-- LOGIN -->
+        <!-- MODAL DE INICIO DE SESIÓN CON GOOGLE (CREAR/ELEGIR CUENTA) -->
+        <div id="google-modal">
+            <div class="google-box">
+                <div style="font-size: 40px; margin-bottom: 10px;">🌐</div>
+                <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 8px;">Acceder con Google</h2>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Ingresa tus datos para registrar o conectar tu cuenta.</p>
+                
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="google-nombre" placeholder="Ej. Dany Vela">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="google-email" placeholder="tucorreo@gmail.com">
+                </div>
+                <button class="btn-google" onclick="confirmarGoogleLogin()" style="margin-bottom: 10px;">Continuar</button>
+                <button onclick="cerrarGoogleModal()" style="background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 13px;">Cancelar</button>
+            </div>
+        </div>
+
+        <!-- LOGIN SCREEN INICIAL -->
         <div id="login-screen">
             <div class="logo-box">🐾</div>
             <h1>Refugio Digital</h1>
@@ -123,7 +176,7 @@
                 </select>
             </div>
 
-            <button class="btn-google" onclick="iniciarSesion()">
+            <button class="btn-google" onclick="abrirGoogleModal()">
                 <span style="background: white; border-radius: 50%; padding: 2px 6px; color: #4285F4; font-weight: 900;">G</span>
                 Iniciar sesión con Google
             </button>
@@ -131,63 +184,84 @@
 
         <!-- APP PRINCIPAL -->
         <div id="main-app">
+            <!-- SIDEBAR PARA COMPUTADORA -->
+            <div class="sidebar-desktop">
+                <div>
+                    <div style="font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 30px; display: flex; align-items: center; gap: 8px;">
+                        <span>🐾</span> Refugio Digital
+                    </div>
+                    <div class="desktop-nav-item active" onclick="cambiarVistaDesktop('view-adoptar', this, 'Adopta')"><i>🐶</i>Adoptar</div>
+                    <div class="desktop-nav-item" onclick="cambiarVistaDesktop('view-reportes', this, 'Reportes')"><i>🚨</i>Reportar</div>
+                    <div class="desktop-nav-item" id="desktop-nav-publicar" style="display:none;" onclick="cambiarVistaDesktop('view-publicar', this, 'Publicar')"><i>📝</i>Publicar</div>
+                    <div class="desktop-nav-item" onclick="cambiarVistaDesktop('view-perfil', this, 'Perfil')"><i>👤</i>Perfil</div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); pt: 15px;">
+                    SJL & Lima, Perú
+                </div>
+            </div>
+
+            <!-- HEADER PARA CELULAR -->
             <div class="header" id="app-header">Refugio Digital <span>🐾</span></div>
 
-            <!-- ADOPCIÓN (LISTA GENERAL LIBRE) -->
-            <div id="view-adoptar" class="view active-view">
-                <div style="margin-bottom: 15px;">
-                    <h2 style="font-size: 18px; color: var(--text-main);">Mascotas en Adopción</h2>
-                    <p style="font-size: 12px; color: var(--text-muted);">Explora libremente y encuentra a tu nuevo compañero</p>
-                </div>
-                <div id="feed-adoptar">
-                    <!-- Renderizado dinámico de la lista completa -->
-                </div>
-            </div>
-
-            <!-- REPORTES -->
-            <div id="view-reportes" class="view">
-                <div class="report-header">
-                    <div>
-                        <h2 style="font-size: 18px; color: var(--text-main);">Alertas Activas</h2>
-                        <p style="font-size: 12px; color: var(--text-muted);">Zona: San Juan de Lurigancho y Lima</p>
+            <!-- CONTENEDOR CENTRAL DE VISTAS -->
+            <div class="desktop-content">
+                <!-- ADOPCIÓN -->
+                <div id="view-adoptar" class="view active-view">
+                    <div style="margin-bottom: 20px;">
+                        <h2 style="font-size: 22px; color: var(--text-main);">Mascotas en Adopción</h2>
+                        <p style="font-size: 13px; color: var(--text-muted);">Explora libremente y encuentra a tu nuevo compañero</p>
                     </div>
-                    <button class="btn-sm" onclick="abrirModal()">+ Reportar</button>
+                    <div id="feed-adoptar" class="grid-desktop"></div>
                 </div>
-                <div id="feed-reportes"></div>
+
+                <!-- REPORTES -->
+                <div id="view-reportes" class="view">
+                    <div class="report-header">
+                        <div>
+                            <h2 style="font-size: 20px; color: var(--text-main);">Alertas Activas</h2>
+                            <p style="font-size: 12px; color: var(--text-muted);">Zona: San Juan de Lurigancho y Lima</p>
+                        </div>
+                        <button class="btn-sm" onclick="abrirModal()">+ Reportar</button>
+                    </div>
+                    <div id="feed-reportes" class="grid-desktop"></div>
+                </div>
+
+                <!-- PUBLICAR (Solo Profesionales) -->
+                <div id="view-publicar" class="view">
+                    <h2 style="margin-bottom: 5px; font-size: 22px;">Publicar Mascota</h2>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Añade un rescatado al sistema de adopción.</p>
+                    
+                    <div style="max-width: 600px;">
+                        <div class="form-group"><label>Nombre</label><input type="text" id="pub-nombre" placeholder="Ej. Toby"></div>
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex:1;"><label>Especie</label><select id="pub-especie"><option>Perro</option><option>Gato</option></select></div>
+                            <div class="form-group" style="flex:1;"><label>Edad</label><input type="text" id="pub-edad" placeholder="Ej. 1 año"></div>
+                        </div>
+                        <div class="form-group"><label>Historia / Descripción</label><textarea id="pub-desc" rows="3" placeholder="Detalles..."></textarea></div>
+                        <button class="btn-main" onclick="publicarMascota()">Guardar y Publicar</button>
+                    </div>
+                </div>
+
+                <!-- PERFIL -->
+                <div id="view-perfil" class="view">
+                    <div style="text-align: center; padding: 30px 0; max-width: 400px; margin: 0 auto;">
+                        <div style="font-size: 60px; margin-bottom: 10px;">👤</div>
+                        <h2 id="perfil-nombre" style="font-size: 22px; margin-bottom: 5px;">Usuario</h2>
+                        <p id="perfil-email" style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;"></p>
+                        <span id="perfil-rol-badge" style="background: #E2E8F0; padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: bold; color: var(--text-muted);">Rol</span>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                        <button class="btn-main" style="background: #EDF2F7; color: var(--danger); box-shadow: none;" onclick="cerrarSesion()">Cerrar Sesión</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- PUBLICAR (Solo Profesionales) -->
-            <div id="view-publicar" class="view">
-                <h2 style="margin-bottom: 5px; font-size: 20px;">Publicar Mascota</h2>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Añade un rescatado al sistema de adopción.</p>
-                
-                <div class="form-group"><label>Nombre</label><input type="text" id="pub-nombre" placeholder="Ej. Toby"></div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="form-group" style="flex:1;"><label>Especie</label><select id="pub-especie"><option>Perro</option><option>Gato</option></select></div>
-                    <div class="form-group" style="flex:1;"><label>Edad</label><input type="text" id="pub-edad" placeholder="Ej. 1 año"></div>
-                </div>
-                <div class="form-group"><label>Historia / Descripción</label><textarea id="pub-desc" rows="3" placeholder="Detalles..."></textarea></div>
-                <button class="btn-main" onclick="publicarMascota()">Guardar y Publicar</button>
-            </div>
-
-            <!-- PERFIL -->
-            <div id="view-perfil" class="view">
-                <div style="text-align: center; padding: 20px 0;">
-                    <div style="font-size: 50px; margin-bottom: 10px;">👤</div>
-                    <h2 id="perfil-nombre" style="font-size: 20px;">Dany Vela</h2>
-                    <span id="perfil-rol-badge" style="background: #E2E8F0; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; color: var(--text-muted);">Rol</span>
-                </div>
-                <div class="form-group" style="margin-top: 30px;">
-                    <button class="btn-main" style="background: #EDF2F7; color: var(--danger); box-shadow: none;" onclick="cerrarSesion()">Cerrar Sesión</button>
-                </div>
-            </div>
-
-            <!-- NAV INFERIOR -->
+            <!-- NAV INFERIOR (Solo Celular) -->
             <div id="bottom-nav">
-                <div class="nav-item active" onclick="cambiarVista('view-adoptar', this, 'Adopta')"><i>🐶</i>Adoptar</div>
-                <div class="nav-item" onclick="cambiarVista('view-reportes', this, 'Reportes')"><i>🚨</i>Reportar</div>
-                <div class="nav-item" id="nav-item-publicar" style="display:none;" onclick="cambiarVista('view-publicar', this, 'Publicar')"><i>📝</i>Publicar</div>
-                <div class="nav-item" onclick="cambiarVista('view-perfil', this, 'Perfil')"><i>👤</i>Perfil</div>
+                <div class="nav-item active" onclick="cambiarVistaMobile('view-adoptar', this, 'Adopta')"><i>🐶</i>Adoptar</div>
+                <div class="nav-item" onclick="cambiarVistaMobile('view-reportes', this, 'Reportes')"><i>🚨</i>Reportar</div>
+                <div class="nav-item" id="nav-item-publicar" style="display:none;" onclick="cambiarVistaMobile('view-publicar', this, 'Publicar')"><i>📝</i>Publicar</div>
+                <div class="nav-item" onclick="cambiarVistaMobile('view-perfil', this, 'Perfil')"><i>👤</i>Perfil</div>
             </div>
         </div>
 
