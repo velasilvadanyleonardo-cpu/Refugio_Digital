@@ -35,6 +35,85 @@
 </head>
 <body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans">
 
+  <!-- CAPA DE BLOQUEO / AUTENTICACIÓN OBLIGATORIA -->
+  <div id="authWall" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-100 space-y-6">
+      
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto text-2xl">
+          <i class="fa-solid fa-shield-cat"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-800">Refugio<span class="text-brand-500">Digital</span></h2>
+        <p class="text-xs text-slate-500">Debes crear una cuenta o iniciar sesión para acceder a la plataforma.</p>
+      </div>
+
+      <!-- PESTAÑAS LOGIN / REGISTRO -->
+      <div class="flex border-b border-slate-200">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600">Iniciar Sesión</button>
+        <button id="tabRegBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600">Crear Cuenta</button>
+      </div>
+
+      <!-- FORMULARIO LOGIN -->
+      <form id="formAuthLogin" onsubmit="procesarLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico</label>
+          <input type="email" id="loginEmail" required placeholder="correo@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Contraseña</label>
+          <input type="password" id="loginPass" required placeholder="••••••••" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md">
+          Ingresar
+        </button>
+      </form>
+
+      <!-- FORMULARIO REGISTRO -->
+      <form id="formAuthRegister" onsubmit="iniciarRegistro(event)" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre Completo / Institución</label>
+          <input type="text" id="regNombreUser" required placeholder="Ej: Dr. Carlos Ramos" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico</label>
+          <input type="email" id="regEmailUser" required placeholder="correo@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Rol de Cuenta</label>
+          <select id="regRolUser" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <option value="Usuario">Usuario Estándar (Adopción / Alertas)</option>
+            <option value="Rescatista">Rescatista Independiente</option>
+            <option value="Veterinario">Veterinaria / Especialista (Publica Adopciones)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Contraseña</label>
+          <input type="password" id="regPassUser" required placeholder="Crea una contraseña" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md">
+          Enviar Código de Verificación
+        </button>
+      </form>
+
+      <!-- PASO VERIFICACIÓN DE CÓDIGO EMAIL -->
+      <div id="stepVerificacionEmail" class="space-y-4 hidden">
+        <div class="bg-brand-50 p-4 rounded-xl border border-brand-200 text-center space-y-1">
+          <p class="text-xs font-semibold text-brand-800">Código de Confirmación de Correo</p>
+          <p class="text-xs text-slate-600">Simulación: Hemos enviado un código PIN a tu correo. Usa el código mostrado a continuación:</p>
+          <div id="displayPIN" class="text-xl font-mono font-bold tracking-widest text-brand-600 py-1">123456</div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Ingresa el Código PIN</label>
+          <input type="text" id="inputPIN" maxlength="6" placeholder="000000" class="w-full text-center tracking-widest font-mono text-lg border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:border-brand-500">
+        </div>
+        <button onclick="confirmarPIN()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition shadow-md">
+          Confirmar y Crear Cuenta
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- NAVBAR -->
   <header class="bg-white/80 backdrop-blur-md border-b border-brand-100 sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -50,39 +129,38 @@
         <button onclick="showSection('inicio')" class="hover:text-brand-600 transition">Inicio</button>
         <button onclick="showSection('adopciones')" class="hover:text-brand-600 transition">Adoptar</button>
         <button onclick="showSection('alertas')" class="hover:text-brand-600 transition">Alertas de Rescate</button>
-        <button onclick="showSection('reportar')" class="hover:text-brand-600 transition">Reportar Caso</button>
+        <button onclick="showSection('reportar')" class="hover:text-brand-600 transition">Publicar Caso</button>
       </nav>
 
-      <!-- Botón Sesión / Admin -->
-      <div id="authNavArea">
+      <!-- Botón Sesión / Perfil -->
+      <div id="authNavArea" class="flex items-center gap-3">
         <!-- Renderizado dinámicamente por JS -->
       </div>
     </div>
   </header>
 
   <!-- CONTENIDO PRINCIPAL (SPA) -->
-  <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
+  <main id="mainApp" class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
 
     <!-- SECCIÓN: INICIO -->
     <section id="sec-inicio" class="space-y-12">
-      <!-- HERO -->
       <div class="bg-gradient-to-br from-brand-50 via-sky-50 to-indigo-50/40 rounded-3xl p-8 md:p-12 border border-brand-100 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
         <div class="space-y-4 max-w-xl">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
-            <i class="fa-solid fa-heart text-brand-500"></i> Red Comunitaria de Mascotas
+            <i class="fa-solid fa-heart text-brand-500"></i> Red Comunitaria Animal
           </span>
           <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 leading-tight">
             Conectando corazones con <span class="text-brand-600">huellitas</span>
           </h1>
           <p class="text-slate-600 text-base md:text-lg">
-            Una plataforma para facilitar la adopción responsable, publicar reportes de rescate y ayudar a mascotas que necesitan un hogar.
+            Plataforma verficada para adopción de mascotas, alertas de rescates y apoyo de veterinarios profesionales.
           </p>
           <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
             <button onclick="showSection('adopciones')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-200 transition">
               <i class="fa-solid fa-dog mr-1"></i> Ver Mascotas
             </button>
             <button onclick="showSection('reportar')" class="px-6 py-3 bg-white hover:bg-brand-50 text-brand-700 border border-brand-200 rounded-xl font-medium transition">
-              <i class="fa-solid fa-bullhorn mr-1"></i> Reportar Caso
+              <i class="fa-solid fa-bullhorn mr-1"></i> Publicar Alerta / Caso
             </button>
           </div>
         </div>
@@ -99,24 +177,24 @@
           <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl">
             <i class="fa-solid fa-paw"></i>
           </div>
-          <h3 class="font-bold text-slate-800 text-lg">Adopción Responsable</h3>
-          <p class="text-sm text-slate-500">Conoce a perros y gatos que están esperando una oportunidad para formar parte de una familia.</p>
+          <h3 class="font-bold text-slate-800 text-lg">Mascotas en Adopción</h3>
+          <p class="text-sm text-slate-500">Revisa la lista de animales rescatados y certificados por veterinarias para adopción.</p>
         </div>
 
         <div onclick="showSection('alertas')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
           <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
             <i class="fa-solid fa-triangle-exclamation"></i>
           </div>
-          <h3 class="font-bold text-slate-800 text-lg">Alertas de Rescate</h3>
-          <p class="text-sm text-slate-500">Casos urgentes de mascotas perdidas o que requieren atención médica e internamiento.</p>
+          <h3 class="font-bold text-slate-800 text-lg">Alertas Comunitaria</h3>
+          <p class="text-sm text-slate-500">Reportes libres de mascotas perdidas o en situación de riesgo en la vía pública.</p>
         </div>
 
         <div onclick="showSection('reportar')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
           <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
             <i class="fa-solid fa-plus"></i>
           </div>
-          <h3 class="font-bold text-slate-800 text-lg">Publicar Alerta</h3>
-          <p class="text-sm text-slate-500">Registra una mascota encontrada o pon en adopción a un rescate de forma sencilla.</p>
+          <h3 class="font-bold text-slate-800 text-lg">Publicar Alerta o Adopción</h3>
+          <p class="text-sm text-slate-500">Publica un reporte rápido de rescate o una solicitud formal si eres veterinaria.</p>
         </div>
       </div>
     </section>
@@ -126,7 +204,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-800">Mascotas en Adopción</h2>
-          <p class="text-sm text-slate-500">Encuentra a tu nuevo compañero de vida.</p>
+          <p class="text-sm text-slate-500">Animales rescatados con ficha de salud avalada.</p>
         </div>
         <div class="flex gap-2">
           <button onclick="filterPets('Todos')" class="px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white">Todos</button>
@@ -136,15 +214,15 @@
       </div>
 
       <div id="gridAdopciones" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Renderizado con JS -->
+        <!-- Renderizado con imágenes vía JS -->
       </div>
     </section>
 
     <!-- SECCIÓN: ALERTAS DE RESCATE -->
     <section id="sec-alertas" class="hidden space-y-6">
       <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-2xl font-bold text-slate-800">Alertas de Rescate</h2>
-        <p class="text-sm text-slate-500">Mascotas perdidas o que requieren ayuda inmediata.</p>
+        <h2 class="text-2xl font-bold text-slate-800">Alertas de Rescate Libres</h2>
+        <p class="text-sm text-slate-500">Reportes abiertos de mascotas encontradas o perdidas por la comunidad.</p>
       </div>
 
       <div id="gridAlertas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -152,26 +230,30 @@
       </div>
     </section>
 
-    <!-- SECCIÓN: REPORTAR / CREAR CASO -->
+    <!-- SECCIÓN: PUBLICAR / REPORTAR -->
     <section id="sec-reportar" class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-brand-100 shadow-sm space-y-6">
       <div class="text-center space-y-1">
-        <h2 class="text-2xl font-bold text-slate-800">Reportar o Publicar Caso</h2>
-        <p class="text-sm text-slate-500">Completa la información sobre la mascota.</p>
+        <h2 class="text-2xl font-bold text-slate-800">Publicar un Caso</h2>
+        <p class="text-sm text-slate-500">Registra un animal rescatado o un reporte urgente.</p>
+      </div>
+
+      <div id="vetNotice" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+        <i class="fa-solid fa-circle-info mr-1"></i> Nota: La opción de <strong>"Mascota en Adopción"</strong> está habilitada únicamente para cuentas de <strong>Veterinaria</strong> o Administrador.
       </div>
 
       <form id="formNuevoRegistro" onsubmit="guardarNuevoRegistro(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Tipo de Publicación</label>
-          <select id="regTipo" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-            <option value="Adopcion">Mascota en Adopción</option>
-            <option value="Alerta">Alerta de Rescate / Perdido</option>
+          <select id="regTipo" onchange="verificarPermisoTipo()" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <option value="Alerta">Alerta de Rescate / Perdido (Abierto a todos)</option>
+            <option value="Adopcion">Mascota en Adopción (Solo Veterinarias)</option>
           </select>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre de la Mascota</label>
-            <input type="text" id="regNombre" required placeholder="Ej: Pochi, Luna..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <input type="text" id="regNombre" required placeholder="Ej: Pochi, Firulais" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Especie</label>
@@ -181,6 +263,11 @@
               <option value="Otro">Otro</option>
             </select>
           </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">URL Imagen de la Mascota (Opcional)</label>
+          <input type="url" id="regImagen" placeholder="https://ejemplo.com/foto.jpg" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -195,12 +282,12 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Detalles / Descripción</label>
-          <textarea id="regDescripcion" rows="3" required placeholder="Describe el estado de la mascota o detalles del rescate..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Detalles del Caso</label>
+          <textarea id="regDescripcion" rows="3" required placeholder="Describe el estado de la mascota o punto de contacto..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
         </div>
 
         <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md transition">
-          Publicar Caso
+          Publicar Registro
         </button>
       </form>
     </section>
@@ -209,11 +296,11 @@
     <section id="sec-admin" class="hidden space-y-6">
       <div class="flex items-center justify-between border-b border-slate-200 pb-4">
         <div>
-          <h2 class="text-2xl font-bold text-slate-800">Panel de Administración</h2>
-          <p class="text-sm text-slate-500">Gestión de registros almacenados en la plataforma.</p>
+          <h2 class="text-2xl font-bold text-slate-800">Panel de Control General</h2>
+          <p class="text-sm text-slate-500">Gestión de publicaciones de la red.</p>
         </div>
         <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">
-          Modo Administrador Activo
+          Administrador
         </span>
       </div>
 
@@ -228,7 +315,7 @@
             </tr>
           </thead>
           <tbody id="tablaAdmin" class="divide-y divide-slate-100">
-            <!-- JS Dynamic content -->
+            <!-- JS Content -->
           </tbody>
         </table>
       </div>
@@ -236,45 +323,50 @@
 
   </main>
 
-  <!-- MODAL: LOGIN -->
-  <div id="modalLogin" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-lg text-slate-800">Iniciar Sesión</h3>
-        <button onclick="toggleModalLogin(false)" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <p class="text-xs text-slate-500">Ingresa tu correo para acceder a las funciones avanzadas del sistema.</p>
-
-      <form onsubmit="procesarLogin(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico</label>
-          <input type="email" id="emailLogin" required placeholder="correo@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition">
-          Ingresar
-        </button>
-      </form>
-    </div>
-  </div>
-
   <!-- FOOTER -->
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1">
     <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
-    <p>Plataforma para el rescate y bienestar animal.</p>
+    <p>Plataforma para el rescate y adopción de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT LOGIC -->
+  <!-- SCRIPT COMPLETO -->
   <script>
     const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
+    let tempUserData = null;
+    let tempGeneratedPIN = null;
 
-    // Datos por defecto iniciales
+    // Datos iniciales con imágenes reales de Unsplash
     const defaultData = [
-      { id: 1, tipo: "Adopcion", nombre: "Luna", especie: "Perro", ubicacion: "San Juan de Lurigancho", edad: "2 años", descripcion: "Rescatada, muy juguetona y con vacunas al día." },
-      { id: 2, tipo: "Adopcion", nombre: "Mishi", especie: "Gato", ubicacion: "Lima Centro", edad: "8 meses", descripcion: "Tranquilo, acostumbrado a departamento." },
-      { id: 3, tipo: "Alerta", nombre: "Peluche", especie: "Perro", ubicacion: "SJL - Zarate", edad: "Desconocida", descripcion: "Encontrado cerca del parque. Busca a sus dueños o temporal." }
+      { 
+        id: 1, 
+        tipo: "Adopcion", 
+        nombre: "Luna", 
+        especie: "Perro", 
+        ubicacion: "San Juan de Lurigancho", 
+        edad: "2 años", 
+        descripcion: "Rescatada, muy cariñosa, esterilizada y con vacunas al día.",
+        imagen: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80"
+      },
+      { 
+        id: 2, 
+        tipo: "Adopcion", 
+        nombre: "Mishi", 
+        especie: "Gato", 
+        ubicacion: "Lima Centro", 
+        edad: "8 meses", 
+        descripcion: "Tranquilo, acostumbrado a departamento y educado.",
+        imagen: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80"
+      },
+      { 
+        id: 3, 
+        tipo: "Alerta", 
+        nombre: "Peluche", 
+        especie: "Perro", 
+        ubicacion: "SJL - Zárate", 
+        edad: "Desconocida", 
+        descripcion: "Encontrado desorientado cerca del parque. Se busca a sus dueños o hogar temporal.",
+        imagen: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80"
+      }
     ];
 
     function getMascotas() {
@@ -294,7 +386,134 @@
       return JSON.parse(localStorage.getItem("refugio_usuario"));
     }
 
-    // NAVEGACIÓN Y VISTAS
+    function getUsersDatabase() {
+      return JSON.parse(localStorage.getItem("refugio_cuentas")) || [];
+    }
+
+    function saveUserDatabase(users) {
+      localStorage.setItem("refugio_cuentas", JSON.stringify(users));
+    }
+
+    // AUTENTICACIÓN Y REGISTRO
+    function switchAuthTab(tab) {
+      const formLogin = document.getElementById('formAuthLogin');
+      const formReg = document.getElementById('formAuthRegister');
+      const stepVerify = document.getElementById('stepVerificacionEmail');
+      const tabLoginBtn = document.getElementById('tabLoginBtn');
+      const tabRegBtn = document.getElementById('tabRegBtn');
+
+      stepVerify.classList.add('hidden');
+
+      if (tab === 'login') {
+        formLogin.classList.remove('hidden');
+        formReg.classList.add('hidden');
+        tabLoginBtn.className = "flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600";
+        tabRegBtn.className = "flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600";
+      } else {
+        formLogin.classList.add('hidden');
+        formReg.classList.remove('hidden');
+        tabRegBtn.className = "flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600";
+        tabLoginBtn.className = "flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600";
+      }
+    }
+
+    function procesarLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPass').value;
+
+      const db = getUsersDatabase();
+      
+      // Auto Administrador si es el correo principal
+      if (email === ADMIN_EMAIL) {
+        const adminUser = {
+          nombre: "Dany Vela (Admin)",
+          email: ADMIN_EMAIL,
+          rol: "Veterinario",
+          esAdmin: true
+        };
+        localStorage.setItem("refugio_usuario", JSON.stringify(adminUser));
+        desbloquearApp();
+        return;
+      }
+
+      const match = db.find(u => u.email === email && u.pass === pass);
+
+      if (match) {
+        localStorage.setItem("refugio_usuario", JSON.stringify(match));
+        desbloquearApp();
+      } else {
+        alert("Correo o contraseña incorrectos. Si eres nuevo, por favor crea una cuenta.");
+      }
+    }
+
+    function iniciarRegistro(e) {
+      e.preventDefault();
+      const email = document.getElementById('regEmailUser').value.trim().toLowerCase();
+      const nombre = document.getElementById('regNombreUser').value.trim();
+      const rol = document.getElementById('regRolUser').value;
+      const pass = document.getElementById('regPassUser').value;
+
+      // Generar PIN aleatorio de 6 dígitos para la verificación de correo
+      tempGeneratedPIN = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      tempUserData = {
+        nombre: nombre,
+        email: email,
+        rol: rol,
+        pass: pass,
+        esAdmin: (email === ADMIN_EMAIL)
+      };
+
+      document.getElementById('formAuthRegister').classList.add('hidden');
+      document.getElementById('stepVerificacionEmail').classList.remove('hidden');
+      document.getElementById('displayPIN').innerText = tempGeneratedPIN;
+    }
+
+    function confirmarPIN() {
+      const input = document.getElementById('inputPIN').value.trim();
+
+      if (input === tempGeneratedPIN) {
+        const db = getUsersDatabase();
+        db.push(tempUserData);
+        saveUserDatabase(db);
+
+        localStorage.setItem("refugio_usuario", JSON.stringify(tempUserData));
+        alert("¡Correo verificado con éxito! Tu cuenta ha sido creada.");
+        desbloquearApp();
+      } else {
+        alert("El código PIN ingresado es incorrecto. Verifica el código en pantalla.");
+      }
+    }
+
+    function desbloquearApp() {
+      document.getElementById('authWall').classList.add('hidden');
+      actualizarBotonSesion();
+      showSection('inicio');
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem("refugio_usuario");
+      location.reload();
+    }
+
+    function actualizarBotonSesion() {
+      const area = document.getElementById('authNavArea');
+      const user = getUsuarioActual();
+
+      if (user) {
+        area.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-lg">${user.rol}</span>
+            ${user.esAdmin ? '<button onclick="showSection(\'admin\')" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg">Admin</button>' : ''}
+            <span class="text-xs font-medium text-slate-600 hidden sm:inline">${user.nombre}</span>
+            <button onclick="cerrarSesion()" class="text-xs text-rose-500 hover:text-rose-700 font-semibold">Salir</button>
+          </div>
+        `;
+      }
+    }
+
+    // CONTROL DE VISTAS
     function showSection(secId) {
       const secciones = ['inicio', 'adopciones', 'alertas', 'reportar', 'admin'];
       secciones.forEach(id => {
@@ -307,69 +526,11 @@
 
       if (secId === 'adopciones') renderAdopciones('Todos');
       if (secId === 'alertas') renderAlertas();
+      if (secId === 'reportar') verificarPermisoTipo();
       if (secId === 'admin') renderAdminTable();
     }
 
-    // MODAL LOGIN
-    function toggleModalLogin(show) {
-      const modal = document.getElementById('modalLogin');
-      if (show) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      } else {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-      }
-    }
-
-    function procesarLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('emailLogin').value.trim().toLowerCase();
-      
-      const usuario = {
-        email: email,
-        esAdmin: (email === ADMIN_EMAIL)
-      };
-
-      localStorage.setItem("refugio_usuario", JSON.stringify(usuario));
-      toggleModalLogin(false);
-      actualizarBotonSesion();
-
-      if (usuario.esAdmin) {
-        showSection('admin');
-      } else {
-        showSection('inicio');
-      }
-    }
-
-    function cerrarSesion() {
-      localStorage.removeItem("refugio_usuario");
-      actualizarBotonSesion();
-      showSection('inicio');
-    }
-
-    function actualizarBotonSesion() {
-      const area = document.getElementById('authNavArea');
-      const user = getUsuarioActual();
-
-      if (user) {
-        area.innerHTML = `
-          <div class="flex items-center gap-3">
-            ${user.esAdmin ? '<button onclick="showSection(\'admin\')" class="px-3 py-1.5 bg-brand-100 text-brand-700 text-xs font-bold rounded-lg hover:bg-brand-200">Panel Admin</button>' : ''}
-            <span class="text-xs font-medium text-slate-500 hidden sm:inline">${user.email}</span>
-            <button onclick="cerrarSesion()" class="text-xs text-slate-400 hover:text-rose-500">Salir</button>
-          </div>
-        `;
-      } else {
-        area.innerHTML = `
-          <button onclick="toggleModalLogin(true)" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition shadow-sm">
-            Ingresar
-          </button>
-        `;
-      }
-    }
-
-    // RENDERIZADO DE CONTENIDOS
+    // RENDERIZADO CON IMÁGENES
     function renderAdopciones(filtro) {
       const grid = document.getElementById('gridAdopciones');
       const lista = getMascotas().filter(m => m.tipo === "Adopcion");
@@ -377,23 +538,26 @@
       const filtrados = filtro === 'Todos' ? lista : lista.filter(m => m.especie === filtro);
 
       if (filtrados.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay mascotas en adopción por el momento.</p>`;
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay mascotas en adopción en este momento.</p>`;
         return;
       }
 
       grid.innerHTML = filtrados.map(item => `
-        <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm space-y-3 hover:border-brand-200 transition">
-          <div class="flex justify-between items-start">
+        <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+          <img src="${item.imagen || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80'}" class="w-full h-48 object-cover" alt="${item.nombre}">
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
-              <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
-              <span class="text-xs text-brand-600 font-medium"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
+              <div class="flex justify-between items-start mb-1">
+                <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
+                <span class="px-2.5 py-0.5 bg-brand-50 text-brand-700 rounded-full text-xs font-semibold">${item.especie}</span>
+              </div>
+              <span class="text-xs text-brand-600 font-medium block mb-2"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
+              <p class="text-sm text-slate-600 line-clamp-2">${item.descripcion}</p>
             </div>
-            <span class="px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-semibold">${item.especie}</span>
-          </div>
-          <p class="text-sm text-slate-600 line-clamp-2">${item.descripcion}</p>
-          <div class="pt-2 flex justify-between items-center text-xs text-slate-400">
-            <span>Edad: ${item.edad || 'N/A'}</span>
-            <button onclick="alert('Contacto registrado. Próximamente se habilitará la mensajería directa.')" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700">Adoptar</button>
+            <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
+              <span>Edad: ${item.edad || 'N/A'}</span>
+              <button onclick="alert('Solicitud enviada a la veterinaria responsable.')" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700">Adoptar</button>
+            </div>
           </div>
         </div>
       `).join('');
@@ -408,43 +572,72 @@
       const lista = getMascotas().filter(m => m.tipo === "Alerta");
 
       if (lista.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay alertas activas en este momento.</p>`;
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay alertas activas registradas.</p>`;
         return;
       }
 
       grid.innerHTML = lista.map(item => `
-        <div class="bg-white rounded-2xl border border-amber-100 p-5 shadow-sm space-y-3">
-          <div class="flex justify-between items-start">
-            <div>
+        <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm flex flex-col">
+          ${item.imagen ? `<img src="${item.imagen}" class="w-full h-40 object-cover">` : ''}
+          <div class="p-5 space-y-2">
+            <div class="flex justify-between items-start">
               <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
-              <span class="text-xs text-amber-600 font-medium"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
+              <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 rounded-full text-xs font-semibold">Alerta</span>
             </div>
-            <span class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-semibold">Alerta Rescate</span>
+            <span class="text-xs text-amber-600 font-medium block"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
+            <p class="text-sm text-slate-600">${item.descripcion}</p>
           </div>
-          <p class="text-sm text-slate-600">${item.descripcion}</p>
         </div>
       `).join('');
     }
 
+    // VERIFICACIÓN DE RESTRICCIÓN DE PUBLICACIÓN
+    function verificarPermisoTipo() {
+      const user = getUsuarioActual();
+      const selectTipo = document.getElementById('regTipo');
+      const notice = document.getElementById('vetNotice');
+
+      if (user && (user.rol === 'Veterinario' || user.esAdmin)) {
+        selectTipo.querySelector('option[value="Adopcion"]').disabled = false;
+        notice.classList.add('hidden');
+      } else {
+        selectTipo.value = "Alerta";
+        selectTipo.querySelector('option[value="Adopcion"]').disabled = true;
+        notice.classList.remove('hidden');
+      }
+    }
+
     function guardarNuevoRegistro(e) {
       e.preventDefault();
+      const user = getUsuarioActual();
+      const tipo = document.getElementById('regTipo').value;
+
+      if (tipo === 'Adopcion' && user.rol !== 'Veterinario' && !user.esAdmin) {
+        alert('Únicamente las veterinarias registradas pueden publicar animales en adopción.');
+        return;
+      }
+
       const lista = getMascotas();
+      const imgInput = document.getElementById('regImagen').value.trim();
 
       const nuevo = {
         id: Date.now(),
-        tipo: document.getElementById('regTipo').value,
+        tipo: tipo,
         nombre: document.getElementById('regNombre').value.trim(),
         especie: document.getElementById('regEspecie').value,
         ubicacion: document.getElementById('regUbicacion').value.trim(),
         edad: document.getElementById('regEdad').value.trim() || 'Desconocida',
-        descripcion: document.getElementById('regDescripcion').value.trim()
+        descripcion: document.getElementById('regDescripcion').value.trim(),
+        imagen: imgInput || (document.getElementById('regEspecie').value === 'Gato' ? 
+          'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80' : 
+          'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80')
       };
 
       lista.unshift(nuevo);
       saveMascotas(lista);
 
       document.getElementById('formNuevoRegistro').reset();
-      alert('¡Caso registrado con éxito!');
+      alert('¡Publicación creada con éxito!');
 
       if (nuevo.tipo === 'Adopcion') {
         showSection('adopciones');
@@ -458,7 +651,7 @@
       const lista = getMascotas();
 
       if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros almacenados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros guardados.</td></tr>`;
         return;
       }
 
@@ -475,7 +668,7 @@
     }
 
     function eliminarRegistro(id) {
-      if (!confirm('¿Seguro que deseas eliminar este registro?')) return;
+      if (!confirm('¿Seguro que deseas eliminar esta publicación?')) return;
       let lista = getMascotas();
       lista = lista.filter(item => item.id !== id);
       saveMascotas(lista);
@@ -484,8 +677,12 @@
 
     // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
-      actualizarBotonSesion();
-      showSection('inicio');
+      const user = getUsuarioActual();
+      if (!user) {
+        document.getElementById('authWall').classList.remove('hidden');
+      } else {
+        desbloquearApp();
+      }
     });
   </script>
 </body>
