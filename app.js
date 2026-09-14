@@ -1,24 +1,55 @@
-// AÑADE ESTAS FUNCIONES EN TU ARCHIVO app.js PARA CONTROLAR LA NUEVA PÁGINA DE BIENVENIDA
-
-function explorarSinCuenta() {
-    document.getElementById('landing-screen').style.display = 'none';
-    // Opcional: Establecer rol invitado
-    window.usuarioActual = { nombre: "Invitado", email: "invitado@refugio.com", rol: "normal" };
-    document.getElementById('main-app').style.display = 'flex';
-    if (window.innerWidth >= 768) {
-        document.getElementById('app-container').classList.add('logged-in');
-    }
-    renderizarTodo();
-}
-
+// Abrir el modal de inicio de sesión con Google desde la pantalla de bienvenida
 function abrirGoogleModalDesdeLanding() {
-    // Si prefieres mostrar el selector de rol antes de autenticar, o lanzar directo el modal de Google
-    document.getElementById('google-modal').style.display = 'flex';
+    const googleModal = document.getElementById('google-modal');
+    if (googleModal) {
+        googleModal.style.display = 'flex';
+    }
 }
 
+// Cerrar el modal de inicio de sesión de Google
+function cerrarGoogleModal() {
+    const googleModal = document.getElementById('google-modal');
+    if (googleModal) {
+        googleModal.style.display = 'none';
+    }
+}
+
+// Saltar la autenticación y entrar directamente a explorar la app
+function explorarSinCuenta() {
+    const landingScreen = document.getElementById('landing-screen');
+    const mainApp = document.getElementById('main-app');
+    const appContainer = document.getElementById('app-container');
+
+    if (landingScreen) {
+        landingScreen.style.display = 'none';
+    }
+    if (mainApp) {
+        mainApp.style.display = 'flex';
+    }
+    if (appContainer) {
+        appContainer.classList.add('logged-in');
+    }
+}
+
+// Simular una autenticación exitosa mediante Google y pasar al panel principal
+function simularLoginGoogleExitoso() {
+    cerrarGoogleModal();
+    explorarSinCuenta();
+}
+
+// Cerrar sesión y regresar a la pantalla de bienvenida vibrante
 function cerrarSesion() {
-    window.usuarioActual = null;
-    document.getElementById('main-app').style.display = 'none';
-    document.getElementById('app-container').classList.remove('logged-in');
-    document.getElementById('landing-screen').style.display = 'flex';
+    const landingScreen = document.getElementById('landing-screen');
+    const mainApp = document.getElementById('main-app');
+    const appContainer = document.getElementById('app-container');
+
+    if (landingScreen) {
+        landingScreen.style.display = 'flex';
+    }
+    if (mainApp) {
+        mainApp.style.display = 'none';
+    }
+    if (appContainer) {
+        appContainer.classList.remove('logged-in');
+    }
 }
