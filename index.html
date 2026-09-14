@@ -1,1005 +1,492 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refugio Digital - Red Global de Rescate</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
-            --accent-warm: #FF6B6B;
-            --bg-color: #FAF6EE;
-            --card-bg: #FFFFFF;
-            --text-main: #1E293B;
-            --text-muted: #64748B;
-            --border: #EADFCF;
-            --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #0F172A;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'Quicksand', 'Plus Jakarta Sans', sans-serif;
-        }
-
-        #app-container {
-            width: 100%;
-            max-width: 414px;
-            height: 100vh;
-            background: var(--bg-color);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-        }
-
-        @media (min-width: 768px) {
-            #app-container {
-                max-width: 1100px;
-                height: 88vh;
-                border-radius: 24px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refugio Digital - Red de Adopción y Rescate</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
             }
+          }
         }
-
-        #landing-screen {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-            padding: 30px 24px;
-            background: linear-gradient(135deg, #FAF6EE 0%, #F3EFE6 50%, #EFEADF 100%);
-            text-align: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 120;
-            overflow-y: auto;
-        }
-
-        .landing-inner-wrapper {
-            width: 100%;
-            max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: auto;
-        }
-
-        .landing-top-badge {
-            background: #FEF3C7;
-            color: #B45309;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
-        }
-
-        .landing-hero-box {
-            background: white;
-            width: 100%;
-            padding: 24px 20px;
-            border-radius: 24px;
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border);
-            margin-bottom: 16px;
-        }
-
-        @keyframes floatAnimation {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-8px) scale(1.03); }
-            100% { transform: translateY(0px) scale(1); }
-        }
-
-        .landing-emojis-row {
-            font-size: 38px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            animation: floatAnimation 3s ease-in-out infinite;
-        }
-
-        .landing-hero-box h1 {
-            color: var(--text-main);
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-
-        .landing-hero-box p {
-            color: var(--text-muted);
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        .landing-features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .landing-feat-card {
-            background: white;
-            padding: 12px;
-            border-radius: 16px;
-            text-align: left;
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .landing-feat-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .landing-feat-card span {
-            font-size: 20px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .landing-feat-card h4 {
-            font-size: 12px;
-            color: var(--text-main);
-            font-weight: 700;
-        }
-
-        .landing-feat-card p {
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-
-        .landing-actions-vibrant {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .donation-banner {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border: 1px solid #F59E0B;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-card);
-        }
-
-        .btn-main {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            width: 100%;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
-            transition: transform 0.2s;
-        }
-
-        .btn-main:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-secundario {
-            background: #FFFFFF;
-            color: var(--text-main);
-            border: 2px solid var(--border);
-            padding: 13px;
-            border-radius: 14px;
-            width: 100%;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-secundario:hover {
-            background: #F3EFE6;
-            border-color: var(--primary);
-        }
-
-        .btn-gps {
-            background: #EFF6FF;
-            color: var(--primary);
-            border: 1px solid #BFDBFE;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 6px;
-            transition: background 0.2s;
-        }
-
-        .btn-gps:hover {
-            background: #DBEAFE;
-        }
-
-        .refugio-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border);
-            margin-bottom: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .refugio-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.08);
-        }
-
-        .pet-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
-
-        .pet-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 8px 0;
-        }
-
-        .pet-tag {
-            background: #F1F5F9;
-            color: var(--text-muted);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .pet-tag.condition {
-            background: #FEF3C7;
-            color: #B45309;
-        }
-
-        #main-app {
-            display: none;
-            height: 100%;
-            width: 100%;
-            flex-direction: column;
-            position: relative;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .header {
-            padding: 16px 24px;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 18px;
-            color: var(--text-main);
-        }
-
-        .desktop-content {
-            flex: 1;
-            width: 100%;
-            overflow-y: auto;
-            padding: 24px;
-            padding-bottom: 90px;
-        }
-
-        .grid-desktop {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        @media (min-width: 768px) {
-            .grid-desktop {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .view {
-            display: none;
-        }
-
-        .view.active-view {
-            display: block;
-        }
-
-        #bottom-nav {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0 16px 0;
-            border-top: 1px solid var(--border);
-            height: 68px;
-            z-index: 50;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            flex: 1;
-        }
-
-        .nav-item i {
-            font-style: normal;
-            font-size: 18px;
-            margin-bottom: 2px;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        #google-modal, #pet-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .google-box {
-            background: white;
-            width: 90%;
-            max-width: 380px;
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .form-input, .form-textarea {
-            width: 100%;
-            padding: 11px 14px;
-            background: #FAF6EE;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 13px;
-            color: var(--text-main);
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .form-input:focus, .form-textarea:focus {
-            border-color: var(--primary);
-            background: #FFFFFF;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .role-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            background: #FAF6EE;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .role-option:hover {
-            border-color: var(--primary);
-            background: #F3EFE6;
-        }
-
-        .role-option input[type="radio"] {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--primary);
-            cursor: pointer;
-        }
-    </style>
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-900 flex justify-center items-center min-h-screen">
-    <div id="app-container">
-        
-        <!-- PANTALLA DE BIENVENIDA -->
-        <div id="landing-screen">
-            <div class="landing-inner-wrapper">
-                <div class="landing-top-badge">✨ Red Global de Rescate</div>
-                
-                <div class="landing-hero-box">
-                    <div class="landing-emojis-row">
-                        <span>🐶</span><span>🐱</span><span>❤️</span>
-                    </div>
-                    <h1>Refugio Digital</h1>
-                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal, reporta emergencias libremente o publica casos de rescate profesional.</p>
-                </div>
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans">
 
-                <div class="landing-features-grid">
-                    <div class="landing-feat-card" onclick="irAReportarDesdeLanding()">
-                        <span>🚨</span>
-                        <h4>Reporta Alertas</h4>
-                        <p>Libre y sin cuenta.</p>
-                    </div>
-                    <div class="landing-feat-card" onclick="explorarSinCuenta()">
-                        <span>👀</span>
-                        <h4>Explorar</h4>
-                        <p>Ver animales y casos.</p>
-                    </div>
-                </div>
-
-                <div class="landing-actions-vibrant">
-                    <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">
-                        ✨ Iniciar Sesión / Registrarse
-                    </button>
-                    <button class="btn-secundario" onclick="explorarSinCuenta()">
-                        🐾 Explorar como Invitado
-                    </button>
-                </div>
-            </div>
+  <!-- NAVBAR -->
+  <header class="bg-white/80 backdrop-blur-md border-b border-brand-100 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="#" onclick="showSection('inicio')" class="flex items-center gap-2 text-brand-700 font-bold text-xl tracking-tight">
+        <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600">
+          <i class="fa-solid fa-paw text-xl"></i>
         </div>
+        <span>Refugio<span class="text-brand-500 font-normal">Digital</span></span>
+      </a>
 
-        <!-- APLICACIÓN PRINCIPAL -->
-        <div id="main-app">
-            <div class="header">
-                <span id="header-title">🐾 Refugio Digital</span>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <button class="btn-gps" style="margin: 0; padding: 6px 10px; font-size: 11px;" onclick="irAReportarDesdeLanding()">🚨 Reportar Alerta</button>
-                    <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="volverAlLanding()">↩ Volver</button>
-                    <button class="btn-secundario" id="btn-auth-action" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="abrirGoogleModalDesdeLanding()">Entrar</button>
-                </div>
-            </div>
-            
-            <div class="desktop-content">
-                
-                <!-- VISTA 1: EXPLORAR MASCOTAS (INICIO) -->
-                <div class="view active-view" id="home-view">
-                    
-                    <!-- Tarjeta de Donación Destacada -->
-                    <div class="donation-banner">
-                        <span style="font-size: 26px; display: block; margin-bottom: 6px;">💛🐾</span>
-                        <h3 style="color: #92400E; font-size: 17px; font-weight: 700; margin-bottom: 4px;">Apoya el Refugio</h3>
-                        <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Dona $3 USD para alimento y rescates. <strong>El 70% va directamente para la fundación</strong> y casos críticos.</p>
-                        <button class="btn-main" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);" onclick="alert('¡Gracias por tu generosidad! Redirigiendo a pasarela de donación solidaria...')">
-                            💖 Dona $3 Dólares Ahora
-                        </button>
-                    </div>
+      <!-- Navegación Desktop -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+        <button onclick="showSection('inicio')" class="hover:text-brand-600 transition">Inicio</button>
+        <button onclick="showSection('adopciones')" class="hover:text-brand-600 transition">Adoptar</button>
+        <button onclick="showSection('alertas')" class="hover:text-brand-600 transition">Alertas de Rescate</button>
+        <button onclick="showSection('reportar')" class="hover:text-brand-600 transition">Reportar Caso</button>
+      </nav>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                        <h2 style="color: var(--text-main); font-weight: 700; font-size: 18px;">Mascotas buscando un hogar</h2>
-                    </div>
-                    
-                    <!-- Galería Interactiva con Datos de Ubicación / Veterinaria -->
-                    <div class="grid-desktop" id="pet-gallery">
-                        <div class="refugio-card" onclick="mostrarDetalleMascota('Firulais', '🐶 2 años', 'Mestizo', 'Vacunado / Sano', 'Refugio Central - SJL (Av. Próceres 450)', 'Perrito alegre y muy cariñoso buscando una segunda oportunidad con familia activa.', 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80')">
-                            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Firulais" class="pet-img">
-                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Firulais</h4>
-                            <div class="pet-tags">
-                                <span class="pet-tag">🐶 2 años</span>
-                                <span class="pet-tag">Mestizo</span>
-                                <span class="pet-tag condition">Vacunado / Sano</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso buscando una segunda oportunidad con familia activa.</p>
-                        </div>
-
-                        <div class="refugio-card" onclick="mostrarDetalleMascota('Pelusa', '🐱 1 año', 'Siamés Mix', 'Esterilizada', 'Clínica Veterinaria Patitas Felices (Los Olivos)', 'Gatita tierna y hogareña que adora dormir en el sofá y busca un hogar tranquilo.', 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80')">
-                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Pelusa" class="pet-img">
-                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Pelusa</h4>
-                            <div class="pet-tags">
-                                <span class="pet-tag">🐱 1 año</span>
-                                <span class="pet-tag">Siamés Mix</span>
-                                <span class="pet-tag condition">Esterilizada</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que adora dormir en el sofá y busca un hogar tranquilo.</p>
-                        </div>
-
-                        <div class="refugio-card" onclick="mostrarDetalleMascota('Chocolate', '🐶 3 años', 'Labrador Mix', 'Tratamiento leve piel', 'Centro de Rescate Canino Lima Este (SJL)', 'Muy amigable, le encanta jugar con la pelota y se lleva bien con otros perros.', 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=500&q=80')">
-                            <img src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=500&q=80" alt="Chocolate" class="pet-img">
-                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Chocolate</h4>
-                            <div class="pet-tags">
-                                <span class="pet-tag">🐶 3 años</span>
-                                <span class="pet-tag">Labrador Mix</span>
-                                <span class="pet-tag condition">Tratamiento leve piel</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Muy amigable, le encanta jugar con la pelota y se lleva bien con otros perros.</p>
-                        </div>
-
-                        <div class="refugio-card" onclick="mostrarDetalleMascota('Luna', '🐱 8 meses', 'Común Europeo', 'Sana y desparasitada', 'Veterinaria San Francisco de Asís (Miraflores)', 'Muy curiosa, juguetona y sociable con personas y otros mininos.', 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=500&q=80')">
-                            <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=500&q=80" alt="Luna" class="pet-img">
-                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Luna</h4>
-                            <div class="pet-tags">
-                                <span class="pet-tag">🐱 8 meses</span>
-                                <span class="pet-tag">Común Europeo</span>
-                                <span class="pet-tag condition">Sana y desparasitada</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Muy curiosa, juguetona y sociable con personas y otros mininos.</p>
-                        </div>
-
-                        <div class="refugio-card" onclick="mostrarDetalleMascota('Toby', '🐶 4 años', 'Pastor Mix', 'Fuerte y protector', 'Refugio Temporal Santa Rosa (Callao)', 'Noble, protector y listo para formar parte de un hogar responsable y cálido.', 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80')">
-                            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80" alt="Toby" class="pet-img">
-                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Toby</h4>
-                            <div class="pet-tags">
-                                <span class="pet-tag">🐶 4 años</span>
-                                <span class="pet-tag">Pastor Mix</span>
-                                <span class="pet-tag condition">Fuerte y protector</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Noble, protector y listo para formar parte de un hogar responsable y cálido.</p>
-                        </div>
-
-                        <div class="refugio-card" onclick="mostrarDetalleMascota('Simba', '🐱 2 años', 'Atigrado', 'Castrado / Sano', 'Clínica Felina Amigos de los Gatos (Surco)', 'Gato tranquilo, elegante y muy regalón que busca un hogar lleno de paz.', 'https://images.unsplash.com/photo-1561948955-570b270e7c36?auto=format&fit=crop&w=500&q=80')">
-                            <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?auto=format&fit=crop&w=500&q=80" alt="Simba" class="pet-img">
-                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Simba</h4>
-                            <div class="pet-tags">
-                                <span class="pet-tag">🐱 2 años</span>
-                                <span class="pet-tag">Atigrado</span>
-                                <span class="pet-tag condition">Castrado / Sano</span>
-                            </div>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gato tranquilo, elegante y muy regalón que busca un hogar lleno de paz.</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- VISTA 2: REPORTAR ALERTAS (ACCESIBLE DESDE LANDING O BOTÓN SUPERIOR) -->
-                <div class="view" id="reportes-view">
-                    <div class="refugio-card" style="padding: 22px; margin-bottom: 20px; cursor: default;">
-                        <span style="font-size: 28px; display: block; margin-bottom: 6px;">🚨</span>
-                        <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 4px;">Reportar Alerta de Rescate</h2>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">¿Viste un animal en peligro o abandonado? <strong>Es 100% libre y gratis</strong>. La foto y la ubicación real son obligatorias para evitar reportes falsos.</p>
-                        
-                        <form onsubmit="enviarReporteAlerta(event)">
-                            <div style="text-align: left; margin-bottom: 12px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Ubicación exacta o GPS:</label>
-                                <input type="text" id="reporte-lugar" class="form-input" placeholder="Ej. Av. Principal 123 / Usa el botón GPS" required>
-                                <button type="button" class="btn-gps" onclick="obtenerUbicacionGPS()">
-                                    📍 Usar mi ubicación actual (GPS)
-                                </button>
-                            </div>
-
-                            <div style="text-align: left; margin-bottom: 12px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto obligatoria del caso:</label>
-                                <input type="file" id="reporte-imagen" class="form-input" accept="image/*" required style="padding: 8px;">
-                            </div>
-
-                            <div style="text-align: left; margin-bottom: 16px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción de la emergencia:</label>
-                                <textarea id="reporte-desc" class="form-textarea" placeholder="Describe el estado del animal, urgencia y referencias..." required></textarea>
-                            </div>
-
-                            <button type="submit" class="btn-main">🚨 Publicar Alerta Verificada</button>
-                        </form>
-                    </div>
-
-                    <!-- Feed de Alertas Activas con Confirmación de Usuarios -->
-                    <h3 style="color: var(--text-main); font-size: 16px; font-weight: 700; margin-bottom: 12px;">📢 Alertas Activas en la Comunidad</h3>
-                    <div id="feed-reportes" style="display: flex; flex-direction: column; gap: 12px;">
-                        <div class="refugio-card" id="reporte-demo-1" style="cursor: default;">
-                            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=80" alt="Alerta" class="pet-img">
-                            <h4 style="color: var(--text-main); font-weight: 700; font-size: 15px; margin-bottom: 4px;">📍 Av. Los Próceres con Sol (SJL)</h4>
-                            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px;">Perrito marrón asustado cojeando cerca al mercado, parece perdido bajo la lluvia.</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF6EE; padding: 10px; border-radius: 12px;">
-                                <span style="font-size: 12px; font-weight: 600; color: #B45309;" id="badge-conf-1">✅ 3 personas confirmaron este caso</span>
-                                <button type="button" class="btn-gps" style="margin: 0;" onclick="confirmarCaso(1)">Yo también lo vi</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- VISTA 3: PUBLICAR MASCOTA (SOLO VETERINARIAS / CLÍNICAS / PROFESIONALES) -->
-                <div class="view" id="publicar-view">
-                    <div id="pub-auth-box">
-                        <!-- Contenido dinámico según rol -->
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Navegación inferior (Con botones limpios: Inicio y Publicar) -->
-            <div id="bottom-nav">
-                <button class="nav-item active" onclick="cambiarVista('home-view', this)">
-                    <i>🏠</i><span>Inicio</span>
-                </button>
-                <button class="nav-item" id="nav-btn-publicar" onclick="intentarAccesoPublicar(this)">
-                    <i>🐾</i><span>Publicar</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- MODAL DE DETALLES DE MASCOTA (UBICACIÓN / VETERINARIA) -->
-        <div id="pet-modal">
-            <div class="google-box" style="text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <h3 id="modal-pet-name" style="color: var(--text-main); font-size: 18px; font-weight: 700;">Detalles de la Mascota</h3>
-                    <button onclick="cerrarPetModal()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">✕</button>
-                </div>
-                <img id="modal-pet-img" src="" alt="Mascota" style="width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 12px;">
-                <div id="modal-pet-tags" class="pet-tags" style="margin-bottom: 10px;"></div>
-                <div style="background: #FAF6EE; padding: 12px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px;">
-                    <span style="font-size: 11px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 2px; text-transform: uppercase;">🏥 Ubicación / Veterinaria disponible:</span>
-                    <p id="modal-pet-location" style="font-size: 13px; font-weight: 600; color: var(--text-main);"></p>
-                </div>
-                <p id="modal-pet-desc" style="color: var(--text-muted); font-size: 13px; line-height: 1.4; margin-bottom: 16px;"></p>
-                <button class="btn-main" onclick="alert('¡Solicitud de adopción enviada con éxito! La veterinaria se pondrá en contacto.'); cerrarPetModal();">🐾 Solicitar Adopción / Visita</button>
-            </div>
-        </div>
-
-        <!-- MODAL DE GOOGLE Y REGISTRO DE DATOS -->
-        <div id="google-modal">
-            <div class="google-box">
-                <h3 style="margin-bottom: 4px; color: var(--text-main); font-size: 18px; font-weight: 700;">Únete a Refugio Digital</h3>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 12px; line-height: 1.3;">Completa tus datos y selecciona tu perfil para continuar.</p>
-                
-                <form id="login-form" onsubmit="procesarRegistroGoogle(event)">
-                    <div style="text-align: left; margin-bottom: 10px;">
-                        <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Nombre completo:</label>
-                        <input type="text" id="reg-nombre" class="form-input" placeholder="Ej. Dany Vela" required>
-                    </div>
-
-                    <div style="text-align: left; margin-bottom: 12px;">
-                        <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Correo electrónico:</label>
-                        <input type="email" id="reg-correo" class="form-input" placeholder="tucorreo@ejemplo.com" required>
-                    </div>
-
-                    <div style="text-align: left; margin-bottom: 14px;">
-                        <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px; text-transform: uppercase;">Selecciona tu perfil:</label>
-                        <div style="display: flex; flex-direction: column; gap: 6px;">
-                            <label class="role-option">
-                                <input type="radio" name="user_role" value="comun" checked>
-                                <span>🧑‍💻 Persona / Adoptante</span>
-                            </label>
-                            <label class="role-option">
-                                <input type="radio" name="user_role" value="profesional">
-                                <span>🎓 Rescatista Profesional</span>
-                            </label>
-                            <label class="role-option">
-                                <input type="radio" name="user_role" value="veterinaria">
-                                <span>🏥 Veterinaria / Clínica</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-main" style="margin-bottom: 8px;">Continuar con Google</button>
-                    <button type="button" class="btn-secundario" onclick="cerrarGoogleModal()">Cancelar</button>
-                </form>
-            </div>
-        </div>
-
+      <!-- Botón Sesión / Admin -->
+      <div id="authNavArea">
+        <!-- Renderizado dinámicamente por JS -->
+      </div>
     </div>
+  </header>
 
-    <script>
-        let usuarioActual = {
-            nombre: 'Invitado',
-            correo: '',
-            rol: 'comun'
-        };
+  <!-- CONTENIDO PRINCIPAL (SPA) -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
 
-        let confirmacionesCasos = {
-            1: 3
-        };
+    <!-- SECCIÓN: INICIO -->
+    <section id="sec-inicio" class="space-y-12">
+      <!-- HERO -->
+      <div class="bg-gradient-to-br from-brand-50 via-sky-50 to-indigo-50/40 rounded-3xl p-8 md:p-12 border border-brand-100 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
+        <div class="space-y-4 max-w-xl">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
+            <i class="fa-solid fa-heart text-brand-500"></i> Red Comunitaria de Mascotas
+          </span>
+          <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 leading-tight">
+            Conectando corazones con <span class="text-brand-600">huellitas</span>
+          </h1>
+          <p class="text-slate-600 text-base md:text-lg">
+            Una plataforma para facilitar la adopción responsable, publicar reportes de rescate y ayudar a mascotas que necesitan un hogar.
+          </p>
+          <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
+            <button onclick="showSection('adopciones')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-200 transition">
+              <i class="fa-solid fa-dog mr-1"></i> Ver Mascotas
+            </button>
+            <button onclick="showSection('reportar')" class="px-6 py-3 bg-white hover:bg-brand-50 text-brand-700 border border-brand-200 rounded-xl font-medium transition">
+              <i class="fa-solid fa-bullhorn mr-1"></i> Reportar Caso
+            </button>
+          </div>
+        </div>
+        <div class="w-full md:w-80 flex justify-center">
+          <div class="w-64 h-64 bg-brand-100/60 rounded-full flex items-center justify-center p-4 border border-brand-200 relative">
+            <i class="fa-solid fa-shield-cat text-8xl text-brand-400"></i>
+          </div>
+        </div>
+      </div>
 
-        function abrirGoogleModalDesdeLanding() {
-            document.getElementById('google-modal').style.display = 'flex';
-        }
+      <!-- ACCESOS RÁPIDOS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div onclick="showSection('adopciones')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-paw"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Adopción Responsable</h3>
+          <p class="text-sm text-slate-500">Conoce a perros y gatos que están esperando una oportunidad para formar parte de una familia.</p>
+        </div>
 
-        function cerrarGoogleModal() {
-            document.getElementById('google-modal').style.display = 'none';
-        }
+        <div onclick="showSection('alertas')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Alertas de Rescate</h3>
+          <p class="text-sm text-slate-500">Casos urgentes de mascotas perdidas o que requieren atención médica e internamiento.</p>
+        </div>
 
-        function mostrarDetalleMascota(nombre, edad, razaCondicion, salud, ubicacion, desc, img) {
-            if (usuarioActual.nombre === 'Invitado') {
-                alert('Como invitado puedes explorar la galería. Para ver la ubicación de la veterinaria y detalles avanzados, por favor inicia sesión o regístrate.');
-                abrirGoogleModalDesdeLanding();
-                return;
-            }
+        <div onclick="showSection('reportar')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Publicar Alerta</h3>
+          <p class="text-sm text-slate-500">Registra una mascota encontrada o pon en adopción a un rescate de forma sencilla.</p>
+        </div>
+      </div>
+    </section>
 
-            document.getElementById('modal-pet-name').innerText = nombre;
-            document.getElementById('modal-pet-img').src = img;
-            document.getElementById('modal-pet-location').innerText = ubicacion;
-            document.getElementById('modal-pet-desc').innerText = desc;
-            
-            const tagsContainer = document.getElementById('modal-pet-tags');
-            tagsContainer.innerHTML = `
-                <span class="pet-tag">${edad}</span>
-                <span class="pet-tag">${razaCondicion}</span>
-                <span class="pet-tag condition">${salud}</span>
-            `;
+    <!-- SECCIÓN: ADOPCIONES -->
+    <section id="sec-adopciones" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Mascotas en Adopción</h2>
+          <p class="text-sm text-slate-500">Encuentra a tu nuevo compañero de vida.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="filterPets('Todos')" class="px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white">Todos</button>
+          <button onclick="filterPets('Perro')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600">Perros</button>
+          <button onclick="filterPets('Gato')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600">Gatos</button>
+        </div>
+      </div>
 
-            document.getElementById('pet-modal').style.display = 'flex';
-        }
+      <div id="gridAdopciones" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Renderizado con JS -->
+      </div>
+    </section>
 
-        function cerrarPetModal() {
-            document.getElementById('pet-modal').style.display = 'none';
-        }
+    <!-- SECCIÓN: ALERTAS DE RESCATE -->
+    <section id="sec-alertas" class="hidden space-y-6">
+      <div class="border-b border-slate-200 pb-4">
+        <h2 class="text-2xl font-bold text-slate-800">Alertas de Rescate</h2>
+        <p class="text-sm text-slate-500">Mascotas perdidas o que requieren ayuda inmediata.</p>
+      </div>
 
-        function explorarSinCuenta() {
-            usuarioActual = { nombre: 'Invitado', correo: '', rol: 'comun' };
-            entrarAlSistema();
-        }
+      <div id="gridAlertas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Renderizado con JS -->
+      </div>
+    </section>
 
-        function irAReportarDesdeLanding() {
-            entrarAlSistema();
-            cambiarVista('reportes-view', null);
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-        }
+    <!-- SECCIÓN: REPORTAR / CREAR CASO -->
+    <section id="sec-reportar" class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-brand-100 shadow-sm space-y-6">
+      <div class="text-center space-y-1">
+        <h2 class="text-2xl font-bold text-slate-800">Reportar o Publicar Caso</h2>
+        <p class="text-sm text-slate-500">Completa la información sobre la mascota.</p>
+      </div>
 
-        function procesarRegistroGoogle(event) {
-            event.preventDefault();
-            const nombre = document.getElementById('reg-nombre').value.trim();
-            const correo = document.getElementById('reg-correo').value.trim();
-            const rolSeleccionado = document.querySelector('input[name="user_role"]:checked').value;
+      <form id="formNuevoRegistro" onsubmit="guardarNuevoRegistro(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Tipo de Publicación</label>
+          <select id="regTipo" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <option value="Adopcion">Mascota en Adopción</option>
+            <option value="Alerta">Alerta de Rescate / Perdido</option>
+          </select>
+        </div>
 
-            if (!nombre || !correo || !correo.includes('@')) {
-                alert('Por favor, ingresa un nombre válido y un correo electrónico correcto.');
-                return;
-            }
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre de la Mascota</label>
+            <input type="text" id="regNombre" required placeholder="Ej: Pochi, Luna..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Especie</label>
+            <select id="regEspecie" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+              <option value="Perro">Perro</option>
+              <option value="Gato">Gato</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+        </div>
 
-            usuarioActual = {
-                nombre: nombre,
-                correo: correo,
-                rol: rolSeleccionado
-            };
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Ubicación / Distrito</label>
+            <input type="text" id="regUbicacion" required placeholder="Ej: San Juan de Lurigancho" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Edad o Tiempo aprox.</label>
+            <input type="text" id="regEdad" placeholder="Ej: 1 año, 6 meses" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
 
-            document.getElementById('btn-auth-action').innerText = usuarioActual.nombre;
-            cerrarGoogleModal();
-            entrarAlSistema();
-        }
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Detalles / Descripción</label>
+          <textarea id="regDescripcion" rows="3" required placeholder="Describe el estado de la mascota o detalles del rescate..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
+        </div>
 
-        function entrarAlSistema() {
-            document.getElementById('landing-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            actualizarVistaPublicar();
-            cambiarVista('home-view', document.querySelector('.nav-item'));
-        }
+        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md transition">
+          Publicar Caso
+        </button>
+      </form>
+    </section>
 
-        function volverAlLanding() {
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('landing-screen').style.display = 'flex';
-            document.getElementById('reg-nombre').value = '';
-            document.getElementById('reg-correo').value = '';
-            document.getElementById('btn-auth-action').innerText = 'Entrar';
-        }
+    <!-- SECCIÓN: PANEL ADMINISTRADOR -->
+    <section id="sec-admin" class="hidden space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Panel de Administración</h2>
+          <p class="text-sm text-slate-500">Gestión de registros almacenados en la plataforma.</p>
+        </div>
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">
+          Modo Administrador Activo
+        </span>
+      </div>
 
-        function cambiarVista(viewId, element) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
-            document.getElementById(viewId).classList.add('active-view');
-
-            if (element) {
-                document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-                element.classList.add('active');
-            }
-        }
-
-        function intentarAccesoPublicar(element) {
-            if (usuarioActual.nombre === 'Invitado') {
-                alert('Para publicar mascotas necesitas iniciar sesión como Veterinaria o Rescatista Profesional.');
-                abrirGoogleModalDesdeLanding();
-                return;
-            }
-            cambiarVista('publicar-view', element);
-        }
-
-        function actualizarVistaPublicar() {
-            const pubBox = document.getElementById('pub-auth-box');
-            if (usuarioActual.nombre !== 'Invitado' && (usuarioActual.rol === 'veterinaria' || usuarioActual.rol === 'profesional')) {
-                pubBox.innerHTML = `
-                    <div class="refugio-card" style="padding: 22px; cursor: default;">
-                        <span style="font-size: 28px; display: block; margin-bottom: 6px;">🐾</span>
-                        <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 4px;">Publicar Mascota en Adopción</h2>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">Como ${usuarioActual.rol === 'veterinaria' ? 'Clínica / Veterinaria' : 'Rescatista Profesional'}, puedes publicar mascotas de forma <strong>gratuita</strong>.</p>
-                        
-                        <form onsubmit="publicarMascotaAdopcion(event)">
-                            <div style="text-align: left; margin-bottom: 10px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Nombre de la mascota:</label>
-                                <input type="text" id="pub-nombre" class="form-input" placeholder="Ej. Bobby" required>
-                            </div>
-                            <div style="text-align: left; margin-bottom: 10px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Edad y Raza:</label>
-                                <input type="text" id="pub-edad-raza" class="form-input" placeholder="Ej. 1 año / Cocker Spaniel" required>
-                            </div>
-                            <div style="text-align: left; margin-bottom: 10px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Condición de salud:</label>
-                                <input type="text" id="pub-condicion" class="form-input" placeholder="Ej. Vacunado y desparasitado" required>
-                            </div>
-                            <div style="text-align: left; margin-bottom: 10px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Ubicación / Veterinaria:</label>
-                                <input type="text" id="pub-ubicacion" class="form-input" placeholder="Ej. Clínica Vet Lima (Av. Javier Prado 120)" required>
-                            </div>
-                            <div style="text-align: left; margin-bottom: 10px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto (Enlace o URL):</label>
-                                <input type="text" id="pub-imagen" class="form-input" placeholder="https://images.unsplash.com/..." required>
-                            </div>
-                            <div style="text-align: left; margin-bottom: 16px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción e historia:</label>
-                                <textarea id="pub-desc" class="form-textarea" placeholder="Historia breve de rescate..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn-main">✨ Publicar Mascota Gratis</button>
-                        </form>
-                    </div>
-                `;
-            } else {
-                pubBox.innerHTML = `
-                    <div class="refugio-card" style="padding: 28px; text-align: center; cursor: default;">
-                        <span style="font-size: 36px; display: block; margin-bottom: 10px;">🔒</span>
-                        <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 6px;">Acceso exclusivo para profesionales</h2>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">La publicación de mascotas es gratuita pero está reservada para <strong>Veterinarias, Clínicas y Rescatistas Profesionales</strong>.</p>
-                        <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">Iniciar sesión como Profesional</button>
-                    </div>
-                `;
-            }
-        }
-
-        function obtenerUbicacionGPS() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const lat = position.coords.latitude.toFixed(4);
-                    const lon = position.coords.longitude.toFixed(4);
-                    document.getElementById('reporte-lugar').value = `Ubicación GPS: Lat ${lat}, Lon ${lon}`;
-                }, () => {
-                    alert('No se pudo acceder al GPS automáticamente. Por favor ingresa la ubicación manualmente.');
-                });
-            } else {
-                alert('La geolocalización no es compatible con este navegador.');
-            }
-        }
-
-        function enviarReporteAlerta(event) {
-            event.preventDefault();
-            const lugar = document.getElementById('reporte-lugar').value;
-            const imagenInput = document.getElementById('reporte-imagen').files[0];
-            const desc = document.getElementById('reporte-desc').value;
-
-            if(!lugar || !desc || !imagenInput) {
-                alert('La foto y la ubicación son obligatorias para publicar un reporte verificado.');
-                return;
-            }
-
-            const imageUrl = URL.createObjectURL(imagenInput);
-            const reportId = Date.now();
-            confirmacionesCasos[reportId] = 1;
-
-            const feed = document.getElementById('feed-reportes');
-            const newReport = document.createElement('div');
-            newReport.className = 'refugio-card';
-            newReport.style.cursor = 'default';
-            newReport.innerHTML = `
-                <img src="${imageUrl}" alt="Alerta" class="pet-img">
-                <h4 style="color: var(--text-main); font-weight: 700; font-size: 15px; margin-bottom: 4px;">📍 ${lugar}</h4>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px;">${desc}</p>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF6EE; padding: 10px; border-radius: 12px;">
-                    <span style="font-size: 12px; font-weight: 600; color: #B45309;" id="badge-conf-${reportId}">✅ 1 persona confirmó este caso</span>
-                    <button type="button" class="btn-gps" style="margin: 0;" onclick="confirmarCaso(${reportId})">Yo también lo vi</button>
-                </div>
-            `;
-            feed.prepend(newReport);
-
-            alert('¡Alerta de rescate publicada con éxito! Gracias por ayudar.');
-            document.getElementById('reporte-lugar').value = '';
-            document.getElementById('reporte-imagen').value = '';
-            document.getElementById('reporte-desc').value = '';
-            cambiarVista('home-view', document.querySelectorAll('.nav-item')[0]);
-        }
-
-        function confirmarCaso(id) {
-            confirmacionesCasos[id] = (confirmacionesCasos[id] || 1) + 1;
-            const badge = document.getElementById(`badge-conf-${id}`);
-            if (badge) {
-                badge.innerText = `✅ ${confirmacionesCasos[id]} personas confirmaron este caso`;
-            }
-            alert('¡Gracias por confirmar! Ayudas a validar la emergencia para los rescatistas.');
-        }
-
-        function publicarMascotaAdopcion(event) {
-            event.preventDefault();
-            const nombre = document.getElementById('pub-nombre').value;
-            const edadRaza = document.getElementById('pub-edad-raza').value;
-            const condicion = document.getElementById('pub-condicion').value;
-            const ubicacion = document.getElementById('pub-ubicacion').value;
-            const imagen = document.getElementById('pub-imagen').value;
-            const desc = document.getElementById('pub-desc').value;
-
-            const gallery = document.getElementById('pet-gallery');
-            const newCard = document.createElement('div');
-            newCard.className = 'refugio-card';
-            newCard.setAttribute('onclick', `mostrarDetalleMascota('${nombre}', '${edadRaza.split('/')[0] || '1 año'}', '${edadRaza.split('/')[1] || 'Mestizo'}', '${condicion}', '${ubicacion}', '${desc}', '${imagen}')`);
-            newCard.innerHTML = `
-                <img src="${imagen}" alt="${nombre}" class="pet-img" onerror="this.src='https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80'">
-                <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">${nombre}</h4>
-                <div class="pet-tags">
-                    <span class="pet-tag">${edadRaza}</span>
-                    <span class="pet-tag condition">${condicion}</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">${desc}</p>
-            `;
-            gallery.prepend(newCard);
-
-            alert('¡Mascota publicada exitosamente para adopción!');
-            cambiarVista('home-view', document.querySelectorAll('.nav-item')[0]);
-        }
-    </script>
-</body>
-</html> 
-<!-- ========================================== -->
-<!-- PANEL DE ADMINISTRADOR (Oculto por defecto) -->
-<!-- ========================================== -->
-<div id="panelAdmin" style="display: none; background: #f4f4f4; padding: 20px; margin-top: 20px; border: 2px dashed #999;">
-    <h2>Panel de Control Maestro (Superusuario)</h2>
-    <p>Vista global y de supervisión total del sistema.</p>
-    
-    <table border="1" style="width:100%; margin-top: 10px; background: white;">
-        <thead>
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs">
             <tr>
-                <th>Categoría</th>
-                <th>Información Registrada</th>
-                <th>Acción de Moderación</th>
+              <th class="p-4">Mascota</th>
+              <th class="p-4">Tipo</th>
+              <th class="p-4">Ubicación</th>
+              <th class="p-4 text-right">Acción</th>
             </tr>
-        </thead>
-        <tbody id="cuerpoTablaAdmin">
-            <!-- Los registros globales aparecerán aquí automáticamente -->
-        </tbody>
-    </table>
-    <button onclick="cerrarSesionAdmin()" style="margin-top: 10px; background: #d9534f; color: white; border: none; padding: 5px 10px; cursor: pointer;">Cerrar Sesión Admin</button>
-</div>
+          </thead>
+          <tbody id="tablaAdmin" class="divide-y divide-slate-100">
+            <!-- JS Dynamic content -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: LOGIN -->
+  <div id="modalLogin" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-lg text-slate-800">Iniciar Sesión</h3>
+        <button onclick="toggleModalLogin(false)" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500">Ingresa tu correo para acceder a las funciones avanzadas del sistema.</p>
+
+      <form onsubmit="procesarLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico</label>
+          <input type="email" id="emailLogin" required placeholder="correo@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition">
+          Ingresar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1">
+    <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
+    <p>Plataforma para el rescate y bienestar animal.</p>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
+
+    // Datos por defecto iniciales
+    const defaultData = [
+      { id: 1, tipo: "Adopcion", nombre: "Luna", especie: "Perro", ubicacion: "San Juan de Lurigancho", edad: "2 años", descripcion: "Rescatada, muy juguetona y con vacunas al día." },
+      { id: 2, tipo: "Adopcion", nombre: "Mishi", especie: "Gato", ubicacion: "Lima Centro", edad: "8 meses", descripcion: "Tranquilo, acostumbrado a departamento." },
+      { id: 3, tipo: "Alerta", nombre: "Peluche", especie: "Perro", ubicacion: "SJL - Zarate", edad: "Desconocida", descripcion: "Encontrado cerca del parque. Busca a sus dueños o temporal." }
+    ];
+
+    function getMascotas() {
+      const data = localStorage.getItem("refugio_mascotas");
+      if (!data) {
+        localStorage.setItem("refugio_mascotas", JSON.stringify(defaultData));
+        return defaultData;
+      }
+      return JSON.parse(data);
+    }
+
+    function saveMascotas(list) {
+      localStorage.setItem("refugio_mascotas", JSON.stringify(list));
+    }
+
+    function getUsuarioActual() {
+      return JSON.parse(localStorage.getItem("refugio_usuario"));
+    }
+
+    // NAVEGACIÓN Y VISTAS
+    function showSection(secId) {
+      const secciones = ['inicio', 'adopciones', 'alertas', 'reportar', 'admin'];
+      secciones.forEach(id => {
+        const el = document.getElementById(`sec-${id}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      const target = document.getElementById(`sec-${secId}`);
+      if (target) target.classList.remove('hidden');
+
+      if (secId === 'adopciones') renderAdopciones('Todos');
+      if (secId === 'alertas') renderAlertas();
+      if (secId === 'admin') renderAdminTable();
+    }
+
+    // MODAL LOGIN
+    function toggleModalLogin(show) {
+      const modal = document.getElementById('modalLogin');
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function procesarLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailLogin').value.trim().toLowerCase();
+      
+      const usuario = {
+        email: email,
+        esAdmin: (email === ADMIN_EMAIL)
+      };
+
+      localStorage.setItem("refugio_usuario", JSON.stringify(usuario));
+      toggleModalLogin(false);
+      actualizarBotonSesion();
+
+      if (usuario.esAdmin) {
+        showSection('admin');
+      } else {
+        showSection('inicio');
+      }
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem("refugio_usuario");
+      actualizarBotonSesion();
+      showSection('inicio');
+    }
+
+    function actualizarBotonSesion() {
+      const area = document.getElementById('authNavArea');
+      const user = getUsuarioActual();
+
+      if (user) {
+        area.innerHTML = `
+          <div class="flex items-center gap-3">
+            ${user.esAdmin ? '<button onclick="showSection(\'admin\')" class="px-3 py-1.5 bg-brand-100 text-brand-700 text-xs font-bold rounded-lg hover:bg-brand-200">Panel Admin</button>' : ''}
+            <span class="text-xs font-medium text-slate-500 hidden sm:inline">${user.email}</span>
+            <button onclick="cerrarSesion()" class="text-xs text-slate-400 hover:text-rose-500">Salir</button>
+          </div>
+        `;
+      } else {
+        area.innerHTML = `
+          <button onclick="toggleModalLogin(true)" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition shadow-sm">
+            Ingresar
+          </button>
+        `;
+      }
+    }
+
+    // RENDERIZADO DE CONTENIDOS
+    function renderAdopciones(filtro) {
+      const grid = document.getElementById('gridAdopciones');
+      const lista = getMascotas().filter(m => m.tipo === "Adopcion");
+      
+      const filtrados = filtro === 'Todos' ? lista : lista.filter(m => m.especie === filtro);
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay mascotas en adopción por el momento.</p>`;
+        return;
+      }
+
+      grid.innerHTML = filtrados.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm space-y-3 hover:border-brand-200 transition">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
+              <span class="text-xs text-brand-600 font-medium"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
+            </div>
+            <span class="px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-semibold">${item.especie}</span>
+          </div>
+          <p class="text-sm text-slate-600 line-clamp-2">${item.descripcion}</p>
+          <div class="pt-2 flex justify-between items-center text-xs text-slate-400">
+            <span>Edad: ${item.edad || 'N/A'}</span>
+            <button onclick="alert('Contacto registrado. Próximamente se habilitará la mensajería directa.')" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700">Adoptar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterPets(especie) {
+      renderAdopciones(especie);
+    }
+
+    function renderAlertas() {
+      const grid = document.getElementById('gridAlertas');
+      const lista = getMascotas().filter(m => m.tipo === "Alerta");
+
+      if (lista.length === 0) {
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay alertas activas en este momento.</p>`;
+        return;
+      }
+
+      grid.innerHTML = lista.map(item => `
+        <div class="bg-white rounded-2xl border border-amber-100 p-5 shadow-sm space-y-3">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
+              <span class="text-xs text-amber-600 font-medium"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
+            </div>
+            <span class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-semibold">Alerta Rescate</span>
+          </div>
+          <p class="text-sm text-slate-600">${item.descripcion}</p>
+        </div>
+      `).join('');
+    }
+
+    function guardarNuevoRegistro(e) {
+      e.preventDefault();
+      const lista = getMascotas();
+
+      const nuevo = {
+        id: Date.now(),
+        tipo: document.getElementById('regTipo').value,
+        nombre: document.getElementById('regNombre').value.trim(),
+        especie: document.getElementById('regEspecie').value,
+        ubicacion: document.getElementById('regUbicacion').value.trim(),
+        edad: document.getElementById('regEdad').value.trim() || 'Desconocida',
+        descripcion: document.getElementById('regDescripcion').value.trim()
+      };
+
+      lista.unshift(nuevo);
+      saveMascotas(lista);
+
+      document.getElementById('formNuevoRegistro').reset();
+      alert('¡Caso registrado con éxito!');
+
+      if (nuevo.tipo === 'Adopcion') {
+        showSection('adopciones');
+      } else {
+        showSection('alertas');
+      }
+    }
+
+    function renderAdminTable() {
+      const tbody = document.getElementById('tablaAdmin');
+      const lista = getMascotas();
+
+      if (lista.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros almacenados.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = lista.map(item => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-4 font-medium text-slate-800">${item.nombre} (${item.especie})</td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-xs ${item.tipo === 'Adopcion' ? 'bg-sky-100 text-sky-700' : 'bg-amber-100 text-amber-700'}">${item.tipo}</span></td>
+          <td class="p-4 text-slate-500">${item.ubicacion}</td>
+          <td class="p-4 text-right">
+            <button onclick="eliminarRegistro(${item.id})" class="text-rose-500 hover:text-rose-700 font-medium text-xs">Eliminar</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function eliminarRegistro(id) {
+      if (!confirm('¿Seguro que deseas eliminar este registro?')) return;
+      let lista = getMascotas();
+      lista = lista.filter(item => item.id !== id);
+      saveMascotas(lista);
+      renderAdminTable();
+    }
+
+    // Inicialización al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      actualizarBotonSesion();
+      showSection('inicio');
+    });
+  </script>
+</body>
+</html>
