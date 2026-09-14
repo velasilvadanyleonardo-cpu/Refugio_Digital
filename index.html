@@ -8,12 +8,451 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --accent-warm: #FF6B6B;
+            --bg-color: #FAF6EE;
+            --card-bg: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border: #EADFCF;
+            --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0F172A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Quicksand', 'Plus Jakarta Sans', sans-serif;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100vh;
+            background: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            #app-container {
+                max-width: 1100px;
+                height: 88vh;
+                border-radius: 24px;
+            }
+        }
+
+        #landing-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 30px 24px;
+            background: linear-gradient(135deg, #FAF6EE 0%, #F3EFE6 50%, #EFEADF 100%);
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 120;
+            overflow-y: auto;
+        }
+
+        .landing-inner-wrapper {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: auto;
+        }
+
+        .landing-top-badge {
+            background: #FEF3C7;
+            color: #B45309;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
+        }
+
+        .landing-hero-box {
+            background: white;
+            width: 100%;
+            padding: 24px 20px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        @keyframes floatAnimation {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.03); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+
+        .landing-emojis-row {
+            font-size: 38px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            animation: floatAnimation 3s ease-in-out infinite;
+        }
+
+        .landing-hero-box h1 {
+            color: var(--text-main);
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .landing-hero-box p {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .landing-features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .landing-feat-card {
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            text-align: left;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+        }
+
+        .landing-feat-card span {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .landing-feat-card h4 {
+            font-size: 12px;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .landing-feat-card p {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .landing-actions-vibrant {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .donation-banner {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border: 1px solid #F59E0B;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+            transition: transform 0.2s;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secundario {
+            background: #FFFFFF;
+            color: var(--text-main);
+            border: 2px solid var(--border);
+            padding: 13px;
+            border-radius: 14px;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secundario:hover {
+            background: #F3EFE6;
+            border-color: var(--primary);
+        }
+
+        .btn-gps {
+            background: #EFF6FF;
+            color: var(--primary);
+            border: 1px solid #BFDBFE;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-gps:hover {
+            background: #DBEAFE;
+        }
+
+        .refugio-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .pet-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .pet-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 8px 0;
+        }
+
+        .pet-tag {
+            background: #F1F5F9;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .pet-tag.condition {
+            background: #FEF3C7;
+            color: #B45309;
+        }
+
+        #main-app {
+            display: none;
+            height: 100%;
+            width: 100%;
+            flex-direction: column;
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 16px 24px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-main);
+        }
+
+        .desktop-content {
+            flex: 1;
+            width: 100%;
+            overflow-y: auto;
+            padding: 24px;
+            padding-bottom: 90px;
+        }
+
+        .grid-desktop {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-desktop {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active-view {
+            display: block;
+        }
+
+        #bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 16px 0;
+            border-top: 1px solid var(--border);
+            height: 68px;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .nav-item i {
+            font-style: normal;
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        #google-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .google-box {
+            background: white;
+            width: 90%;
+            max-width: 380px;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 11px 14px;
+            background: #FAF6EE;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .role-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #FAF6EE;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary);
+            background: #F3EFE6;
+        }
+
+        .role-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="bg-slate-900 flex justify-center items-center min-h-screen">
     <div id="app-container">
         
-        <!-- PANTALLA DE BIENVENIDA CENTRADA -->
+        <!-- PANTALLA DE BIENVENIDA -->
         <div id="landing-screen">
             <div class="landing-inner-wrapper">
                 <div class="landing-top-badge">✨ Red Global de Rescate</div>
@@ -23,28 +462,28 @@
                         <span>🐶</span><span>🐱</span><span>❤️</span>
                     </div>
                     <h1>Refugio Digital</h1>
-                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal, reporta emergencias o publica casos de rescate sin importar el lugar.</p>
+                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal, reporta emergencias libremente o publica casos de rescate profesional.</p>
                 </div>
 
                 <div class="landing-features-grid">
-                    <div class="landing-feat-card">
-                        <span>🏡</span>
-                        <h4>Adopta con Amor</h4>
-                        <p>Hogares seguros.</p>
-                    </div>
-                    <div class="landing-feat-card">
+                    <div class="landing-feat-card" onclick="irAReportarDesdeLanding()" style="cursor: pointer;">
                         <span>🚨</span>
                         <h4>Reporta Alertas</h4>
-                        <p>Salva vidas gratis.</p>
+                        <p>Libre y sin cuenta.</p>
+                    </div>
+                    <div class="landing-feat-card" onclick="explorarSinCuenta()" style="cursor: pointer;">
+                        <span>👀</span>
+                        <h4>Explorar</h4>
+                        <p>Ver animales y casos.</p>
                     </div>
                 </div>
 
                 <div class="landing-actions-vibrant">
                     <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">
-                        ✨ Comenzar con Google
+                        ✨ Iniciar Sesión / Registrarse
                     </button>
                     <button class="btn-secundario" onclick="explorarSinCuenta()">
-                        👀 Explorar Mascotas
+                        🐾 Explorar como Invitado
                     </button>
                 </div>
             </div>
@@ -53,10 +492,10 @@
         <!-- APLICACIÓN PRINCIPAL -->
         <div id="main-app">
             <div class="header">
-                <span>🐾 Refugio Digital</span>
+                <span id="header-title">🐾 Refugio Digital</span>
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="volverAlLanding()">↩ Volver</button>
-                    <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="cerrarSesion()">Salir</button>
+                    <button class="btn-secundario" id="btn-auth-action" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="abrirGoogleModalDesdeLanding()">Entrar</button>
                 </div>
             </div>
             
@@ -79,52 +518,120 @@
                         <h2 style="color: var(--text-main); font-weight: 700; font-size: 18px;">Mascotas buscando un hogar</h2>
                     </div>
                     
-                    <!-- Galería de Mascotas con Imágenes Reales -->
+                    <!-- Galería con datos ampliados (Edad, Raza, Condición, Nombres realistas) -->
                     <div class="grid-desktop" id="pet-gallery">
                         <div class="refugio-card">
                             <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Firulais" class="pet-img">
-                            <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Firulais</h4>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso buscando una segunda oportunidad.</p>
+                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Firulais</h4>
+                            <div class="pet-tags">
+                                <span class="pet-tag">🐶 2 años</span>
+                                <span class="pet-tag">Mestizo</span>
+                                <span class="pet-tag condition">Vacunado / Sano</span>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso buscando una segunda oportunidad con familia activa.</p>
                         </div>
+
                         <div class="refugio-card">
-                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Michi" class="pet-img">
-                            <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Michi</h4>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que busca una familia que la llene de amor.</p>
+                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Pelusa" class="pet-img">
+                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Pelusa</h4>
+                            <div class="pet-tags">
+                                <span class="pet-tag">🐱 1 año</span>
+                                <span class="pet-tag">Siamés Mix</span>
+                                <span class="pet-tag condition">Esterilizada</span>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que adora dormir en el sofá y busca un hogar tranquilo.</p>
                         </div>
+
+                        <div class="refugio-card">
+                            <img src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=500&q=80" alt="Chocolate" class="pet-img">
+                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Chocolate</h4>
+                            <div class="pet-tags">
+                                <span class="pet-tag">🐶 3 años</span>
+                                <span class="pet-tag">Labrador Mix</span>
+                                <span class="pet-tag condition">Tratamiento leve piel</span>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Muy amigable, le encanta jugar con la pelota y se lleva bien con otros perros.</p>
+                        </div>
+
+                        <div class="refugio-card">
+                            <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=500&q=80" alt="Luna" class="pet-img">
+                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Luna</h4>
+                            <div class="pet-tags">
+                                <span class="pet-tag">🐱 8 meses</span>
+                                <span class="pet-tag">Común Europeo</span>
+                                <span class="pet-tag condition">Sana y desparasitada</span>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Muy curiosa, juguetona y sociable con personas y otros mininos.</p>
+                        </div>
+
                         <div class="refugio-card">
                             <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80" alt="Toby" class="pet-img">
-                            <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Toby</h4>
+                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Toby</h4>
+                            <div class="pet-tags">
+                                <span class="pet-tag">🐶 4 años</span>
+                                <span class="pet-tag">Pastor Mix</span>
+                                <span class="pet-tag condition">Fuerte y protector</span>
+                            </div>
                             <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Noble, protector y listo para formar parte de un hogar responsable y cálido.</p>
+                        </div>
+
+                        <div class="refugio-card">
+                            <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?auto=format&fit=crop&w=500&q=80" alt="Simba" class="pet-img">
+                            <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">Simba</h4>
+                            <div class="pet-tags">
+                                <span class="pet-tag">🐱 2 años</span>
+                                <span class="pet-tag">Atigrado</span>
+                                <span class="pet-tag condition">Castrado / Sano</span>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gato tranquilo, elegante y muy regalón que busca un hogar lleno de paz.</p>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- VISTA 2: REPORTAR ALERTAS (LIBRE Y GRATIS) -->
+                <!-- VISTA 2: REPORTAR ALERTAS (LIBRE Y GRATIS, FOTO OBLIGATORIA, GPS Y CONFIRMACIONES) -->
                 <div class="view" id="reportes-view">
-                    <div class="refugio-card" style="padding: 22px;">
+                    <div class="refugio-card" style="padding: 22px; margin-bottom: 20px;">
                         <span style="font-size: 28px; display: block; margin-bottom: 6px;">🚨</span>
                         <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 4px;">Reportar Alerta de Rescate</h2>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">¿Viste un animal en peligro, perdido o abandonado? Reportarlo es <strong>100% libre y gratuito</strong> para ayudar a movilizar la red de apoyo.</p>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">¿Viste un animal en peligro o abandonado? <strong>Es 100% libre y gratis</strong>. La foto y la ubicación real son obligatorias para evitar reportes falsos.</p>
                         
                         <form onsubmit="enviarReporteAlerta(event)">
                             <div style="text-align: left; margin-bottom: 12px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Lugar o Ubicación exacta:</label>
-                                <input type="text" id="reporte-lugar" class="form-input" placeholder="Ej. Av. Principal 123 / Parque Central" required>
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Ubicación exacta o GPS:</label>
+                                <input type="text" id="reporte-lugar" class="form-input" placeholder="Ej. Av. Principal 123 / Usa el botón GPS" required>
+                                <button type="button" class="btn-gps" onclick="obtenerUbicacionGPS()">
+                                    📍 Usar mi ubicación actual (GPS)
+                                </button>
                             </div>
 
                             <div style="text-align: left; margin-bottom: 12px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto del animal o la situación:</label>
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto obligatoria del caso:</label>
                                 <input type="file" id="reporte-imagen" class="form-input" accept="image/*" required style="padding: 8px;">
                             </div>
 
                             <div style="text-align: left; margin-bottom: 16px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción de la situación/lugar:</label>
-                                <textarea id="reporte-desc" class="form-textarea" placeholder="Describe el estado del animal, referencias del lugar u otros detalles importantes..." required></textarea>
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción de la emergencia:</label>
+                                <textarea id="reporte-desc" class="form-textarea" placeholder="Describe el estado del animal, urgencia y referencias..." required></textarea>
                             </div>
 
-                            <button type="submit" class="btn-main">🚨 Publicar Alerta Gratis</button>
+                            <button type="submit" class="btn-main">🚨 Publicar Alerta Verificada</button>
                         </form>
+                    </div>
+
+                    <!-- Feed de Alertas Activas con Confirmación de Usuarios -->
+                    <h3 style="color: var(--text-main); font-size: 16px; font-weight: 700; margin-bottom: 12px;">📢 Alertas Activas en la Comunidad</h3>
+                    <div id="feed-reportes" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Reporte de ejemplo inicial con sistema de confirmación -->
+                        <div class="refugio-card" id="reporte-demo-1">
+                            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=500&q=80" alt="Alerta" class="pet-img">
+                            <h4 style="color: var(--text-main); font-weight: 700; font-size: 15px; margin-bottom: 4px;">📍 Av. Los Próceres con Sol (SJL)</h4>
+                            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px;">Perrito marrón asustado cojeando cerca al mercado, parece perdido bajo la lluvia.</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF6EE; padding: 10px; border-radius: 12px;">
+                                <span style="font-size: 12px; font-weight: 600; color: #B45309;" id="badge-conf-1">✅ 3 personas confirmaron este caso</span>
+                                <button type="button" class="btn-gps" style="margin: 0;" onclick="confirmarCaso(1)">Yo también lo vi</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -137,7 +644,7 @@
 
             </div>
 
-            <!-- Navegación inferior -->
+            <!-- Navegación inferior (Con restricciones para invitados) -->
             <div id="bottom-nav">
                 <button class="nav-item active" onclick="cambiarVista('home-view', this)">
                     <i>🏠</i><span>Inicio</span>
@@ -145,7 +652,7 @@
                 <button class="nav-item" onclick="cambiarVista('reportes-view', this)">
                     <i>🚨</i><span>Reportes</span>
                 </button>
-                <button class="nav-item" onclick="cambiarVista('publicar-view', this)">
+                <button class="nav-item" id="nav-btn-publicar" onclick="intentarAccesoPublicar(this)">
                     <i>🐾</i><span>Publicar</span>
                 </button>
             </div>
@@ -196,9 +703,13 @@
 
     <script>
         let usuarioActual = {
-            nombre: '',
+            nombre: 'Invitado',
             correo: '',
             rol: 'comun'
+        };
+
+        let confirmacionesCasos = {
+            1: 3
         };
 
         function abrirGoogleModalDesdeLanding() {
@@ -214,6 +725,12 @@
             entrarAlSistema();
         }
 
+        function irAReportarDesdeLanding() {
+            usuarioActual = { nombre: 'Invitado', correo: '', rol: 'comun' };
+            entrarAlSistema();
+            cambiarVista('reportes-view', document.querySelectorAll('.nav-item')[1]);
+        }
+
         function procesarRegistroGoogle(event) {
             event.preventDefault();
             const nombre = document.getElementById('reg-nombre').value.trim();
@@ -221,7 +738,7 @@
             const rolSeleccionado = document.querySelector('input[name="user_role"]:checked').value;
 
             if (!nombre || !correo || !correo.includes('@')) {
-                alert('Por favor, ingresa un nombre válido y un correo electrónico correcto para continuar.');
+                alert('Por favor, ingresa un nombre válido y un correo electrónico correcto.');
                 return;
             }
 
@@ -231,6 +748,7 @@
                 rol: rolSeleccionado
             };
 
+            document.getElementById('btn-auth-action').innerText = usuarioActual.nombre;
             cerrarGoogleModal();
             entrarAlSistema();
         }
@@ -247,10 +765,7 @@
             document.getElementById('landing-screen').style.display = 'flex';
             document.getElementById('reg-nombre').value = '';
             document.getElementById('reg-correo').value = '';
-        }
-
-        function cerrarSesion() {
-            volverAlLanding();
+            document.getElementById('btn-auth-action').innerText = 'Entrar';
         }
 
         function cambiarVista(viewId, element) {
@@ -263,31 +778,45 @@
             }
         }
 
+        function intentarAccesoPublicar(element) {
+            if (usuarioActual.nombre === 'Invitado') {
+                alert('Para publicar mascotas necesitas iniciar sesión como Veterinaria o Rescatista Profesional.');
+                abrirGoogleModalDesdeLanding();
+                return;
+            }
+            cambiarVista('publicar-view', element);
+        }
+
         function actualizarVistaPublicar() {
             const pubBox = document.getElementById('pub-auth-box');
-            if (usuarioActual.rol === 'veterinaria' || usuarioActual.rol === 'profesional') {
+            if (usuarioActual.nombre !== 'Invitado' && (usuarioActual.rol === 'veterinaria' || usuarioActual.rol === 'profesional')) {
                 pubBox.innerHTML = `
                     <div class="refugio-card" style="padding: 22px;">
                         <span style="font-size: 28px; display: block; margin-bottom: 6px;">🐾</span>
                         <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 4px;">Publicar Mascota en Adopción</h2>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">Como ${usuarioActual.rol === 'veterinaria' ? 'Clínica / Veterinaria' : 'Rescatista Profesional'}, puedes publicar mascotas de forma <strong>gratuita</strong> para conectar con adoptantes.</p>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">Como ${usuarioActual.rol === 'veterinaria' ? 'Clínica / Veterinaria' : 'Rescatista Profesional'}, puedes publicar mascotas de forma <strong>gratuita</strong>.</p>
                         
                         <form onsubmit="publicarMascotaAdopcion(event)">
-                            <div style="text-align: left; margin-bottom: 12px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Nombre de la mascota:</label>
-                                <input type="text" id="pub-nombre" class="form-input" placeholder="Ej. Lucas" required>
+                            <div style="text-align: left; margin-bottom: 10px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Nombre:</label>
+                                <input type="text" id="pub-nombre" class="form-input" placeholder="Ej. Bobby" required>
                             </div>
-
-                            <div style="text-align: left; margin-bottom: 12px;">
-                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto de la mascota (URL de imagen o foto):</label>
-                                <input type="text" id="pub-imagen" class="form-input" placeholder="https://images.unsplash.com/... (o enlace de foto)" required>
+                            <div style="text-align: left; margin-bottom: 10px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Edad y Raza:</label>
+                                <input type="text" id="pub-edad-raza" class="form-input" placeholder="Ej. 1 año / Cocker Spaniel" required>
                             </div>
-
+                            <div style="text-align: left; margin-bottom: 10px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Condición de salud:</label>
+                                <input type="text" id="pub-condicion" class="form-input" placeholder="Ej. Vacunado y desparasitado" required>
+                            </div>
+                            <div style="text-align: left; margin-bottom: 10px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto (Enlace o URL):</label>
+                                <input type="text" id="pub-imagen" class="form-input" placeholder="https://images.unsplash.com/..." required>
+                            </div>
                             <div style="text-align: left; margin-bottom: 16px;">
                                 <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción e historia:</label>
-                                <textarea id="pub-desc" class="form-textarea" placeholder="Edad, temperamento, vacunas y detalles de adopción..." required></textarea>
+                                <textarea id="pub-desc" class="form-textarea" placeholder="Historia breve de rescate..." required></textarea>
                             </div>
-
                             <button type="submit" class="btn-main">✨ Publicar Mascota Gratis</button>
                         </form>
                     </div>
@@ -297,29 +826,77 @@
                     <div class="refugio-card" style="padding: 28px; text-align: center;">
                         <span style="font-size: 36px; display: block; margin-bottom: 10px;">🔒</span>
                         <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 6px;">Acceso exclusivo para profesionales</h2>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">La publicación de mascotas para adopción es totalmente <strong>gratuita</strong> pero está reservada exclusivamente para <strong>Veterinarias, Clínicas y Rescatistas Profesionales</strong> verificados.</p>
-                        <p style="color: var(--text-muted); font-size: 12px;">Si eres adoptante, puedes usar la sección de <strong>Reportes</strong> para avisar sobre casos de rescate libremente.</p>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">La publicación de mascotas es gratuita pero está reservada para <strong>Veterinarias, Clínicas y Rescatistas Profesionales</strong>.</p>
+                        <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">Iniciar sesión como Profesional</button>
                     </div>
                 `;
+            }
+        }
+
+        function obtenerUbicacionGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude.toFixed(4);
+                    const lon = position.coords.longitude.toFixed(4);
+                    document.getElementById('reporte-lugar').value = `Ubicación GPS: Lat ${lat}, Lon ${lon}`;
+                }, () => {
+                    alert('No se pudo acceder al GPS automáticamente. Por favor ingresa la ubicación manualmente.');
+                });
+            } else {
+                alert('La geolocalización no es compatible con este navegador.');
             }
         }
 
         function enviarReporteAlerta(event) {
             event.preventDefault();
             const lugar = document.getElementById('reporte-lugar').value;
+            const imagenInput = document.getElementById('reporte-imagen').files[0];
             const desc = document.getElementById('reporte-desc').value;
-            if(!lugar || !desc) return;
 
-            alert('¡Alerta de rescate enviada con éxito! La red de apoyo ha sido notificada en la zona.');
+            if(!lugar || !desc || !imagenInput) {
+                alert('La foto y la ubicación son obligatorias para publicar un reporte verificado.');
+                return;
+            }
+
+            const imageUrl = URL.createObjectURL(imagenInput);
+            const reportId = Date.now();
+            confirmacionesCasos[reportId] = 1;
+
+            const feed = document.getElementById('feed-reportes');
+            const newReport = document.createElement('div');
+            newReport.className = 'refugio-card';
+            newReport.innerHTML = `
+                <img src="${imageUrl}" alt="Alerta" class="pet-img">
+                <h4 style="color: var(--text-main); font-weight: 700; font-size: 15px; margin-bottom: 4px;">📍 ${lugar}</h4>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px;">${desc}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF6EE; padding: 10px; border-radius: 12px;">
+                    <span style="font-size: 12px; font-weight: 600; color: #B45309;" id="badge-conf-${reportId}">✅ 1 persona confirmó este caso</span>
+                    <button type="button" class="btn-gps" style="margin: 0;" onclick="confirmarCaso(${reportId})">Yo también lo vi</button>
+                </div>
+            `;
+            feed.prepend(newReport);
+
+            alert('¡Alerta de rescate publicada con éxito! Gracias por ayudar.');
             document.getElementById('reporte-lugar').value = '';
             document.getElementById('reporte-imagen').value = '';
             document.getElementById('reporte-desc').value = '';
             cambiarVista('home-view', document.querySelectorAll('.nav-item')[0]);
         }
 
+        function confirmarCaso(id) {
+            confirmacionesCasos[id] = (confirmacionesCasos[id] || 1) + 1;
+            const badge = document.getElementById(`badge-conf-${id}`);
+            if (badge) {
+                badge.innerText = `✅ ${confirmacionesCasos[id]} personas confirmaron este caso`;
+            }
+            alert('¡Gracias por confirmar! Ayudas a validar la emergencia para los rescatistas.');
+        }
+
         function publicarMascotaAdopcion(event) {
             event.preventDefault();
             const nombre = document.getElementById('pub-nombre').value;
+            const edadRaza = document.getElementById('pub-edad-raza').value;
+            const condicion = document.getElementById('pub-condicion').value;
             const imagen = document.getElementById('pub-imagen').value;
             const desc = document.getElementById('pub-desc').value;
 
@@ -328,7 +905,11 @@
             newCard.className = 'refugio-card';
             newCard.innerHTML = `
                 <img src="${imagen}" alt="${nombre}" class="pet-img" onerror="this.src='https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80'">
-                <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">${nombre}</h4>
+                <h4 style="margin-bottom: 2px; color: var(--text-main); font-weight: 700; font-size: 15px;">${nombre}</h4>
+                <div class="pet-tags">
+                    <span class="pet-tag">${edadRaza}</span>
+                    <span class="pet-tag condition">${condicion}</span>
+                </div>
                 <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">${desc}</p>
             `;
             gallery.prepend(newCard);
