@@ -1,196 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Refugio Digital - Adopción y Rescate</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<!-- REEMPLAZA EL BLOQUE DE #landing-screen EN TU index.html POR ESTE -->
 
-    <div id="app-container">
-        <!-- MODAL DE GOOGLE LOGIN -->
-        <div id="google-modal">
-            <div class="google-box">
-                <div style="font-size: 40px; margin-bottom: 10px;">🌐</div>
-                <h2 style="font-size: 20px; color: var(--text-main); margin-bottom: 8px;">Acceder con Google</h2>
-                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Ingresa tus datos para registrar o conectar tu cuenta.</p>
-                
-                <div class="form-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" id="google-nombre" placeholder="Ej. Dany Vela">
-                </div>
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="google-email" placeholder="tucorreo@gmail.com">
-                </div>
-                <button class="btn-google" onclick="confirmarGoogleLogin()" style="margin-bottom: 10px;">Continuar</button>
-                <button onclick="cerrarGoogleModal()" style="background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 13px;">Cancelar</button>
-            </div>
-        </div>
-
-        <!-- PÁGINA DE BIENVENIDA / LANDING & ONBOARDING -->
         <div id="landing-screen">
             <div class="landing-hero">
                 <div class="logo-box">🐾</div>
-                <h1>Refugio Digital</h1>
-                <p>La plataforma comunitaria para conectar rescatistas, refugios y adoptantes en Lima y San Juan de Lurigancho.</p>
+                <h1>¡Hola, bienvenido!</h1>
+                <p>Únete a nuestra red comunitaria para conectar rescatistas, refugios y adoptantes en Lima y San Juan de Lurigancho.</p>
             </div>
 
-            <!-- CONTADOR DE IMPACTO -->
-            <div class="impact-grid">
-                <div class="impact-item">
-                    <span>+1,420</span>
-                    <p>Rescatados</p>
-                </div>
-                <div class="impact-item">
-                    <span>+980</span>
-                    <p>Adopciones</p>
-                </div>
-                <div class="impact-item">
-                    <span>45</span>
-                    <p>Refugios</p>
-                </div>
-            </div>
-
-            <!-- EXPLICACIÓN DE ROLES -->
+            <!-- EXPLICACIÓN DE ROLES AMIGABLE (Sin datos falsos) -->
             <div class="roles-explainer">
                 <div class="role-card">
-                    <i>👤</i>
+                    <i>🐶</i>
                     <div>
                         <h4>Ciudadano / Adoptante</h4>
-                        <p>Explora mascotas, adopta, reporta animales en peligro en SJL y apoya causas.</p>
+                        <p>Encuentra mascotas que buscan hogar y reporta casos de ayuda en tu zona.</p>
                     </div>
                 </div>
                 <div class="role-card">
-                    <i>🏥</i>
+                    <i>🏡</i>
                     <div>
                         <h4>Refugio / Rescatista</h4>
-                        <p>Publica rescatados, gestiona historiales y da seguimiento a adopciones activas.</p>
+                        <p>Publica rescatados y gestiona adopciones de forma rápida y ordenada.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- BOTONES DE ACCESO -->
+            <!-- BOTONES DE ACCESO CENTRADOS -->
             <div class="landing-actions">
                 <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">
                     <span style="background: white; border-radius: 50%; padding: 2px 6px; color: #2563EB; font-weight: 900;">G</span>
-                    Iniciar Sesión / Registrarse
+                    Iniciar Sesión con Google
                 </button>
                 <button class="btn-secundario" onclick="explorarSinCuenta()">
                     👀 Explorar sin cuenta
                 </button>
             </div>
         </div>
-
-        <!-- APP PRINCIPAL -->
-        <div id="main-app">
-            <!-- SIDEBAR COMPUTADORA -->
-            <div class="sidebar-desktop">
-                <div>
-                    <div style="font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 30px; display: flex; align-items: center; gap: 8px;">
-                        <span>🐾</span> Refugio Digital
-                    </div>
-                    <div class="desktop-nav-item active" onclick="cambiarVistaDesktop('view-adoptar', this)"><i>🐶</i>Adoptar</div>
-                    <div class="desktop-nav-item" onclick="cambiarVistaDesktop('view-reportes', this)"><i>🚨</i>Reportar</div>
-                    <div class="desktop-nav-item" id="desktop-nav-publicar" style="display:none;" onclick="cambiarVistaDesktop('view-publicar', this)"><i>📝</i>Publicar</div>
-                    <div class="desktop-nav-item" onclick="cambiarVistaDesktop('view-perfil', this)"><i>👤</i>Perfil</div>
-                </div>
-                <div style="font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 15px;">
-                    SJL & Lima, Perú
-                </div>
-            </div>
-
-            <!-- HEADER CELULAR -->
-            <div class="header" id="app-header">Refugio Digital <span>🐾</span></div>
-
-            <!-- CONTENIDO -->
-            <div class="desktop-content">
-                <!-- ADOPCIÓN -->
-                <div id="view-adoptar" class="view active-view">
-                    <div style="margin-bottom: 20px;">
-                        <h2 style="font-size: 22px; color: var(--text-main);">Mascotas en Adopción</h2>
-                        <p style="font-size: 13px; color: var(--text-muted);">Explora libremente y encuentra a tu nuevo compañero</p>
-                    </div>
-                    <div id="feed-adoptar" class="grid-desktop"></div>
-                </div>
-
-                <!-- REPORTES -->
-                <div id="view-reportes" class="view">
-                    <div class="report-header">
-                        <div>
-                            <h2 style="font-size: 20px; color: var(--text-main);">Alertas Activas</h2>
-                            <p style="font-size: 12px; color: var(--text-muted);">Zona: San Juan de Lurigancho y Lima</p>
-                        </div>
-                        <button class="btn-sm" onclick="abrirModal()">+ Reportar</button>
-                    </div>
-                    <div id="feed-reportes" class="grid-desktop"></div>
-                </div>
-
-                <!-- PUBLICAR -->
-                <div id="view-publicar" class="view">
-                    <h2 style="margin-bottom: 5px; font-size: 22px;">Publicar Mascota</h2>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Añade un rescatado al sistema de adopción.</p>
-                    
-                    <div style="max-width: 600px;">
-                        <div class="form-group"><label>Nombre</label><input type="text" id="pub-nombre" placeholder="Ej. Toby"></div>
-                        <div style="display: flex; gap: 10px;">
-                            <div class="form-group" style="flex:1;"><label>Especie</label><select id="pub-especie"><option>Perro</option><option>Gato</option></select></div>
-                            <div class="form-group" style="flex:1;"><label>Edad</label><input type="text" id="pub-edad" placeholder="Ej. 1 año"></div>
-                        </div>
-                        <div class="form-group"><label>Historia / Descripción</label><textarea id="pub-desc" rows="3" placeholder="Detalles..."></textarea></div>
-                        <button class="btn-main" onclick="publicarMascota()">Guardar y Publicar</button>
-                    </div>
-                </div>
-
-                <!-- PERFIL -->
-                <div id="view-perfil" class="view">
-                    <div style="text-align: center; padding: 30px 0; max-width: 400px; margin: 0 auto;">
-                        <div style="font-size: 60px; margin-bottom: 10px;">👤</div>
-                        <h2 id="perfil-nombre" style="font-size: 22px; margin-bottom: 5px;">Usuario</h2>
-                        <p id="perfil-email" style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;"></p>
-                        <span id="perfil-rol-badge" style="background: #E2E8F0; padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: bold; color: var(--text-muted);">Rol</span>
-                    </div>
-                    <div class="form-group" style="margin-top: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                        <button class="btn-main" style="background: #F1F5F9; color: var(--danger); box-shadow: none;" onclick="cerrarSesion()">Cerrar Sesión</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NAV INFERIOR CELULAR -->
-            <div id="bottom-nav">
-                <div class="nav-item active" onclick="cambiarVistaMobile('view-adoptar', this, 'Adopta')"><i>🐶</i>Adoptar</div>
-                <div class="nav-item" onclick="cambiarVistaMobile('view-reportes', this, 'Reportes')"><i>🚨</i>Reportar</div>
-                <div class="nav-item" id="nav-item-publicar" style="display:none;" onclick="cambiarVistaMobile('view-publicar', this, 'Publicar')"><i>📝</i>Publicar</div>
-                <div class="nav-item" onclick="cambiarVistaMobile('view-perfil', this, 'Perfil')"><i>👤</i>Perfil</div>
-            </div>
-        </div>
-
-        <!-- MODAL REPORTE -->
-        <div class="modal-overlay" id="modal-reporte">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 style="color: var(--danger); font-size: 18px;">🚨 Nuevo Reporte</h3>
-                    <button class="close-btn" onclick="cerrarModal()">×</button>
-                </div>
-                <label class="upload-area">
-                    <input type="file" id="rep-file" accept="image/*" onchange="mostrarNombreArchivo(this)">
-                    <span id="upload-text">📸 Adjuntar fotografía del animal</span>
-                </label>
-                <div class="form-group"><label>Ubicación / Referencia (SJL)</label><input type="text" id="rep-ubi" placeholder="Ej. Estación Bayóvar"></div>
-                <div class="form-group">
-                    <label>Estado</label>
-                    <select id="rep-estado">
-                        <option>Herido / Urgente</option>
-                        <option>Asustado / Desorientado</option>
-                        <option>Posible Abandono</option>
-                    </select>
-                </div>
-                <button class="btn-main" style="background: var(--danger);" onclick="enviarReporte()">Enviar Alerta</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
