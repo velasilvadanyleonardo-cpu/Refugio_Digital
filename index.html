@@ -981,4 +981,25 @@
         }
     </script>
 </body>
-</html>
+</html> 
+<!-- ========================================== -->
+<!-- PANEL DE ADMINISTRADOR (Oculto por defecto) -->
+<!-- ========================================== -->
+<div id="panelAdmin" style="display: none; background: #f4f4f4; padding: 20px; margin-top: 20px; border: 2px dashed #999;">
+    <h2>Panel de Control Maestro (Superusuario)</h2>
+    <p>Vista global y de supervisión total del sistema.</p>
+    
+    <table border="1" style="width:100%; margin-top: 10px; background: white;">
+        <thead>
+            <tr>
+                <th>Categoría</th>
+                <th>Información Registrada</th>
+                <th>Acción de Moderación</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTablaAdmin">
+            <!-- Los registros globales aparecerán aquí automáticamente -->
+        </tbody>
+    </table>
+    <button onclick="cerrarSesionAdmin()" style="margin-top: 10px; background: #d9534f; color: white; border: none; padding: 5px 10px; cursor: pointer;">Cerrar Sesión Admin</button>
+</div>
