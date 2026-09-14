@@ -4,21 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Refugio Digital - SJL & Lima, Perú</title>
-    <!-- Google Fonts con personalidad y legibilidad -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tus estilos personalizados cálidos -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-900 flex justify-center items-center min-h-screen">
     <div id="app-container">
         
-        <!-- PANTALLA DE BIENVENIDA (LANDING CÁLIDA) -->
+        <!-- PANTALLA DE BIENVENIDA CENTRADA -->
         <div id="landing-screen">
-            <div class="w-full">
+            <div class="landing-inner-wrapper">
                 <div class="landing-top-badge">✨ SJL & Lima, Perú</div>
                 
                 <div class="landing-hero-box">
@@ -33,56 +30,77 @@
                     <div class="landing-feat-card">
                         <span>🏡</span>
                         <h4>Adopta con Amor</h4>
-                        <p>Dale un hogar seguro a perritos y gatitos.</p>
+                        <p>Hogares seguros.</p>
                     </div>
                     <div class="landing-feat-card">
                         <span>🚨</span>
                         <h4>Reporta Alertas</h4>
-                        <p>Salva vidas avisando de casos en tu zona.</p>
+                        <p>Salva vidas.</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="landing-actions-vibrant">
-                <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">
-                    ✨ Comenzar Ahora con Google
-                </button>
-                <button class="btn-secundario" onclick="explorarSinCuenta()">
-                    👀 Explorar 50+ Mascotas
-                </button>
+                <div class="landing-actions-vibrant">
+                    <button class="btn-main" onclick="abrirGoogleModalDesdeLanding()">
+                        ✨ Comenzar con Google
+                    </button>
+                    <button class="btn-secundario" onclick="explorarSinCuenta()">
+                        👀 Explorar Mascotas
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- APLICACIÓN PRINCIPAL (ADAPTADA PARA MÓVIL Y PC) -->
+        <!-- APLICACIÓN PRINCIPAL -->
         <div id="main-app">
             <div class="header">
                 <span>🐾 Refugio Digital</span>
-                <button class="btn-secundario" style="width: auto; padding: 6px 14px; font-size: 13px;" onclick="cerrarSesion()">Salir</button>
+                <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="cerrarSesion()">Salir</button>
             </div>
             
             <div class="desktop-content">
                 <div class="view active-view" id="home-view">
-                    <h2 style="margin-bottom: 16px; color: var(--text-main); font-weight: 700;">Mascotas buscando hogar en SJL y Lima</h2>
+                    
+                    <!-- Tarjeta de Donación Destacada -->
+                    <div class="donation-banner">
+                        <span style="font-size: 26px; display: block; margin-bottom: 6px;">💛🐾</span>
+                        <h3 style="color: #92400E; font-size: 17px; font-weight: 700; margin-bottom: 4px;">Apoya el Refugio</h3>
+                        <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Dona $3 USD para alimento y rescates. <strong>El 70% va directamente para la fundación</strong> y casos críticos en SJL.</p>
+                        <button class="btn-main" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);" onclick="alert('¡Gracias por tu generosidad! Redirigiendo a pasarela de donación solidaria...')">
+                            💖 Dona $3 Dólares Ahora
+                        </button>
+                    </div>
+
+                    <h2 style="margin-bottom: 14px; color: var(--text-main); font-weight: 700; font-size: 18px;">Mascotas buscando hogar en SJL y Lima</h2>
+                    
+                    <!-- Galería de 3 Mascotas de Ejemplo -->
                     <div class="grid-desktop">
                         <div class="refugio-card">
-                            <div style="width: 50px; height: 50px; background: #E0E7FF; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 12px;">
+                            <div style="width: 46px; height: 46px; background: #E0E7FF; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
                                 🐕
                             </div>
-                            <h4 style="margin-bottom: 6px; color: var(--text-main); font-weight: 700;">Firulais</h4>
-                            <p style="color: var(--text-muted); font-size: 13px; line-height: 1.4;">Un perrito muy alegre y cariñoso rescatado en San Juan de Lurigancho.</p>
+                            <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Firulais</h4>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso rescatado en las laderas de San Juan de Lurigancho.</p>
                         </div>
                         <div class="refugio-card">
-                            <div style="width: 50px; height: 50px; background: #FEE2E2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 12px;">
+                            <div style="width: 46px; height: 46px; background: #FEE2E2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
                                 🐈
                             </div>
-                            <h4 style="margin-bottom: 6px; color: var(--text-main); font-weight: 700;">Michi</h4>
-                            <p style="color: var(--text-muted); font-size: 13px; line-height: 1.4;">Gatito tierno y tranquilo buscando una familia que lo llene de amor en Lima.</p>
+                            <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Michi</h4>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que busca una familia que la llene de amor en Lima.</p>
+                        </div>
+                        <div class="refugio-card">
+                            <div style="width: 46px; height: 46px; background: #FEF3C7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
+                                🐕‍🦺
+                            </div>
+                            <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Toby</h4>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Noble, protector y listo para formar parte de un hogar responsable y cálido.</p>
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- Barra de navegación inferior móvil -->
+            <!-- Navegación móvil inferior -->
             <div id="bottom-nav">
                 <div class="nav-item active">
                     <i>🏠</i><span>Inicio</span>
@@ -93,39 +111,37 @@
             </div>
         </div>
 
-        <!-- MODAL DE GOOGLE Y SELECCIÓN DE PERFIL -->
+        <!-- MODAL DE GOOGLE Y PERFILES -->
         <div id="google-modal">
-            <div class="google-box" style="max-height: 90vh; overflow-y: auto;">
-                <h3 style="margin-bottom: 6px; color: var(--text-main); font-size: 20px; font-weight: 700;">Únete a Refugio Digital</h3>
-                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 14px; line-height: 1.4;">Conéctate con Google y cuéntanos cuál será tu rol en la red de ayuda de SJL y Lima.</p>
+            <div class="google-box">
+                <h3 style="margin-bottom: 4px; color: var(--text-main); font-size: 18px; font-weight: 700;">Únete a Refugio Digital</h3>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 12px; line-height: 1.3;">Inicia sesión con Google e indícanos tu rol en la red de apoyo.</p>
                 
-                <!-- Selector de Perfiles -->
-                <div style="text-align: left; margin-bottom: 16px;">
-                    <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Selecciona tu perfil:</label>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="text-align: left; margin-bottom: 14px;">
+                    <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px; text-transform: uppercase;">Selecciona tu perfil:</label>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
                         <label class="role-option">
                             <input type="radio" name="user_role" value="comun" checked>
-                            <span>🧑‍💻 Persona Común / Adoptante</span>
+                            <span>🧑‍💻 Persona / Adoptante</span>
                         </label>
                         <label class="role-option">
                             <input type="radio" name="user_role" value="profesional">
-                            <span>🎓 Profesional / Rescatista</span>
+                            <span>🎓 Rescatista Profesional</span>
                         </label>
                         <label class="role-option">
                             <input type="radio" name="user_role" value="veterinaria">
-                            <span>🏥 Veterinaria / Clínica Aliada</span>
+                            <span>🏥 Veterinaria / Clínica</span>
                         </label>
                     </div>
                 </div>
 
-                <button class="btn-main" onclick="simularLoginGoogleExitoso()" style="margin-bottom: 10px;">Continuar con Google</button>
+                <button class="btn-main" onclick="simularLoginGoogleExitoso()" style="margin-bottom: 8px;">Continuar con Google</button>
                 <button class="btn-secundario" onclick="cerrarGoogleModal()">Cancelar</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Archivo JavaScript principal conectado -->
     <script src="app.js"></script>
 </body>
 </html>
