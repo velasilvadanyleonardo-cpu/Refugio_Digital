@@ -30,6 +30,9 @@
             #app-container.logged-in {
                 max-width: 1200px; height: 85vh; border-radius: 20px; border: none; display: flex; flex-direction: row;
             }
+            #app-container.logged-in #main-app {
+                flex-direction: row !important;
+            }
         }
 
         .sidebar-desktop { display: none; }
@@ -38,7 +41,7 @@
 
         @media (min-width: 768px) {
             #app-container.logged-in .sidebar-desktop {
-                width: 260px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; padding: 24px; z-index: 50;
+                width: 260px; background: var(--white); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; padding: 24px; z-index: 50; height: 100%;
             }
             #app-container.logged-in .desktop-content { flex: 1; height: 100%; overflow-y: auto; background: var(--bg-color); padding: 30px; }
             #app-container.logged-in #bottom-nav { display: none !important; }
