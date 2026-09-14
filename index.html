@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refugio Digital - Red de Apoyo Animal</title>
+    <title>Refugio Digital - Red Global de Rescate</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
                         <span>🐶</span><span>🐱</span><span>❤️</span>
                     </div>
                     <h1>Refugio Digital</h1>
-                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal o ayuda a un peludito en situación de rescate sin importar el lugar.</p>
+                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal, reporta emergencias o publica casos de rescate sin importar el lugar.</p>
                 </div>
 
                 <div class="landing-features-grid">
@@ -35,7 +35,7 @@
                     <div class="landing-feat-card">
                         <span>🚨</span>
                         <h4>Reporta Alertas</h4>
-                        <p>Salva vidas.</p>
+                        <p>Salva vidas gratis.</p>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
         </div>
 
         <!-- APLICACIÓN PRINCIPAL -->
-        <div id="main-app" style="display: none;">
+        <div id="main-app">
             <div class="header">
                 <span>🐾 Refugio Digital</span>
                 <div style="display: flex; gap: 8px;">
@@ -61,13 +61,15 @@
             </div>
             
             <div class="desktop-content">
+                
+                <!-- VISTA 1: EXPLORAR MASCOTAS (INICIO) -->
                 <div class="view active-view" id="home-view">
                     
                     <!-- Tarjeta de Donación Destacada -->
                     <div class="donation-banner">
                         <span style="font-size: 26px; display: block; margin-bottom: 6px;">💛🐾</span>
                         <h3 style="color: #92400E; font-size: 17px; font-weight: 700; margin-bottom: 4px;">Apoya el Refugio</h3>
-                        <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Dona $3 USD para alimento y rescates. <strong>El 70% va directamente para la fundación</strong> y casos críticos de rescate.</p>
+                        <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Dona $3 USD para alimento y rescates. <strong>El 70% va directamente para la fundación</strong> y casos críticos.</p>
                         <button class="btn-main" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);" onclick="alert('¡Gracias por tu generosidad! Redirigiendo a pasarela de donación solidaria...')">
                             💖 Dona $3 Dólares Ahora
                         </button>
@@ -75,45 +77,77 @@
 
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                         <h2 style="color: var(--text-main); font-weight: 700; font-size: 18px;">Mascotas buscando un hogar</h2>
-                        <button class="btn-secundario" style="display: none; width: auto; padding: 6px 12px; font-size: 12px;" id="btn-volver-pc" onclick="volverAlLanding()">↩ Volver al Inicio</button>
                     </div>
                     
-                    <!-- Galería de 3 Mascotas de Ejemplo -->
-                    <div class="grid-desktop">
+                    <!-- Galería de Mascotas con Imágenes Reales -->
+                    <div class="grid-desktop" id="pet-gallery">
                         <div class="refugio-card">
-                            <div style="width: 46px; height: 46px; background: #E0E7FF; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
-                                🐕
-                            </div>
+                            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80" alt="Firulais" class="pet-img">
                             <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Firulais</h4>
                             <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso buscando una segunda oportunidad.</p>
                         </div>
                         <div class="refugio-card">
-                            <div style="width: 46px; height: 46px; background: #FEE2E2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
-                                🐈
-                            </div>
+                            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500&q=80" alt="Michi" class="pet-img">
                             <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Michi</h4>
                             <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que busca una familia que la llene de amor.</p>
                         </div>
                         <div class="refugio-card">
-                            <div style="width: 46px; height: 46px; background: #FEF3C7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
-                                🐕‍🦺
-                            </div>
+                            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80" alt="Toby" class="pet-img">
                             <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Toby</h4>
                             <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Noble, protector y listo para formar parte de un hogar responsable y cálido.</p>
                         </div>
                     </div>
 
                 </div>
+
+                <!-- VISTA 2: REPORTAR ALERTAS (LIBRE Y GRATIS) -->
+                <div class="view" id="reportes-view">
+                    <div class="refugio-card" style="padding: 22px;">
+                        <span style="font-size: 28px; display: block; margin-bottom: 6px;">🚨</span>
+                        <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 4px;">Reportar Alerta de Rescate</h2>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">¿Viste un animal en peligro, perdido o abandonado? Reportarlo es <strong>100% libre y gratuito</strong> para ayudar a movilizar la red de apoyo.</p>
+                        
+                        <form onsubmit="enviarReporteAlerta(event)">
+                            <div style="text-align: left; margin-bottom: 12px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Lugar o Ubicación exacta:</label>
+                                <input type="text" id="reporte-lugar" class="form-input" placeholder="Ej. Av. Principal 123 / Parque Central" required>
+                            </div>
+
+                            <div style="text-align: left; margin-bottom: 12px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto del animal o la situación:</label>
+                                <input type="file" id="reporte-imagen" class="form-input" accept="image/*" required style="padding: 8px;">
+                            </div>
+
+                            <div style="text-align: left; margin-bottom: 16px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción de la situación/lugar:</label>
+                                <textarea id="reporte-desc" class="form-textarea" placeholder="Describe el estado del animal, referencias del lugar u otros detalles importantes..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-main">🚨 Publicar Alerta Gratis</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- VISTA 3: PUBLICAR MASCOTA (SOLO VETERINARIAS / CLÍNICAS / PROFESIONALES) -->
+                <div class="view" id="publicar-view">
+                    <div id="pub-auth-box">
+                        <!-- Contenido dinámico según rol -->
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Navegación móvil inferior -->
+            <!-- Navegación inferior -->
             <div id="bottom-nav">
-                <div class="nav-item active">
+                <button class="nav-item active" onclick="cambiarVista('home-view', this)">
                     <i>🏠</i><span>Inicio</span>
-                </div>
-                <div class="nav-item" onclick="alert('Sección de Reportes de Alertas activa próximamente')">
+                </button>
+                <button class="nav-item" onclick="cambiarVista('reportes-view', this)">
                     <i>🚨</i><span>Reportes</span>
-                </div>
+                </button>
+                <button class="nav-item" onclick="cambiarVista('publicar-view', this)">
+                    <i>🐾</i><span>Publicar</span>
+                </button>
             </div>
         </div>
 
@@ -161,6 +195,12 @@
     </div>
 
     <script>
+        let usuarioActual = {
+            nombre: '',
+            correo: '',
+            rol: 'comun'
+        };
+
         function abrirGoogleModalDesdeLanding() {
             document.getElementById('google-modal').style.display = 'flex';
         }
@@ -170,43 +210,131 @@
         }
 
         function explorarSinCuenta() {
-            document.getElementById('landing-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            document.getElementById('app-container').classList.add('logged-in');
-            if (window.innerWidth >= 768) {
-                document.getElementById('btn-volver-pc').style.display = 'block';
-            }
+            usuarioActual = { nombre: 'Invitado', correo: '', rol: 'comun' };
+            entrarAlSistema();
         }
 
         function procesarRegistroGoogle(event) {
             event.preventDefault();
             const nombre = document.getElementById('reg-nombre').value.trim();
             const correo = document.getElementById('reg-correo').value.trim();
+            const rolSeleccionado = document.querySelector('input[name="user_role"]:checked').value;
 
             if (!nombre || !correo || !correo.includes('@')) {
                 alert('Por favor, ingresa un nombre válido y un correo electrónico correcto para continuar.');
                 return;
             }
 
+            usuarioActual = {
+                nombre: nombre,
+                correo: correo,
+                rol: rolSeleccionado
+            };
+
             cerrarGoogleModal();
+            entrarAlSistema();
+        }
+
+        function entrarAlSistema() {
             document.getElementById('landing-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
-            document.getElementById('app-container').classList.add('logged-in');
-            if (window.innerWidth >= 768) {
-                document.getElementById('btn-volver-pc').style.display = 'block';
-            }
+            actualizarVistaPublicar();
+            cambiarVista('home-view', document.querySelector('.nav-item'));
         }
 
         function volverAlLanding() {
             document.getElementById('main-app').style.display = 'none';
             document.getElementById('landing-screen').style.display = 'flex';
-            document.getElementById('app-container').classList.remove('logged-in');
             document.getElementById('reg-nombre').value = '';
             document.getElementById('reg-correo').value = '';
         }
 
         function cerrarSesion() {
             volverAlLanding();
+        }
+
+        function cambiarVista(viewId, element) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
+            document.getElementById(viewId).classList.add('active-view');
+
+            if (element) {
+                document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+                element.classList.add('active');
+            }
+        }
+
+        function actualizarVistaPublicar() {
+            const pubBox = document.getElementById('pub-auth-box');
+            if (usuarioActual.rol === 'veterinaria' || usuarioActual.rol === 'profesional') {
+                pubBox.innerHTML = `
+                    <div class="refugio-card" style="padding: 22px;">
+                        <span style="font-size: 28px; display: block; margin-bottom: 6px;">🐾</span>
+                        <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 4px;">Publicar Mascota en Adopción</h2>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">Como ${usuarioActual.rol === 'veterinaria' ? 'Clínica / Veterinaria' : 'Rescatista Profesional'}, puedes publicar mascotas de forma <strong>gratuita</strong> para conectar con adoptantes.</p>
+                        
+                        <form onsubmit="publicarMascotaAdopcion(event)">
+                            <div style="text-align: left; margin-bottom: 12px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Nombre de la mascota:</label>
+                                <input type="text" id="pub-nombre" class="form-input" placeholder="Ej. Lucas" required>
+                            </div>
+
+                            <div style="text-align: left; margin-bottom: 12px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Foto de la mascota (URL de imagen o foto):</label>
+                                <input type="text" id="pub-imagen" class="form-input" placeholder="https://images.unsplash.com/... (o enlace de foto)" required>
+                            </div>
+
+                            <div style="text-align: left; margin-bottom: 16px;">
+                                <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Descripción e historia:</label>
+                                <textarea id="pub-desc" class="form-textarea" placeholder="Edad, temperamento, vacunas y detalles de adopción..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-main">✨ Publicar Mascota Gratis</button>
+                        </form>
+                    </div>
+                `;
+            } else {
+                pubBox.innerHTML = `
+                    <div class="refugio-card" style="padding: 28px; text-align: center;">
+                        <span style="font-size: 36px; display: block; margin-bottom: 10px;">🔒</span>
+                        <h2 style="color: var(--text-main); font-size: 18px; font-weight: 700; margin-bottom: 6px;">Acceso exclusivo para profesionales</h2>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.4;">La publicación de mascotas para adopción es totalmente <strong>gratuita</strong> pero está reservada exclusivamente para <strong>Veterinarias, Clínicas y Rescatistas Profesionales</strong> verificados.</p>
+                        <p style="color: var(--text-muted); font-size: 12px;">Si eres adoptante, puedes usar la sección de <strong>Reportes</strong> para avisar sobre casos de rescate libremente.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function enviarReporteAlerta(event) {
+            event.preventDefault();
+            const lugar = document.getElementById('reporte-lugar').value;
+            const desc = document.getElementById('reporte-desc').value;
+            if(!lugar || !desc) return;
+
+            alert('¡Alerta de rescate enviada con éxito! La red de apoyo ha sido notificada en la zona.');
+            document.getElementById('reporte-lugar').value = '';
+            document.getElementById('reporte-imagen').value = '';
+            document.getElementById('reporte-desc').value = '';
+            cambiarVista('home-view', document.querySelectorAll('.nav-item')[0]);
+        }
+
+        function publicarMascotaAdopcion(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('pub-nombre').value;
+            const imagen = document.getElementById('pub-imagen').value;
+            const desc = document.getElementById('pub-desc').value;
+
+            const gallery = document.getElementById('pet-gallery');
+            const newCard = document.createElement('div');
+            newCard.className = 'refugio-card';
+            newCard.innerHTML = `
+                <img src="${imagen}" alt="${nombre}" class="pet-img" onerror="this.src='https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=500&q=80'">
+                <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">${nombre}</h4>
+                <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">${desc}</p>
+            `;
+            gallery.prepend(newCard);
+
+            alert('¡Mascota publicada exitosamente para adopción!');
+            cambiarVista('home-view', document.querySelectorAll('.nav-item')[0]);
         }
     </script>
 </body>
