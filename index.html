@@ -9,6 +9,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   
   <script>
     tailwind.config = {
@@ -99,7 +101,7 @@
       <div id="stepVerificacionEmail" class="space-y-4 hidden">
         <div class="bg-brand-50 p-4 rounded-xl border border-brand-200 text-center space-y-1">
           <p class="text-xs font-semibold text-brand-800">Código de Confirmación de Correo</p>
-          <p class="text-xs text-slate-600">Simulación: Hemos enviado un código PIN a tu correo. Usa el código mostrado a continuación:</p>
+          <p class="text-xs text-slate-600">Hemos enviado un código PIN a tu correo electrónico. Ingrésalo a continuación:</p>
           <div id="displayPIN" class="text-xl font-mono font-bold tracking-widest text-brand-600 py-1">123456</div>
         </div>
         <div>
@@ -153,7 +155,7 @@
             Conectando corazones con <span class="text-brand-600">huellitas</span>
           </h1>
           <p class="text-slate-600 text-base md:text-lg">
-            Plataforma verficada para adopción de mascotas, alertas de rescates y apoyo de veterinarios profesionales.
+            Plataforma verificada para adopción de mascotas, alertas de rescates y apoyo de veterinarios profesionales.
           </p>
           <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
             <button onclick="showSection('adopciones')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-200 transition">
@@ -329,13 +331,25 @@
     <p>Plataforma para el rescate y adopción de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT COMPLETO -->
+  <!-- SCRIPT COMPLETO CON EMAILJS INTEGRADO -->
   <script>
+    // =========================================================
+    // CONFIGURACIÓN DE EMAILJS (TOTALMENTE CONFIGURADO)
+    // =========================================================
+    const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
+    const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
+    const EMAILJS_TEMPLATE_ID = "template_qzi7zxc";
+
+    // Inicializar EmailJS
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
     const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
     let tempUserData = null;
     let tempGeneratedPIN = null;
 
-    // Datos iniciales con imágenes reales de Unsplash
+    // Datos iniciales con imágenes reales
     const defaultData = [
       { 
         id: 1, 
@@ -454,7 +468,7 @@
       const rol = document.getElementById('regRolUser').value;
       const pass = document.getElementById('regPassUser').value;
 
-      // Generar PIN aleatorio de 6 dígitos para la verificación de correo
+      // Generar PIN aleatorio de 6 dígitos
       tempGeneratedPIN = Math.floor(100000 + Math.random() * 900000).toString();
       
       tempUserData = {
@@ -465,9 +479,36 @@
         esAdmin: (email === ADMIN_EMAIL)
       };
 
-      document.getElementById('formAuthRegister').classList.add('hidden');
-      document.getElementById('stepVerificacionEmail').classList.remove('hidden');
-      document.getElementById('displayPIN').innerText = tempGeneratedPIN;
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerText;
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Enviando código por correo...";
+
+      // Parámetros para enviar vía EmailJS
+      const templateParams = {
+        to_email: email,
+        to_name: nombre,
+        pin_code: tempGeneratedPIN
+      };
+
+      // Envío real con EmailJS
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          alert("¡Código de confirmación enviado exitosamente a " + email + "!");
+          document.getElementById('formAuthRegister').classList.add('hidden');
+          document.getElementById('stepVerificacionEmail').classList.remove('hidden');
+          document.getElementById('displayPIN').innerText = tempGeneratedPIN;
+        }, function(error) {
+          console.error("Error al enviar EmailJS:", error);
+          alert("Ocurrió un problema con el servicio de correo. Mostrando el PIN en pantalla para continuar.");
+          document.getElementById('formAuthRegister').classList.add('hidden');
+          document.getElementById('stepVerificacionEmail').classList.remove('hidden');
+          document.getElementById('displayPIN').innerText = tempGeneratedPIN;
+        })
+        .finally(function() {
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
+        });
     }
 
     function confirmarPIN() {
@@ -482,7 +523,7 @@
         alert("¡Correo verificado con éxito! Tu cuenta ha sido creada.");
         desbloquearApp();
       } else {
-        alert("El código PIN ingresado es incorrecto. Verifica el código en pantalla.");
+        alert("El código PIN ingresado es incorrecto. Por favor verifica el código recibido.");
       }
     }
 
@@ -661,26 +702,25 @@
           <td class="p-4"><span class="px-2 py-0.5 rounded text-xs ${item.tipo === 'Adopcion' ? 'bg-sky-100 text-sky-700' : 'bg-amber-100 text-amber-700'}">${item.tipo}</span></td>
           <td class="p-4 text-slate-500">${item.ubicacion}</td>
           <td class="p-4 text-right">
-            <button onclick="eliminarRegistro(${item.id})" class="text-rose-500 hover:text-rose-700 font-medium text-xs">Eliminar</button>
+            <button onclick="eliminarMascota(${item.id})" class="text-rose-500 hover:text-rose-700 text-xs font-semibold">Eliminar</button>
           </td>
         </tr>
       `).join('');
     }
 
-    function eliminarRegistro(id) {
-      if (!confirm('¿Seguro que deseas eliminar esta publicación?')) return;
-      let lista = getMascotas();
-      lista = lista.filter(item => item.id !== id);
-      saveMascotas(lista);
-      renderAdminTable();
+    function eliminarMascota(id) {
+      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
+        let lista = getMascotas();
+        lista = lista.filter(m => m.id !== id);
+        saveMascotas(lista);
+        renderAdminTable();
+      }
     }
 
     // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       const user = getUsuarioActual();
-      if (!user) {
-        document.getElementById('authWall').classList.remove('hidden');
-      } else {
+      if (user) {
         desbloquearApp();
       }
     });
