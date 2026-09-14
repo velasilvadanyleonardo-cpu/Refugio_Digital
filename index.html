@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refugio Digital - SJL & Lima, Perú</title>
+    <title>Refugio Digital - Red de Apoyo Animal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Quicksand:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,14 +16,14 @@
         <!-- PANTALLA DE BIENVENIDA CENTRADA -->
         <div id="landing-screen">
             <div class="landing-inner-wrapper">
-                <div class="landing-top-badge">✨ SJL & Lima, Perú</div>
+                <div class="landing-top-badge">✨ Red Global de Rescate</div>
                 
                 <div class="landing-hero-box">
                     <div class="landing-emojis-row">
                         <span>🐶</span><span>🐱</span><span>❤️</span>
                     </div>
                     <h1>Refugio Digital</h1>
-                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal o ayuda a un peludito en situación de rescate.</p>
+                    <p>Unimos corazones con patitas. Encuentra a tu compañero ideal o ayuda a un peludito en situación de rescate sin importar el lugar.</p>
                 </div>
 
                 <div class="landing-features-grid">
@@ -54,7 +54,10 @@
         <div id="main-app">
             <div class="header">
                 <span>🐾 Refugio Digital</span>
-                <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="cerrarSesion()">Salir</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="volverAlLanding()">↩ Volver</button>
+                    <button class="btn-secundario" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="cerrarSesion()">Salir</button>
+                </div>
             </div>
             
             <div class="desktop-content">
@@ -64,13 +67,16 @@
                     <div class="donation-banner">
                         <span style="font-size: 26px; display: block; margin-bottom: 6px;">💛🐾</span>
                         <h3 style="color: #92400E; font-size: 17px; font-weight: 700; margin-bottom: 4px;">Apoya el Refugio</h3>
-                        <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Dona $3 USD para alimento y rescates. <strong>El 70% va directamente para la fundación</strong> y casos críticos en SJL.</p>
+                        <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Dona $3 USD para alimento y rescates. <strong>El 70% va directamente para la fundación</strong> y casos críticos de rescate.</p>
                         <button class="btn-main" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);" onclick="alert('¡Gracias por tu generosidad! Redirigiendo a pasarela de donación solidaria...')">
                             💖 Dona $3 Dólares Ahora
                         </button>
                     </div>
 
-                    <h2 style="margin-bottom: 14px; color: var(--text-main); font-weight: 700; font-size: 18px;">Mascotas buscando hogar en SJL y Lima</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <h2 style="color: var(--text-main); font-weight: 700; font-size: 18px;">Mascotas buscando un hogar</h2>
+                        <button class="btn-secundario" style="display: none; width: auto; padding: 6px 12px; font-size: 12px;" id="btn-volver-pc" onclick="volverAlLanding()">↩ Volver al Inicio</button>
+                    </div>
                     
                     <!-- Galería de 3 Mascotas de Ejemplo -->
                     <div class="grid-desktop">
@@ -79,14 +85,14 @@
                                 🐕
                             </div>
                             <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Firulais</h4>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso rescatado en las laderas de San Juan de Lurigancho.</p>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Perrito alegre y muy cariñoso buscando una segunda oportunidad.</p>
                         </div>
                         <div class="refugio-card">
                             <div style="width: 46px; height: 46px; background: #FEE2E2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
                                 🐈
                             </div>
                             <h4 style="margin-bottom: 4px; color: var(--text-main); font-weight: 700; font-size: 15px;">Michi</h4>
-                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que busca una familia que la llene de amor en Lima.</p>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.4;">Gatita tierna y hogareña que busca una familia que la llene de amor.</p>
                         </div>
                         <div class="refugio-card">
                             <div style="width: 46px; height: 46px; background: #FEF3C7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 10px;">
@@ -111,37 +117,98 @@
             </div>
         </div>
 
-        <!-- MODAL DE GOOGLE Y PERFILES -->
+        <!-- MODAL DE GOOGLE Y REGISTRO DE DATOS -->
         <div id="google-modal">
             <div class="google-box">
                 <h3 style="margin-bottom: 4px; color: var(--text-main); font-size: 18px; font-weight: 700;">Únete a Refugio Digital</h3>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 12px; line-height: 1.3;">Inicia sesión con Google e indícanos tu rol en la red de apoyo.</p>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 12px; line-height: 1.3;">Completa tus datos y selecciona tu perfil para continuar.</p>
                 
-                <div style="text-align: left; margin-bottom: 14px;">
-                    <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px; text-transform: uppercase;">Selecciona tu perfil:</label>
-                    <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <label class="role-option">
-                            <input type="radio" name="user_role" value="comun" checked>
-                            <span>🧑‍💻 Persona / Adoptante</span>
-                        </label>
-                        <label class="role-option">
-                            <input type="radio" name="user_role" value="profesional">
-                            <span>🎓 Rescatista Profesional</span>
-                        </label>
-                        <label class="role-option">
-                            <input type="radio" name="user_role" value="veterinaria">
-                            <span>🏥 Veterinaria / Clínica</span>
-                        </label>
+                <form id="login-form" onsubmit="procesarRegistroGoogle(event)">
+                    <div style="text-align: left; margin-bottom: 10px;">
+                        <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Nombre completo:</label>
+                        <input type="text" id="reg-nombre" class="form-input" placeholder="Ej. Dany Vela" required>
                     </div>
-                </div>
 
-                <button class="btn-main" onclick="simularLoginGoogleExitoso()" style="margin-bottom: 8px;">Continuar con Google</button>
-                <button class="btn-secundario" onclick="cerrarGoogleModal()">Cancelar</button>
+                    <div style="text-align: left; margin-bottom: 12px;">
+                        <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; text-transform: uppercase;">Correo electrónico:</label>
+                        <input type="email" id="reg-correo" class="form-input" placeholder="tucorreo@ejemplo.com" required>
+                    </div>
+
+                    <div style="text-align: left; margin-bottom: 14px;">
+                        <label style="font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px; text-transform: uppercase;">Selecciona tu perfil:</label>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label class="role-option">
+                                <input type="radio" name="user_role" value="comun" checked>
+                                <span>🧑‍💻 Persona / Adoptante</span>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="user_role" value="profesional">
+                                <span>🎓 Rescatista Profesional</span>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="user_role" value="veterinaria">
+                                <span>🏥 Veterinaria / Clínica</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-main" style="margin-bottom: 8px;">Continuar con Google</button>
+                    <button type="button" class="btn-secundario" onclick="cerrarGoogleModal()">Cancelar</button>
+                </form>
             </div>
         </div>
 
     </div>
 
-    <script src="app.js"></script>
+    <!-- Script de control integrado para validación y navegación -->
+    <script>
+        function abrirGoogleModalDesdeLanding() {
+            document.getElementById('google-modal').style.display = 'flex';
+        }
+
+        function cerrarGoogleModal() {
+            document.getElementById('google-modal').style.display = 'none';
+        }
+
+        function explorarSinCuenta() {
+            document.getElementById('landing-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('app-container').classList.add('logged-in');
+            if (window.innerWidth >= 768) {
+                document.getElementById('btn-volver-pc').style.display = 'block';
+            }
+        }
+
+        function procesarRegistroGoogle(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('reg-nombre').value.trim();
+            const correo = document.getElementById('reg-correo').value.trim();
+
+            if (!nombre || !correo || !correo.includes('@')) {
+                alert('Por favor, ingresa un nombre válido y un correo electrónico correcto para continuar.');
+                return;
+            }
+
+            cerrarGoogleModal();
+            document.getElementById('landing-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('app-container').classList.add('logged-in');
+            if (window.innerWidth >= 768) {
+                document.getElementById('btn-volver-pc').style.display = 'block';
+            }
+        }
+
+        function volverAlLanding() {
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('landing-screen').style.display = 'flex';
+            document.getElementById('app-container').classList.remove('logged-in');
+            document.getElementById('reg-nombre').value = '';
+            document.getElementById('reg-correo').value = '';
+        }
+
+        function cerrarSesion() {
+            volverAlLanding();
+        }
+    </script>
 </body>
 </html>
