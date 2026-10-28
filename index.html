@@ -182,4 +182,319 @@
             Conectando corazones con <span class="text-brand-600">huellitas</span>
           </h1>
           <p class="text-slate-600 text-base md:text-lg">
-            Plataforma verificada para adop
+            Plataforma verificada para adopción de mascotas, alertas de rescates, accesorios y apoyo de veterinarios profesionales.
+          </p>
+          <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
+            <button onclick="showSection('adopciones')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-200 transition cursor-pointer">
+              <i class="fa-solid fa-dog mr-1"></i> Ver Mascotas
+            </button>
+            <button onclick="showSection('accesorios')" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-medium shadow-md shadow-amber-200 transition cursor-pointer">
+              <i class="fa-solid fa-store mr-1"></i> Tienda de Accesorios
+            </button>
+          </div>
+        </div>
+        <div class="w-full md:w-80 flex justify-center">
+          <div class="w-64 h-64 bg-brand-100/60 rounded-full flex items-center justify-center p-4 border border-brand-200 relative">
+            <i class="fa-solid fa-shield-cat text-8xl text-brand-400"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCESOS RÁPIDOS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div onclick="showSection('adopciones')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-paw"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Mascotas en Adopción</h3>
+          <p class="text-sm text-slate-500">Revisa la lista detallada de animales rescatados e información certificada.</p>
+        </div>
+
+        <div onclick="showSection('alertas')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Alertas Comunitaria</h3>
+          <p class="text-sm text-slate-500">Reportes específicos de mascotas perdidas o en situación de riesgo.</p>
+        </div>
+
+        <div onclick="showSection('accesorios')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-shirt"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Accesorios y Tienda</h3>
+          <p class="text-sm text-slate-500">Ropa, envases para comida y agua, juguetes interactivos y correas.</p>
+        </div>
+
+        <div onclick="showSection('reportar')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 text-lg">Publicar Caso o Accesorio</h3>
+          <p class="text-sm text-slate-500">Publica alertas con fotos de tu cámara o vende artículos para mascotas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: ADOPCIONES -->
+    <section id="sec-adopciones" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Mascotas en Adopción</h2>
+          <p class="text-sm text-slate-500">Animales rescatados que cuentan con su ficha de salud e información detallada.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="filterPets('Todos')" class="px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white cursor-pointer">Todos</button>
+          <button onclick="filterPets('Perro')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer">Perros</button>
+          <button onclick="filterPets('Gato')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer">Gatos</button>
+        </div>
+      </div>
+
+      <div id="gridAdopciones" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- SECCIÓN: ALERTAS DE RESCATE -->
+    <section id="sec-alertas" class="hidden space-y-6">
+      <div class="border-b border-slate-200 pb-4">
+        <h2 class="text-2xl font-bold text-slate-800">Alertas de Rescate y Casos Abiertos</h2>
+        <p class="text-sm text-slate-500">Reportes específicos y detallados de mascotas extraviadas o que necesitan asistencia urgente de la comunidad.</p>
+      </div>
+
+      <div id="gridAlertas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- SECCIÓN: ACCESORIOS Y TIENDA -->
+    <section id="sec-accesorios" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800"><i class="fa-solid fa-store text-amber-500 mr-2"></i>Tienda de Accesorios para Mascotas</h2>
+          <p class="text-sm text-slate-500">Encuentra ropa, platos de comida/agua, juguetes interactivos y más para tus peluditos.</p>
+        </div>
+        <button onclick="showSection('reportar')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white cursor-pointer shadow-sm">
+          <i class="fa-solid fa-plus mr-1"></i> Vender o Donar Accesorio
+        </button>
+      </div>
+
+      <!-- Filtros de categoría de accesorios -->
+      <div class="flex flex-wrap gap-2 pt-1">
+        <button onclick="filterAccesorios('Todos')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white cursor-pointer">Todos</button>
+        <button onclick="filterAccesorios('Ropa')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer"><i class="fa-solid fa-shirt mr-1"></i>Ropa</button>
+        <button onclick="filterAccesorios('Envases')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer"><i class="fa-solid fa-bowl-food mr-1"></i>Comida / Agua</button>
+        <button onclick="filterAccesorios('Juguetes')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer"><i class="fa-solid fa-bone mr-1"></i>Juguetes</button>
+        <button onclick="filterAccesorios('Otros')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer"><i class="fa-solid fa-box mr-1"></i>Camas / Correas</button>
+      </div>
+
+      <div id="gridAccesorios" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- SECCIÓN: VETERINARIAS VERIFICADAS -->
+    <section id="sec-veterinarias" class="hidden space-y-6">
+      <div class="border-b border-slate-200 pb-4">
+        <h2 class="text-2xl font-bold text-slate-800">Veterinarias Verificadas</h2>
+        <p class="text-sm text-slate-500">Perfiles profesionales revisados detalladamente por la administración de Refugio Digital.</p>
+      </div>
+      <div id="gridVeterinarias" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      <p class="text-xs text-slate-400">La insignia indica que el perfil fue revisado dentro de esta plataforma; no sustituye la verificación directa de credenciales profesionales.</p>
+    </section>
+
+    <!-- SECCIÓN: PUBLICAR / REPORTAR -->
+    <section id="sec-reportar" class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-brand-100 shadow-sm space-y-6">
+      <div class="text-center space-y-1">
+        <h2 class="text-2xl font-bold text-slate-800">Publicar un Caso o Accesorio</h2>
+        <p class="text-sm text-slate-500">Completa la información detallada y adjunta una fotografía usando la cámara de tu dispositivo.</p>
+      </div>
+
+      <div id="vetNotice" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+        <i class="fa-solid fa-circle-info mr-1"></i> Nota: La opción de <strong>"Mascota en Adopción"</strong> está habilitada únicamente para cuentas de <strong>Veterinaria</strong> o Administrador.
+      </div>
+
+      <form id="formNuevoRegistro" onsubmit="guardarNuevoRegistro(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Tipo de Publicación</label>
+          <select id="regTipo" onchange="cambiarFormularioPorTipo()" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <option value="Alerta">Alerta de Rescate / Mascota Perdida</option>
+            <option value="Adopcion">Mascota en Adopción</option>
+            <option value="Accesorio">Vender / Donar Accesorio para Mascota</option>
+          </select>
+        </div>
+
+        <div id="grupoCamposMascota" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre o Identificador</label>
+              <input type="text" id="regNombre" placeholder="Ej: Pochi, Sin nombre / Desconocido" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Especie</label>
+              <select id="regEspecie" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+                <option value="Perro">Perro</option>
+                <option value="Gato">Gato</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="grupoCamposAccesorio" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría del Accesorio</label>
+              <select id="regCategoriaAcc" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+                <option value="Ropa">Ropa y Vestimenta</option>
+                <option value="Envases">Envases / Comederos y Bebederos</option>
+                <option value="Juguetes">Juguetes y Entretenimiento</option>
+                <option value="Otros">Camas, Correas y Varios</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Precio (S/.) o Donación</label>
+              <input type="text" id="regPrecioAcc" placeholder="Ej: S/. 25.00 o Gratis (Donación)" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Fotografía (Capturar con Cámara o Archivo)</label>
+          <input type="file" id="regImagenFile" accept="image/*" capture="environment" class="w-full border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500 bg-slate-50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+          <p class="text-xs text-slate-400 mt-1">Pulsa para abrir la cámara de tu celular y tomar una foto clara del producto o animal.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Ubicación / Distrito</label>
+            <input type="text" id="regUbicacion" required placeholder="Ej: San Juan de Lurigancho" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1" id="lblEdad">Edad / Tiempo o Estado</label>
+            <input type="text" id="regEdad" placeholder="Ej: Nuevo, Poco uso, 1 año" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Descripción detallada</label>
+          <textarea id="regDescripcion" rows="3" required placeholder="Detalla el estado, tamaño, material, características o datos de contacto..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md cursor-pointer">
+          Publicar Registro Detallado
+        </button>
+      </form>
+    </section>
+
+    <!-- SECCIÓN: PANEL ADMINISTRADOR -->
+    <section id="sec-admin" class="hidden space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-800">Panel de Control General</h2>
+          <p class="text-sm text-slate-500">Gestión de publicaciones de la red.</p>
+        </div>
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">
+          Administrador
+        </span>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs">
+            <tr>
+              <th class="p-4">Publicación</th>
+              <th class="p-4">Tipo</th>
+              <th class="p-4">Ubicación</th>
+              <th class="p-4 text-right">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaAdmin" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="p-4 border-b border-slate-200">
+          <h3 class="font-bold text-slate-800">Solicitudes de cuentas veterinarias</h3>
+          <p class="text-xs text-slate-500">Revisa la colegiatura y la información profesional antes de aprobar.</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs"><tr><th class="p-3">Profesional / clínica</th><th class="p-3">Colegiatura</th><th class="p-3">Contacto</th><th class="p-3">Estado</th><th class="p-3">Acciones</th></tr></thead>
+            <tbody id="tablaVeterinariasAdmin" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1">
+    <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
+    <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
+  </footer>
+
+  <!-- SCRIPT COMPLETO Y CORREGIDO -->
+  <script>
+    const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
+    const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
+    const EMAILJS_TEMPLATE_ID = "template_qzi7zxc";
+
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
+    const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
+    let tempUserData = null;
+    let tempGeneratedPIN = null;
+
+    // Datos iniciales
+    const defaultData = [
+      { 
+        id: 1, 
+        tipo: "Adopcion", 
+        nombre: "Luna", 
+        especie: "Perro", 
+        ubicacion: "San Juan de Lurigancho", 
+        edad: "2 años", 
+        descripcion: "Rescatada en excelente estado de salud, muy cariñosa, entrenada en casa, esterilizada y con todas sus vacunas al día.",
+        imagen: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80"
+      },
+      { 
+        id: 2, 
+        tipo: "Adopcion", 
+        nombre: "Mishi", 
+        especie: "Gato", 
+        ubicacion: "Lima Centro", 
+        edad: "8 meses", 
+        descripcion: "Felino de temperamento tranquilo, perfectamente acostumbrado a la vida en departamento, uso de arenero y muy sociable.",
+        imagen: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80"
+      },
+      { 
+        id: 3, 
+        tipo: "Alerta", 
+        nombre: "Peluche", 
+        especie: "Perro", 
+        ubicacion: "SJL - Zárate", 
+        edad: "Desconocida", 
+        descripcion: "Reportado deambulando desorientado cerca de la zona comercial. Se busca urgentemente a sus propietarios o a una familia temporal dispuesta a brindarle refugio.",
+        imagen: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 101,
+        tipo: "Accesorio",
+        nombre: "Polera Térmica para Perro Mediano",
+        categoria: "Ropa",
+        precio: "S/. 25.00",
+        ubicacion: "San Juan de Lurigancho",
+        edad: "Nuevo",
+        descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para perros medianos.",
+        imagen: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 102,
+        tipo: "Accesorio",
+        nombre: "Plato Antideslizante Doble (Comida y Agua)",
+        categoria: "Envases",
+        precio: "S/. 20.00",
+        ubicacion: "Lima Centro",
+        edad: "Nuevo",
+        descripcion: "Envase de acero inoxidable con base de silicona antideslizante para evitar derrames de agua y croquetas.",
+        imagen: "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id
