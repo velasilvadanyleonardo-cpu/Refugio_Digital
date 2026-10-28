@@ -1,260 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Refugio Digital - Red de Adopción y Rescate</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- EmailJS SDK -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              200: '#bae6fd',
-              300: '#7dd3fc',
-              400: '#38bdf8',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-              800: '#075985',
-              900: '#0c4a6e',
-            }
-          }
-        }
-      }
-    }
-  </script>
-</head>
-<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans">
-
-  <!-- CAPA DE BLOQUEO / AUTENTICACIÓN OBLIGATORIA -->
-  <div id="authWall" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-brand-100 space-y-6">
-      
-      <div class="text-center space-y-2">
-        <div class="w-14 h-14 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto text-2xl">
-          <i class="fa-solid fa-shield-cat"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-slate-800">Refugio<span class="text-brand-500">Digital</span></h2>
-        <p class="text-xs text-slate-500">Debes crear una cuenta o iniciar sesión para acceder a la plataforma.</p>
-      </div>
-
-      <!-- PESTAÑAS LOGIN / REGISTRO -->
-      <div class="flex border-b border-slate-200">
-        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600">Iniciar Sesión</button>
-        <button id="tabRegBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600">Crear Cuenta</button>
-      </div>
-
-      <!-- FORMULARIO LOGIN -->
-      <form id="formAuthLogin" onsubmit="procesarLogin(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico</label>
-          <input type="email" id="loginEmail" required placeholder="correo@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Contraseña</label>
-          <input type="password" id="loginPass" required placeholder="••••••••" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md">
-          Ingresar
-        </button>
-      </form>
-
-      <!-- FORMULARIO REGISTRO -->
-      <form id="formAuthRegister" onsubmit="iniciarRegistro(event)" class="space-y-4 hidden">
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre Completo / Institución</label>
-          <input type="text" id="regNombreUser" required placeholder="Ej: Dr. Carlos Ramos" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Correo Electrónico</label>
-          <input type="email" id="regEmailUser" required placeholder="correo@ejemplo.com" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Rol de Cuenta</label>
-          <select id="regRolUser" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-            <option value="Usuario">Usuario Estándar (Adopción / Alertas)</option>
-            <option value="Rescatista">Rescatista Independiente</option>
-            <option value="Veterinario">Veterinaria / Especialista (Publica Adopciones)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Contraseña</label>
-          <input type="password" id="regPassUser" required placeholder="Crea una contraseña" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md">
-          Enviar Código de Verificación
-        </button>
-      </form>
-
-      <!-- PASO VERIFICACIÓN DE CÓDIGO EMAIL -->
-      <div id="stepVerificacionEmail" class="space-y-4 hidden">
-        <div class="bg-brand-50 p-4 rounded-xl border border-brand-200 text-center space-y-1">
-          <p class="text-xs font-semibold text-brand-800">Código de Confirmación de Correo</p>
-          <p class="text-xs text-slate-600">Hemos enviado un código PIN a tu correo electrónico. Ingrésalo a continuación:</p>
-          <div id="displayPIN" class="text-xl font-mono font-bold tracking-widest text-brand-600 py-1">123456</div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Ingresa el Código PIN</label>
-          <input type="text" id="inputPIN" maxlength="6" placeholder="000000" class="w-full text-center tracking-widest font-mono text-lg border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:border-brand-500">
-        </div>
-        <button onclick="confirmarPIN()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition shadow-md">
-          Confirmar y Crear Cuenta
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- NAVBAR -->
-  <header class="bg-white/80 backdrop-blur-md border-b border-brand-100 sticky top-0 z-40">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="#" onclick="showSection('inicio')" class="flex items-center gap-2 text-brand-700 font-bold text-xl tracking-tight">
-        <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600">
-          <i class="fa-solid fa-paw text-xl"></i>
-        </div>
-        <span>Refugio<span class="text-brand-500 font-normal">Digital</span></span>
-      </a>
-
-      <!-- Navegación Desktop -->
-      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-        <button onclick="showSection('inicio')" class="hover:text-brand-600 transition">Inicio</button>
-        <button onclick="showSection('adopciones')" class="hover:text-brand-600 transition">Adoptar</button>
-        <button onclick="showSection('alertas')" class="hover:text-brand-600 transition">Alertas de Rescate</button>
-        <button onclick="showSection('reportar')" class="hover:text-brand-600 transition">Publicar Caso</button>
-      </nav>
-
-      <!-- Botón Sesión / Perfil -->
-      <div id="authNavArea" class="flex items-center gap-3">
-        <!-- Renderizado dinámicamente por JS -->
-      </div>
-    </div>
-  </header>
-
-  <!-- CONTENIDO PRINCIPAL (SPA) -->
-  <main id="mainApp" class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
-
-    <!-- SECCIÓN: INICIO -->
-    <section id="sec-inicio" class="space-y-12">
-      <div class="bg-gradient-to-br from-brand-50 via-sky-50 to-indigo-50/40 rounded-3xl p-8 md:p-12 border border-brand-100 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
-        <div class="space-y-4 max-w-xl">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
-            <i class="fa-solid fa-heart text-brand-500"></i> Red Comunitaria Animal
-          </span>
-          <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 leading-tight">
-            Conectando corazones con <span class="text-brand-600">huellitas</span>
-          </h1>
-          <p class="text-slate-600 text-base md:text-lg">
-            Plataforma verificada para adopción de mascotas, alertas de rescates y apoyo de veterinarios profesionales.
-          </p>
-          <div class="flex flex-wrap gap-3 justify-center md:justify-start pt-2">
-            <button onclick="showSection('adopciones')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md shadow-brand-200 transition">
-              <i class="fa-solid fa-dog mr-1"></i> Ver Mascotas
-            </button>
-            <button onclick="showSection('reportar')" class="px-6 py-3 bg-white hover:bg-brand-50 text-brand-700 border border-brand-200 rounded-xl font-medium transition">
-              <i class="fa-solid fa-bullhorn mr-1"></i> Publicar Alerta / Caso
-            </button>
-          </div>
-        </div>
-        <div class="w-full md:w-80 flex justify-center">
-          <div class="w-64 h-64 bg-brand-100/60 rounded-full flex items-center justify-center p-4 border border-brand-200 relative">
-            <i class="fa-solid fa-shield-cat text-8xl text-brand-400"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- ACCESOS RÁPIDOS -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div onclick="showSection('adopciones')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
-          <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl">
-            <i class="fa-solid fa-paw"></i>
-          </div>
-          <h3 class="font-bold text-slate-800 text-lg">Mascotas en Adopción</h3>
-          <p class="text-sm text-slate-500">Revisa la lista de animales rescatados y certificados por veterinarias para adopción.</p>
-        </div>
-
-        <div onclick="showSection('alertas')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-          </div>
-          <h3 class="font-bold text-slate-800 text-lg">Alertas Comunitaria</h3>
-          <p class="text-sm text-slate-500">Reportes libres de mascotas perdidas o en situación de riesgo en la vía pública.</p>
-        </div>
-
-        <div onclick="showSection('reportar')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
-          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
-            <i class="fa-solid fa-plus"></i>
-          </div>
-          <h3 class="font-bold text-slate-800 text-lg">Publicar Alerta o Adopción</h3>
-          <p class="text-sm text-slate-500">Publica un reporte rápido de rescate o una solicitud formal si eres veterinaria.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCIÓN: ADOPCIONES -->
-    <section id="sec-adopciones" class="hidden space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-        <div>
-          <h2 class="text-2xl font-bold text-slate-800">Mascotas en Adopción</h2>
-          <p class="text-sm text-slate-500">Animales rescatados con ficha de salud avalada.</p>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="filterPets('Todos')" class="px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white">Todos</button>
-          <button onclick="filterPets('Perro')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600">Perros</button>
-          <button onclick="filterPets('Gato')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600">Gatos</button>
-        </div>
-      </div>
-
-      <div id="gridAdopciones" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Renderizado con imágenes vía JS -->
-      </div>
-    </section>
-
-    <!-- SECCIÓN: ALERTAS DE RESCATE -->
-    <section id="sec-alertas" class="hidden space-y-6">
-      <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-2xl font-bold text-slate-800">Alertas de Rescate Libres</h2>
-        <p class="text-sm text-slate-500">Reportes abiertos de mascotas encontradas o perdidas por la comunidad.</p>
-      </div>
-
-      <div id="gridAlertas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Renderizado con JS -->
-      </div>
-    </section>
-
-    <!-- SECCIÓN: PUBLICAR / REPORTAR -->
-    <section id="sec-reportar" class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-brand-100 shadow-sm space-y-6">
-      <div class="text-center space-y-1">
-        <h2 class="text-2xl font-bold text-slate-800">Publicar un Caso</h2>
-        <p class="text-sm text-slate-500">Registra un animal rescatado o un reporte urgente.</p>
-      </div>
-
-      <div id="vetNotice" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
-        <i class="fa-solid fa-circle-info mr-1"></i> Nota: La opción de <strong>"Mascota en Adopción"</strong> está habilitada únicamente para cuentas de <strong>Veterinaria</strong> o Administrador.
-      </div>
-
-      <form id="formNuevoRegistro" onsubmit="guardarNuevoRegistro(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Tipo de Publicación</label>
-          <select id="regTipo" onchange="verificarPermisoTipo()" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-            <option value="Alerta">Alerta de Rescate / Perdido (Abierto a todos)</option>
-            <option value="Adopcion">Mascota en Adopción (Solo Veterinarias)</option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre de la Mascota</label>
             <input type="text" id="regNombre" required placeholder="Ej: Pochi, Firulais" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
           <div>
@@ -266,464 +9,544 @@
             </select>
           </div>
         </div>
-
-        <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">URL Imagen de la Mascota (Opcional)</label>
-          <input type="url" id="regImagen" placeholder="https://ejemplo.com/foto.jpg" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-        </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Ubicación / Distrito</label>
-            <input type="text" id="regUbicacion" required placeholder="Ej: San Juan de Lurigancho" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Ubicación</label>
+            <input type="text" id="regUbicacion" required placeholder="Distrito, ciudad" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
           <div>
-            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Edad o Tiempo aprox.</label>
-            <input type="text" id="regEdad" placeholder="Ej: 1 año, 6 meses" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Teléfono de contacto</label>
+            <input type="tel" id="regTelefono" required placeholder="Número de contacto" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
         </div>
-
         <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Detalles del Caso</label>
-          <textarea id="regDescripcion" rows="3" required placeholder="Describe el estado de la mascota o punto de contacto..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Descripción</label>
+          <textarea id="regDescripcion" required rows="3" placeholder="Describe el caso, estado del animal y cómo ayudar..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
         </div>
-
-        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-md transition">
-          Publicar Registro
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">URL de imagen (opcional)</label>
+          <input type="url" id="regImagen" placeholder="https://..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+        </div>
+        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md">
+          Publicar Caso
         </button>
       </form>
     </section>
 
-    <!-- SECCIÓN: PANEL ADMINISTRADOR -->
+    <!-- PANEL ADMINISTRADOR -->
     <section id="sec-admin" class="hidden space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
-        <div>
-          <h2 class="text-2xl font-bold text-slate-800">Panel de Control General</h2>
-          <p class="text-sm text-slate-500">Gestión de publicaciones de la red.</p>
-        </div>
-        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">
-          Administrador
-        </span>
+      <div class="border-b border-slate-200 pb-4">
+        <h2 class="text-2xl font-bold text-slate-800">Panel de Administración</h2>
+        <p class="text-sm text-slate-500">Revisa las solicitudes de cuentas veterinarias y decide si se verifican.</p>
       </div>
-
-      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <table class="w-full text-left text-sm">
-          <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs">
-            <tr>
-              <th class="p-4">Mascota</th>
-              <th class="p-4">Tipo</th>
-              <th class="p-4">Ubicación</th>
-              <th class="p-4 text-right">Acción</th>
-            </tr>
-          </thead>
-          <tbody id="tablaAdmin" class="divide-y divide-slate-100">
-            <!-- JS Content -->
-          </tbody>
-        </table>
-      </div>
+      <div id="listaSolicitudesVet" class="space-y-4"></div>
     </section>
 
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1">
-    <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
-    <p>Plataforma para el rescate y adopción de mascotas.</p>
+  <footer class="mt-auto bg-white border-t border-slate-100 py-6">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <p>© 2026 Refugio Digital — Red de Adopción y Rescate</p>
+      <p>Hecho para promover el bienestar animal.</p>
+    </div>
   </footer>
 
-  <!-- SCRIPT COMPLETO CON EMAILJS INTEGRADO -->
   <script>
-    // =========================================================
-    // CONFIGURACIÓN DE EMAILJS (TOTALMENTE CONFIGURADO)
-    // =========================================================
-    const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
-    const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
-    const EMAILJS_TEMPLATE_ID = "template_qzi7zxc";
+    // ------------------------------------------------------------
+    // CONFIGURACIÓN
+    // ------------------------------------------------------------
+    const EMAILJS_PUBLIC_KEY = 'erNn22pnz05OBc3bJ';
+    const EMAILJS_SERVICE_ID = 'service_ed8dvbu';
+    const EMAILJS_TEMPLATE_ID = 'template_qzi7zxc';
+    const ADMIN_EMAIL = 'velasilvadanyleonardo@gmail.com';
 
-    // Inicializar EmailJS
-    if (typeof emailjs !== 'undefined') {
+    if (window.emailjs) {
       emailjs.init(EMAILJS_PUBLIC_KEY);
     }
 
-    const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
-    let tempUserData = null;
-    let tempGeneratedPIN = null;
+    // ------------------------------------------------------------
+    // ESTADO DE LA APLICACIÓN
+    // ------------------------------------------------------------
+    let usuarioActual = JSON.parse(localStorage.getItem('refugio_usuario')) || null;
+    let cuentas = JSON.parse(localStorage.getItem('refugio_cuentas')) || [];
+    let mascotas = JSON.parse(localStorage.getItem('refugio_mascotas')) || [];
+    let registroPendiente = null;
+    let pinGenerado = null;
+    let filtroActual = 'Todos';
 
-    // Datos iniciales con imágenes reales
-    const defaultData = [
-      { 
-        id: 1, 
-        tipo: "Adopcion", 
-        nombre: "Luna", 
-        especie: "Perro", 
-        ubicacion: "San Juan de Lurigancho", 
-        edad: "2 años", 
-        descripcion: "Rescatada, muy cariñosa, esterilizada y con vacunas al día.",
-        imagen: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80"
-      },
-      { 
-        id: 2, 
-        tipo: "Adopcion", 
-        nombre: "Mishi", 
-        especie: "Gato", 
-        ubicacion: "Lima Centro", 
-        edad: "8 meses", 
-        descripcion: "Tranquilo, acostumbrado a departamento y educado.",
-        imagen: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80"
-      },
-      { 
-        id: 3, 
-        tipo: "Alerta", 
-        nombre: "Peluche", 
-        especie: "Perro", 
-        ubicacion: "SJL - Zárate", 
-        edad: "Desconocida", 
-        descripcion: "Encontrado desorientado cerca del parque. Se busca a sus dueños o hogar temporal.",
-        imagen: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80"
-      }
-    ];
-
-    function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas");
-      if (!data) {
-        localStorage.setItem("refugio_mascotas", JSON.stringify(defaultData));
-        return defaultData;
-      }
-      return JSON.parse(data);
+    function guardarCuentas() {
+      localStorage.setItem('refugio_cuentas', JSON.stringify(cuentas));
     }
 
-    function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas", JSON.stringify(list));
+    function guardarMascotas() {
+      localStorage.setItem('refugio_mascotas', JSON.stringify(mascotas));
     }
 
-    function getUsuarioActual() {
-      return JSON.parse(localStorage.getItem("refugio_usuario"));
-    }
-
-    function getUsersDatabase() {
-      return JSON.parse(localStorage.getItem("refugio_cuentas")) || [];
-    }
-
-    function saveUserDatabase(users) {
-      localStorage.setItem("refugio_cuentas", JSON.stringify(users));
-    }
-
-    // AUTENTICACIÓN Y REGISTRO
-    function switchAuthTab(tab) {
-      const formLogin = document.getElementById('formAuthLogin');
-      const formReg = document.getElementById('formAuthRegister');
-      const stepVerify = document.getElementById('stepVerificacionEmail');
-      const tabLoginBtn = document.getElementById('tabLoginBtn');
-      const tabRegBtn = document.getElementById('tabRegBtn');
-
-      stepVerify.classList.add('hidden');
-
-      if (tab === 'login') {
-        formLogin.classList.remove('hidden');
-        formReg.classList.add('hidden');
-        tabLoginBtn.className = "flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600";
-        tabRegBtn.className = "flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600";
+    function guardarSesion() {
+      if (usuarioActual) {
+        localStorage.setItem('refugio_usuario', JSON.stringify(usuarioActual));
       } else {
-        formLogin.classList.add('hidden');
-        formReg.classList.remove('hidden');
-        tabRegBtn.className = "flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600";
-        tabLoginBtn.className = "flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600";
+        localStorage.removeItem('refugio_usuario');
       }
     }
 
-    function procesarLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-      const pass = document.getElementById('loginPass').value;
+    function escaparHTML(valor) {
+      return String(valor ?? '').replace(/[&<>"']/g, caracter => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      })[caracter]);
+    }
 
-      const db = getUsersDatabase();
-      
-      // Auto Administrador si es el correo principal
-      if (email === ADMIN_EMAIL) {
-        const adminUser = {
-          nombre: "Dany Vela (Admin)",
-          email: ADMIN_EMAIL,
-          rol: "Veterinario",
-          esAdmin: true
-        };
-        localStorage.setItem("refugio_usuario", JSON.stringify(adminUser));
-        desbloquearApp();
+    function mostrarMensaje(mensaje) {
+      alert(mensaje);
+    }
+
+    // ------------------------------------------------------------
+    // AUTENTICACIÓN Y REGISTRO
+    // ------------------------------------------------------------
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('formAuthLogin');
+      const registerForm = document.getElementById('formAuthRegister');
+      const verifyStep = document.getElementById('stepVerificacionEmail');
+      const loginButton = document.getElementById('tabLoginBtn');
+      const registerButton = document.getElementById('tabRegBtn');
+
+      loginForm.classList.toggle('hidden', tab !== 'login');
+      registerForm.classList.toggle('hidden', tab !== 'register');
+      verifyStep.classList.add('hidden');
+
+      loginButton.className = tab === 'login'
+        ? 'flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600'
+        : 'flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600';
+
+      registerButton.className = tab === 'register'
+        ? 'flex-1 py-2 text-sm font-semibold text-brand-600 border-b-2 border-brand-600'
+        : 'flex-1 py-2 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-slate-600';
+    }
+
+    function mostrarCamposVeterinaria() {
+      const esVeterinaria = document.getElementById('regRolUser').value === 'Veterinario';
+      const campos = document.getElementById('camposVeterinaria');
+      campos.classList.toggle('hidden', !esVeterinaria);
+
+      document.getElementById('regClinica').required = esVeterinaria;
+      document.getElementById('regColegiatura').required = esVeterinaria;
+      document.getElementById('regTelefonoVet').required = esVeterinaria;
+      document.getElementById('regUbicacionVet').required = esVeterinaria;
+    }
+
+    async function iniciarRegistro(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById('regNombreUser').value.trim();
+      const email = document.getElementById('regEmailUser').value.trim().toLowerCase();
+      const rol = document.getElementById('regRolUser').value;
+      const password = document.getElementById('regPassUser').value;
+
+      if (password.length < 8) {
+        mostrarMensaje('La contraseña debe tener al menos 8 caracteres.');
         return;
       }
 
-      const match = db.find(u => u.email === email && u.pass === pass);
-
-      if (match) {
-        localStorage.setItem("refugio_usuario", JSON.stringify(match));
-        desbloquearApp();
-      } else {
-        alert("Correo o contraseña incorrectos. Si eres nuevo, por favor crea una cuenta.");
+      if (cuentas.some(cuenta => cuenta.email === email)) {
+        mostrarMensaje('Ya existe una cuenta con ese correo electrónico.');
+        return;
       }
-    }
 
-    function iniciarRegistro(e) {
-      e.preventDefault();
-      const email = document.getElementById('regEmailUser').value.trim().toLowerCase();
-      const nombre = document.getElementById('regNombreUser').value.trim();
-      const rol = document.getElementById('regRolUser').value;
-      const pass = document.getElementById('regPassUser').value;
+      let datosVeterinaria = null;
 
-      // Generar PIN aleatorio de 6 dígitos
-      tempGeneratedPIN = Math.floor(100000 + Math.random() * 900000).toString();
-      
-      tempUserData = {
-        nombre: nombre,
-        email: email,
-        rol: rol,
-        pass: pass,
-        esAdmin: (email === ADMIN_EMAIL)
+      if (rol === 'Veterinario') {
+        datosVeterinaria = {
+          clinica: document.getElementById('regClinica').value.trim(),
+          colegiatura: document.getElementById('regColegiatura').value.trim(),
+          telefono: document.getElementById('regTelefonoVet').value.trim(),
+          ubicacion: document.getElementById('regUbicacionVet').value.trim(),
+          prueba: document.getElementById('regPruebaVet').value.trim()
+        };
+
+        if (!datosVeterinaria.clinica || !datosVeterinaria.colegiatura ||
+            !datosVeterinaria.telefono || !datosVeterinaria.ubicacion) {
+          mostrarMensaje('Completa los datos obligatorios para solicitar la verificación veterinaria.');
+          return;
+        }
+      }
+
+      registroPendiente = {
+        nombre,
+        email,
+        rol,
+        password,
+        veterinaria: datosVeterinaria,
+        estadoVerificacion: rol === 'Veterinario' ? 'pendiente' : 'no_aplica'
       };
 
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerText;
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Enviando código por correo...";
+      pinGenerado = String(Math.floor(100000 + Math.random() * 900000));
 
-      // Parámetros para enviar vía EmailJS
-      const templateParams = {
-        to_email: email,
-        to_name: nombre,
-        pin_code: tempGeneratedPIN
-      };
+      document.getElementById('formAuthRegister').classList.add('hidden');
+      document.getElementById('stepVerificacionEmail').classList.remove('hidden');
+      document.getElementById('mensajeVerificacion').textContent =
+        'Introduce el código de 6 dígitos enviado a tu correo electrónico.';
 
-      // Envío real con EmailJS
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-        .then(function(response) {
-          alert("¡Código de confirmación enviado exitosamente a " + email + "!");
-          document.getElementById('formAuthRegister').classList.add('hidden');
-          document.getElementById('stepVerificacionEmail').classList.remove('hidden');
-          document.getElementById('displayPIN').innerText = tempGeneratedPIN;
-        }, function(error) {
-          console.error("Error al enviar EmailJS:", error);
-          alert("Ocurrió un problema con el servicio de correo. Mostrando el PIN en pantalla para continuar.");
-          document.getElementById('formAuthRegister').classList.add('hidden');
-          document.getElementById('stepVerificacionEmail').classList.remove('hidden');
-          document.getElementById('displayPIN').innerText = tempGeneratedPIN;
-        })
-        .finally(function() {
-          submitBtn.disabled = false;
-          submitBtn.innerText = originalText;
+      try {
+        if (!window.emailjs) {
+          throw new Error('EmailJS no está disponible');
+        }
+
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email: email,
+          to_name: nombre,
+          verification_code: pinGenerado,
+          codigo: pinGenerado
         });
+
+        mostrarMensaje('Si el correo es correcto, recibirás el código de verificación. Revisa también la carpeta de spam.');
+      } catch (error) {
+        console.error('Error al enviar el correo de verificación:', error);
+        mostrarMensaje('No se pudo confirmar el envío del correo. Revisa la configuración de EmailJS e inténtalo nuevamente. Por seguridad, el código no se mostrará en pantalla.');
+      }
     }
 
     function confirmarPIN() {
-      const input = document.getElementById('inputPIN').value.trim();
+      const pinIngresado = document.getElementById('inputPIN').value.trim();
 
-      if (input === tempGeneratedPIN) {
-        const db = getUsersDatabase();
-        db.push(tempUserData);
-        saveUserDatabase(db);
-
-        localStorage.setItem("refugio_usuario", JSON.stringify(tempUserData));
-        alert("¡Correo verificado con éxito! Tu cuenta ha sido creada.");
-        desbloquearApp();
-      } else {
-        alert("El código PIN ingresado es incorrecto. Por favor verifica el código recibido.");
+      if (!registroPendiente || !pinGenerado) {
+        mostrarMensaje('No hay una verificación pendiente. Vuelve a iniciar el registro.');
+        return;
       }
+
+      if (pinIngresado !== pinGenerado) {
+        mostrarMensaje('El código ingresado no es correcto. Inténtalo nuevamente.');
+        return;
+      }
+
+      const cuentaNueva = {
+        id: Date.now(),
+        nombre: registroPendiente.nombre,
+        email: registroPendiente.email,
+        password: registroPendiente.password,
+        rol: registroPendiente.rol,
+        veterinaria: registroPendiente.veterinaria,
+        estadoVerificacion: registroPendiente.estadoVerificacion,
+        fechaRegistro: new Date().toISOString()
+      };
+
+      cuentas.push(cuentaNueva);
+      guardarCuentas();
+
+      registroPendiente = null;
+      pinGenerado = null;
+      document.getElementById('inputPIN').value = '';
+      document.getElementById('stepVerificacionEmail').classList.add('hidden');
+      document.getElementById('formAuthRegister').reset();
+      switchAuthTab('login');
+
+      mostrarMensaje(
+        cuentaNueva.rol === 'Veterinario'
+          ? 'Cuenta creada. Tu solicitud veterinaria está pendiente de revisión por el administrador.'
+          : 'Cuenta creada correctamente. Ya puedes iniciar sesión.'
+      );
     }
 
-    function desbloquearApp() {
+    function procesarLogin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPass').value;
+      const cuenta = cuentas.find(c => c.email === email && c.password === password);
+
+      if (!cuenta) {
+        mostrarMensaje('Correo o contraseña incorrectos.');
+        return;
+      }
+
+      usuarioActual = {
+        id: cuenta.id,
+        nombre: cuenta.nombre,
+        email: cuenta.email,
+        rol: cuenta.rol,
+        veterinaria: cuenta.veterinaria,
+        estadoVerificacion: cuenta.estadoVerificacion
+      };
+
+      guardarSesion();
       document.getElementById('authWall').classList.add('hidden');
-      actualizarBotonSesion();
+      actualizarInterfaz();
+      showSection('inicio');
+    }
+
+    function explorarSinCuenta() {
+      usuarioActual = null;
+      guardarSesion();
+      document.getElementById('authWall').classList.add('hidden');
+      actualizarInterfaz();
       showSection('inicio');
     }
 
     function cerrarSesion() {
-      localStorage.removeItem("refugio_usuario");
-      location.reload();
+      usuarioActual = null;
+      guardarSesion();
+      document.getElementById('authWall').classList.remove('hidden');
+      switchAuthTab('login');
+      actualizarInterfaz();
     }
 
-    function actualizarBotonSesion() {
-      const area = document.getElementById('authNavArea');
-      const user = getUsuarioActual();
-
-      if (user) {
-        area.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="px-2.5 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-lg">${user.rol}</span>
-            ${user.esAdmin ? '<button onclick="showSection(\'admin\')" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg">Admin</button>' : ''}
-            <span class="text-xs font-medium text-slate-600 hidden sm:inline">${user.nombre}</span>
-            <button onclick="cerrarSesion()" class="text-xs text-rose-500 hover:text-rose-700 font-semibold">Salir</button>
-          </div>
-        `;
-      }
-    }
-
-    // CONTROL DE VISTAS
-    function showSection(secId) {
-      const secciones = ['inicio', 'adopciones', 'alertas', 'reportar', 'admin'];
-      secciones.forEach(id => {
-        const el = document.getElementById(`sec-${id}`);
-        if (el) el.classList.add('hidden');
+    // ------------------------------------------------------------
+    // NAVEGACIÓN Y RENDERIZADO
+    // ------------------------------------------------------------
+    function showSection(nombre) {
+      document.querySelectorAll('main section').forEach(seccion => {
+        seccion.classList.add('hidden');
       });
 
-      const target = document.getElementById(`sec-${secId}`);
-      if (target) target.classList.remove('hidden');
+      const objetivo = document.getElementById(`sec-${nombre}`);
+      if (objetivo) objetivo.classList.remove('hidden');
 
-      if (secId === 'adopciones') renderAdopciones('Todos');
-      if (secId === 'alertas') renderAlertas();
-      if (secId === 'reportar') verificarPermisoTipo();
-      if (secId === 'admin') renderAdminTable();
+      if (nombre === 'veterinarias') renderVeterinarias();
+      if (nombre === 'adopciones') renderMascotas('Adopcion');
+      if (nombre === 'alertas') renderMascotas('Alerta');
+      if (nombre === 'admin') renderSolicitudesVet();
     }
 
-    // RENDERIZADO CON IMÁGENES
-    function renderAdopciones(filtro) {
-      const grid = document.getElementById('gridAdopciones');
-      const lista = getMascotas().filter(m => m.tipo === "Adopcion");
-      
-      const filtrados = filtro === 'Todos' ? lista : lista.filter(m => m.especie === filtro);
+    function actualizarInterfaz() {
+      const zonaNav = document.getElementById('authNavArea');
+      const vetNotice = document.getElementById('vetNotice');
+      const esAdmin = usuarioActual && usuarioActual.rol === 'Administrador';
+      const esVeterinariaVerificada = usuarioActual &&
+        usuarioActual.rol === 'Veterinario' &&
+        usuarioActual.estadoVerificacion === 'verificada';
 
-      if (filtrados.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay mascotas en adopción en este momento.</p>`;
-        return;
-      }
+      zonaNav.innerHTML = '';
 
-      grid.innerHTML = filtrados.map(item => `
-        <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-          <img src="${item.imagen || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80'}" class="w-full h-48 object-cover" alt="${item.nombre}">
-          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
-            <div>
-              <div class="flex justify-between items-start mb-1">
-                <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
-                <span class="px-2.5 py-0.5 bg-brand-50 text-brand-700 rounded-full text-xs font-semibold">${item.especie}</span>
-              </div>
-              <span class="text-xs text-brand-600 font-medium block mb-2"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
-              <p class="text-sm text-slate-600 line-clamp-2">${item.descripcion}</p>
-            </div>
-            <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
-              <span>Edad: ${item.edad || 'N/A'}</span>
-              <button onclick="alert('Solicitud enviada a la veterinaria responsable.')" class="px-3 py-1.5 bg-brand-600 text-white rounded-lg font-medium hover:bg-brand-700">Adoptar</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function filterPets(especie) {
-      renderAdopciones(especie);
-    }
-
-    function renderAlertas() {
-      const grid = document.getElementById('gridAlertas');
-      const lista = getMascotas().filter(m => m.tipo === "Alerta");
-
-      if (lista.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay alertas activas registradas.</p>`;
-        return;
-      }
-
-      grid.innerHTML = lista.map(item => `
-        <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm flex flex-col">
-          ${item.imagen ? `<img src="${item.imagen}" class="w-full h-40 object-cover">` : ''}
-          <div class="p-5 space-y-2">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-slate-800 text-lg">${item.nombre}</h3>
-              <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 rounded-full text-xs font-semibold">Alerta</span>
-            </div>
-            <span class="text-xs text-amber-600 font-medium block"><i class="fa-solid fa-location-dot mr-1"></i>${item.ubicacion}</span>
-            <p class="text-sm text-slate-600">${item.descripcion}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // VERIFICACIÓN DE RESTRICCIÓN DE PUBLICACIÓN
-    function verificarPermisoTipo() {
-      const user = getUsuarioActual();
-      const selectTipo = document.getElementById('regTipo');
-      const notice = document.getElementById('vetNotice');
-
-      if (user && (user.rol === 'Veterinario' || user.esAdmin)) {
-        selectTipo.querySelector('option[value="Adopcion"]').disabled = false;
-        notice.classList.add('hidden');
+      if (usuarioActual) {
+        zonaNav.innerHTML = `
+          <span class="hidden sm:inline text-sm font-semibold text-slate-600">${escaparHTML(usuarioActual.nombre)}</span>
+          <button onclick="showSection('admin')" class="${esAdmin ? '' : 'hidden'} px-3 py-2 rounded-lg text-sm bg-amber-100 text-amber-800">Administración</button>
+          <button onclick="cerrarSesion()" class="px-3 py-2 rounded-lg text-sm border border-slate-200 hover:bg-slate-50">Salir</button>
+        `;
       } else {
-        selectTipo.value = "Alerta";
-        selectTipo.querySelector('option[value="Adopcion"]').disabled = true;
-        notice.classList.remove('hidden');
+        zonaNav.innerHTML = `
+          <button onclick="document.getElementById('authWall').classList.remove('hidden'); switchAuthTab('login')" class="px-3 py-2 rounded-lg text-sm border border-brand-200 text-brand-700 hover:bg-brand-50">Ingresar</button>
+        `;
+      }
+
+      if (vetNotice) {
+        vetNotice.classList.toggle('hidden', esVeterinariaVerificada || esAdmin);
+      }
+
+      const opcionAdopcion = document.querySelector('#regTipo option[value="Adopcion"]');
+      if (opcionAdopcion) {
+        opcionAdopcion.disabled = !(esVeterinariaVerificada || esAdmin);
       }
     }
 
-    function guardarNuevoRegistro(e) {
-      e.preventDefault();
-      const user = getUsuarioActual();
+    // ------------------------------------------------------------
+    // PUBLICACIONES
+    // ------------------------------------------------------------
+    function verificarPermisoTipo() {
       const tipo = document.getElementById('regTipo').value;
+      const esAdmin = usuarioActual && usuarioActual.rol === 'Administrador';
+      const esVeterinariaVerificada = usuarioActual &&
+        usuarioActual.rol === 'Veterinario' &&
+        usuarioActual.estadoVerificacion === 'verificada';
 
-      if (tipo === 'Adopcion' && user.rol !== 'Veterinario' && !user.esAdmin) {
-        alert('Únicamente las veterinarias registradas pueden publicar animales en adopción.');
+      if (tipo === 'Adopcion' && !(esVeterinariaVerificada || esAdmin)) {
+        mostrarMensaje('Solo las cuentas veterinarias verificadas pueden publicar mascotas en adopción.');
+        document.getElementById('regTipo').value = 'Alerta';
+      }
+    }
+
+    function guardarNuevoRegistro(event) {
+      event.preventDefault();
+
+      if (!usuarioActual) {
+        mostrarMensaje('Inicia sesión o crea una cuenta para publicar un caso.');
+        document.getElementById('authWall').classList.remove('hidden');
         return;
       }
 
-      const lista = getMascotas();
-      const imgInput = document.getElementById('regImagen').value.trim();
+      const tipo = document.getElementById('regTipo').value;
+      const esAdmin = usuarioActual.rol === 'Administrador';
+      const esVeterinariaVerificada = usuarioActual.rol === 'Veterinario' &&
+        usuarioActual.estadoVerificacion === 'verificada';
 
-      const nuevo = {
+      if (tipo === 'Adopcion' && !(esVeterinariaVerificada || esAdmin)) {
+        mostrarMensaje('Solo las cuentas veterinarias verificadas pueden publicar mascotas en adopción.');
+        return;
+      }
+
+      const nuevaMascota = {
         id: Date.now(),
-        tipo: tipo,
+        tipo,
         nombre: document.getElementById('regNombre').value.trim(),
         especie: document.getElementById('regEspecie').value,
         ubicacion: document.getElementById('regUbicacion').value.trim(),
-        edad: document.getElementById('regEdad').value.trim() || 'Desconocida',
+        telefono: document.getElementById('regTelefono').value.trim(),
         descripcion: document.getElementById('regDescripcion').value.trim(),
-        imagen: imgInput || (document.getElementById('regEspecie').value === 'Gato' ? 
-          'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80' : 
-          'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80')
+        imagen: document.getElementById('regImagen').value.trim(),
+        autor: usuarioActual.nombre,
+        autorEmail: usuarioActual.email,
+        fecha: new Date().toISOString()
       };
 
-      lista.unshift(nuevo);
-      saveMascotas(lista);
-
+      mascotas.unshift(nuevaMascota);
+      guardarMascotas();
       document.getElementById('formNuevoRegistro').reset();
-      alert('¡Publicación creada con éxito!');
-
-      if (nuevo.tipo === 'Adopcion') {
-        showSection('adopciones');
-      } else {
-        showSection('alertas');
-      }
+      mostrarMensaje('Publicación guardada correctamente.');
+      showSection(tipo === 'Adopcion' ? 'adopciones' : 'alertas');
     }
 
-    function renderAdminTable() {
-      const tbody = document.getElementById('tablaAdmin');
-      const lista = getMascotas();
+    function filterPets(especie) {
+      filtroActual = especie;
+      renderMascotas('Adopcion');
+    }
 
-      if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros guardados.</td></tr>`;
+    function renderMascotas(tipo) {
+      const contenedor = document.getElementById(tipo === 'Adopcion' ? 'gridAdopciones' : 'gridAlertas');
+      const registros = mascotas.filter(m => m.tipo === tipo &&
+        (tipo !== 'Adopcion' || filtroActual === 'Todos' || m.especie === filtroActual));
+
+      if (!registros.length) {
+        contenedor.innerHTML = `
+          <div class="col-span-full bg-white p-8 rounded-2xl border border-slate-100 text-center text-slate-500">
+            <i class="fa-solid fa-paw text-3xl mb-3 text-slate-300"></i>
+            <p>Todavía no hay publicaciones en esta sección.</p>
+          </div>
+        `;
         return;
       }
 
-      tbody.innerHTML = lista.map(item => `
-        <tr class="hover:bg-slate-50">
-          <td class="p-4 font-medium text-slate-800">${item.nombre} (${item.especie})</td>
-          <td class="p-4"><span class="px-2 py-0.5 rounded text-xs ${item.tipo === 'Adopcion' ? 'bg-sky-100 text-sky-700' : 'bg-amber-100 text-amber-700'}">${item.tipo}</span></td>
-          <td class="p-4 text-slate-500">${item.ubicacion}</td>
-          <td class="p-4 text-right">
-            <button onclick="eliminarMascota(${item.id})" class="text-rose-500 hover:text-rose-700 text-xs font-semibold">Eliminar</button>
-          </td>
-        </tr>
+      contenedor.innerHTML = registros.map(mascota => `
+        <article class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          ${mascota.imagen ? `<img src="${escaparHTML(mascota.imagen)}" alt="${escaparHTML(mascota.nombre)}" class="w-full h-48 object-cover" onerror="this.style.display='none'">` : ''}
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-bold text-lg text-slate-800">${escaparHTML(mascota.nombre)}</h3>
+              <span class="text-xs px-2 py-1 rounded-full ${mascota.tipo === 'Adopcion' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${mascota.tipo === 'Adopcion' ? 'En adopción' : 'Alerta'}</span>
+            </div>
+            <p class="text-sm text-slate-600"><i class="fa-solid fa-paw mr-1"></i>${escaparHTML(mascota.especie)} · ${escaparHTML(mascota.ubicacion)}</p>
+            <p class="text-sm text-slate-600">${escaparHTML(mascota.descripcion)}</p>
+            <div class="pt-3 border-t border-slate-100 text-xs text-slate-500">
+              <p>Publicado por: ${escaparHTML(mascota.autor)}</p>
+              <p>Contacto: ${escaparHTML(mascota.telefono)}</p>
+            </div>
+          </div>
+        </article>
       `).join('');
     }
 
-    function eliminarMascota(id) {
-      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-        let lista = getMascotas();
-        lista = lista.filter(m => m.id !== id);
-        saveMascotas(lista);
-        renderAdminTable();
+    // ------------------------------------------------------------
+    // VETERINARIAS VERIFICADAS Y MODERACIÓN
+    // ------------------------------------------------------------
+    function renderVeterinarias() {
+      const contenedor = document.getElementById('gridVeterinarias');
+      const vets = cuentas.filter(c => c.rol === 'Veterinario' && c.estadoVerificacion === 'verificada');
+
+      if (!vets.length) {
+        contenedor.innerHTML = `
+          <div class="col-span-full bg-white p-8 rounded-2xl border border-slate-100 text-center text-slate-500">
+            <i class="fa-solid fa-user-doctor text-3xl mb-3 text-slate-300"></i>
+            <p>Aún no hay perfiles veterinarios verificados.</p>
+          </div>
+        `;
+        return;
       }
+
+      contenedor.innerHTML = vets.map(vet => `
+        <article class="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5 space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-bold text-lg text-slate-800">${escaparHTML(vet.veterinaria?.clinica || vet.nombre)}</h3>
+              <p class="text-sm text-slate-500">${escaparHTML(vet.nombre)}</p>
+            </div>
+            <span class="text-xs rounded-full bg-emerald-100 text-emerald-700 px-2 py-1"><i class="fa-solid fa-circle-check mr-1"></i>Verificada</span>
+          </div>
+          <p class="text-sm text-slate-600"><i class="fa-solid fa-location-dot mr-1"></i>${escaparHTML(vet.veterinaria?.ubicacion || 'Ubicación no indicada')}</p>
+          <p class="text-sm text-slate-600"><i class="fa-solid fa-phone mr-1"></i>${escaparHTML(vet.veterinaria?.telefono || 'Contacto no indicado')}</p>
+          <p class="text-xs text-slate-500">Colegiatura: ${escaparHTML(vet.veterinaria?.colegiatura || 'No indicada')}</p>
+          ${vet.veterinaria?.prueba ? `<a href="${escaparHTML(vet.veterinaria.prueba)}" target="_blank" rel="noopener noreferrer" class="text-sm text-brand-600 underline">Ver perfil o documento</a>` : ''}
+        </article>
+      `).join('');
     }
 
-    // Inicialización al cargar la página
-    window.addEventListener('DOMContentLoaded', () => {
-      const user = getUsuarioActual();
-      if (user) {
-        desbloquearApp();
+    function renderSolicitudesVet() {
+      const contenedor = document.getElementById('listaSolicitudesVet');
+      if (!usuarioActual || usuarioActual.rol !== 'Administrador') {
+        contenedor.innerHTML = '<p class="text-sm text-red-600">Acceso restringido.</p>';
+        return;
       }
-    });
+
+      const pendientes = cuentas.filter(c => c.rol === 'Veterinario' && c.estadoVerificacion === 'pendiente');
+
+      if (!pendientes.length) {
+        contenedor.innerHTML = '<div class="bg-white rounded-xl p-6 border border-slate-100 text-slate-500">No hay solicitudes pendientes.</div>';
+        return;
+      }
+
+      contenedor.innerHTML = pendientes.map(vet => `
+        <article class="bg-white border border-slate-100 rounded-2xl p-5 space-y-3">
+          <h3 class="font-bold text-slate-800">${escaparHTML(vet.veterinaria?.clinica || vet.nombre)}</h3>
+          <p class="text-sm text-slate-600">Responsable: ${escaparHTML(vet.nombre)}</p>
+          <p class="text-sm text-slate-600">Correo: ${escaparHTML(vet.email)}</p>
+          <p class="text-sm text-slate-600">Colegiatura: ${escaparHTML(vet.veterinaria?.colegiatura || 'No indicada')}</p>
+          <p class="text-sm text-slate-600">Teléfono: ${escaparHTML(vet.veterinaria?.telefono || 'No indicado')}</p>
+          <p class="text-sm text-slate-600">Ubicación: ${escaparHTML(vet.veterinaria?.ubicacion || 'No indicada')}</p>
+          ${vet.veterinaria?.prueba ? `<p><a href="${escaparHTML(vet.veterinaria.prueba)}" target="_blank" rel="noopener noreferrer" class="text-sm text-brand-600 underline">Revisar documento o perfil</a></p>` : ''}
+          <div class="flex flex-wrap gap-2">
+            <button onclick="resolverSolicitudVet(${vet.id}, 'verificada')" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm">Aprobar y verificar</button>
+            <button onclick="resolverSolicitudVet(${vet.id}, 'rechazada')" class="px-4 py-2 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-sm">Rechazar solicitud</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function resolverSolicitudVet(id, nuevoEstado) {
+      if (!usuarioActual || usuarioActual.rol !== 'Administrador') {
+        mostrarMensaje('No tienes permiso para realizar esta acción.');
+        return;
+      }
+
+      const cuenta = cuentas.find(c => c.id === id);
+      if (!cuenta) {
+        mostrarMensaje('No se encontró la cuenta veterinaria.');
+        return;
+      }
+
+      cuenta.estadoVerificacion = nuevoEstado;
+      guardarCuentas();
+
+      if (usuarioActual.email === cuenta.email) {
+        usuarioActual.estadoVerificacion = nuevoEstado;
+        guardarSesion();
+      }
+
+      renderSolicitudesVet();
+      renderVeterinarias();
+      actualizarInterfaz();
+      mostrarMensaje(nuevoEstado === 'verificada'
+        ? 'Cuenta veterinaria verificada correctamente.'
+        : 'Solicitud veterinaria rechazada.');
+    }
+
+    // ------------------------------------------------------------
+    // INICIALIZACIÓN
+    // ------------------------------------------------------------
+    function iniciarAplicacion() {
+      actualizarInterfaz();
+
+      if (usuarioActual) {
+        document.getElementById('authWall').classList.add('hidden');
+      } else {
+        document.getElementById('authWall').classList.remove('hidden');
+      }
+
+      showSection('inicio');
+    }
+
+    iniciarAplicacion();
   </script>
 </body>
 </html>
