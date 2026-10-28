@@ -341,7 +341,7 @@
               <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría del Accesorio</label>
               <select id="regCategoriaAcc" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
                 <option value="Ropa">Ropa y Vestimenta</option>
-                <option value="Comederos">Comederos y Bebederos</option>
+                <option value="Comederos">Comederos / Bebederos</option>
                 <option value="Juguetes">Juguetes y Entretenimiento</option>
                 <option value="Otros">Camas, Correas y Varios</option>
               </select>
@@ -428,7 +428,7 @@
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT CON IMAGEN DE COMEDEROS ACTUALIZADA Y CUENTAS SEGURAS -->
+  <!-- SCRIPT CON COMEDERO DE GATO Y BEBEDERO DE PERRO SEPARADOS -->
   <script>
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
     const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
@@ -447,9 +447,10 @@
     const IMG_GATO_POCHI = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80";
     const IMG_PERRO_PELUCHE = "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80";
 
-    // FOTOS DE ACCESORIOS ESPECÍFICAS Y CORREGIDAS
+    // FOTOS DE ACCESORIOS ESPECÍFICAS
     const IMG_ROPA_POLERA = "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80"; 
-    const IMG_COMEDERO_DOBLE = "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80"; // Imagen clara de comederos / platos de mascota
+    const IMG_COMEDERO_GATO = "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=600&q=80"; // Plato / comedero para gato
+    const IMG_BEBEDERO_PERRO = "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=600&q=80"; // Bebedero / dispensador de agua para perro
     const IMG_JUGUETE_GOMA = "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80";
 
     const defaultData = [
@@ -497,13 +498,24 @@
       {
         id: 102,
         tipo: "Accesorio",
-        nombre: "Comedero y Bebedero Doble de Acero",
+        nombre: "Comedero Antideslizante para Gato",
         categoria: "Comederos",
-        precio: "S/. 20.00",
+        precio: "S/. 18.00",
         ubicacion: "Lima Centro",
         edad: "Nuevo",
-        descripcion: "Platos comederos de acero inoxidable con base de silicona antideslizante para evitar derrames de agua o alimento.",
-        imagen: IMG_COMEDERO_DOBLE
+        descripcion: "Plato comedero ergonómico y bajo especial para felinos, con base de goma antideslizante.",
+        imagen: IMG_COMEDERO_GATO
+      },
+      {
+        id: 104,
+        tipo: "Accesorio",
+        nombre: "Bebedero Automático Portátil para Perro",
+        categoria: "Comederos",
+        precio: "S/. 30.00",
+        ubicacion: "Miraflores",
+        edad: "Nuevo",
+        descripcion: "Bebedero y dispensador de agua portátil ideal para paseos largos y viajes con tu perrito.",
+        imagen: IMG_BEBEDERO_PERRO
       },
       {
         id: 103,
@@ -518,11 +530,11 @@
       }
     ];
 
-    // GESTIÓN DE PUBLICACIONES (v5 para asegurar la nueva imagen de comederos)
+    // GESTIÓN DE PUBLICACIONES (v6 para separar comedero y bebedero con sus respectivas imágenes)
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v5");
+      const data = localStorage.getItem("refugio_mascotas_v6");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v5", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v6", JSON.stringify(defaultData));
         return defaultData;
       }
       try {
@@ -533,7 +545,7 @@
     }
 
     function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas_v5", JSON.stringify(list));
+      localStorage.setItem("refugio_mascotas_v6", JSON.stringify(list));
     }
 
     // GESTIÓN DE CUENTAS (Aislada por completo)
