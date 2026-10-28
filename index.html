@@ -223,7 +223,7 @@
             <i class="fa-solid fa-shirt"></i>
           </div>
           <h3 class="font-bold text-slate-800 text-lg">Accesorios y Tienda</h3>
-          <p class="text-sm text-slate-500">Ropa, envases para comida y agua, juguetes interactivos y correas.</p>
+          <p class="text-sm text-slate-500">Ropa, comederos, bebederos, juguetes interactivos y correas.</p>
         </div>
 
         <div onclick="showSection('reportar')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
@@ -268,18 +268,18 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
           <h2 class="text-2xl font-bold text-slate-800"><i class="fa-solid fa-store text-amber-500 mr-2"></i>Tienda de Accesorios para Mascotas</h2>
-          <p class="text-sm text-slate-500">Encuentra ropa, platos de comida/agua, juguetes interactivos y más para tus peluditos.</p>
+          <p class="text-sm text-slate-500">Encuentra ropa, comederos, bebederos, juguetes interactivos y más para tus peluditos.</p>
         </div>
         <button onclick="showSection('reportar')" class="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white cursor-pointer shadow-sm">
           <i class="fa-solid fa-plus mr-1"></i> Vender o Donar Accesorio
         </button>
       </div>
 
-      <!-- Filtros de categoría de accesorios -->
+      <!-- Filtros de categoría de accesorios corregidos -->
       <div class="flex flex-wrap gap-2 pt-1" id="botonesFiltroAcc">
         <button onclick="filterAccesorios('Todos')" id="btnAcc-Todos" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white cursor-pointer transition">Todos</button>
         <button onclick="filterAccesorios('Ropa')" id="btnAcc-Ropa" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition"><i class="fa-solid fa-shirt mr-1"></i>Ropa</button>
-        <button onclick="filterAccesorios('Envases')" id="btnAcc-Envases" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition"><i class="fa-solid fa-bowl-food mr-1"></i>Comida / Agua</button>
+        <button onclick="filterAccesorios('Comederos')" id="btnAcc-Comederos" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition"><i class="fa-solid fa-bowl-food mr-1"></i>Comederos / Bebederos</button>
         <button onclick="filterAccesorios('Juguetes')" id="btnAcc-Juguetes" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition"><i class="fa-solid fa-bone mr-1"></i>Juguetes</button>
         <button onclick="filterAccesorios('Otros')" id="btnAcc-Otros" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition"><i class="fa-solid fa-box mr-1"></i>Camas / Correas</button>
       </div>
@@ -341,7 +341,7 @@
               <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría del Accesorio</label>
               <select id="regCategoriaAcc" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
                 <option value="Ropa">Ropa y Vestimenta</option>
-                <option value="Envases">Envases / Comederos y Bebederos</option>
+                <option value="Comederos">Comederos y Bebederos</option>
                 <option value="Juguetes">Juguetes y Entretenimiento</option>
                 <option value="Otros">Camas, Correas y Varios</option>
               </select>
@@ -428,7 +428,7 @@
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT SEPARADO Y SEGURO -->
+  <!-- SCRIPT CON IMÁGENES DE ROPA Y COMEDEROS CORREGIDOS -->
   <script>
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
     const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
@@ -442,10 +442,15 @@
     let tempUserData = null;
     let tempGeneratedPIN = null;
 
-    // IMÁGENES CORREGIDAS (LUNA, POCHI EL GATO Y PELUCHE CON NUEVAS FOTOS DE PERROS)
+    // FOTOS CORREGIDAS
     const IMG_PERRO_LUNA = "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=600&q=80";
     const IMG_GATO_POCHI = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80";
     const IMG_PERRO_PELUCHE = "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80";
+
+    // FOTOS DE ROPA Y COMEDEROS ESPECÍFICAS
+    const IMG_ROPA_POLERA = "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80"; // Muestra la ropa puesta
+    const IMG_COMEDERO_DOBLE = "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=600&q=80"; // Platos / comederos
+    const IMG_JUGUETE_GOMA = "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80";
 
     const defaultData = [
       { 
@@ -481,24 +486,24 @@
       {
         id: 101,
         tipo: "Accesorio",
-        nombre: "Polera Térmica para Perro Mediano",
+        nombre: "Polera Térmica Abrigadora",
         categoria: "Ropa",
         precio: "S/. 25.00",
         ubicacion: "San Juan de Lurigancho",
         edad: "Nuevo",
-        descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para perros medianos.",
-        imagen: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=600&q=80"
+        descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para mascotas medianas.",
+        imagen: IMG_ROPA_POLERA
       },
       {
         id: 102,
         tipo: "Accesorio",
-        nombre: "Plato Antideslizante Doble (Comida y Agua)",
-        categoria: "Envases",
+        nombre: "Comedero y Bebedero Doble de Acero",
+        categoria: "Comederos",
         precio: "S/. 20.00",
         ubicacion: "Lima Centro",
         edad: "Nuevo",
-        descripcion: "Envase de acero inoxidable con base de silicona antideslizante para evitar derrames de agua y croquetas.",
-        imagen: "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=600&q=80"
+        descripcion: "Platos comederos de acero inoxidable con base de silicona antideslizante para evitar derrames de agua o alimento.",
+        imagen: IMG_COMEDERO_DOBLE
       },
       {
         id: 103,
@@ -509,15 +514,15 @@
         ubicacion: "Miraflores",
         edad: "Nuevo",
         descripcion: "Juguete de goma resistente para limpieza dental y entretenimiento antiestrés para cachorros y perros adultos.",
-        imagen: "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80"
+        imagen: IMG_JUGUETE_GOMA
       }
     ];
 
-    // GESTIÓN DE PUBLICACIONES (Separado de cuentas para total seguridad)
+    // GESTIÓN DE PUBLICACIONES (v4 para aplicar cambios de imágenes sin borrar cuentas)
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v3");
+      const data = localStorage.getItem("refugio_mascotas_v4");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v3", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v4", JSON.stringify(defaultData));
         return defaultData;
       }
       try {
@@ -528,10 +533,10 @@
     }
 
     function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas_v3", JSON.stringify(list));
+      localStorage.setItem("refugio_mascotas_v4", JSON.stringify(list));
     }
 
-    // GESTIÓN DE CUENTAS (Completamente aislada e independiente)
+    // GESTIÓN DE CUENTAS (Aislada por completo)
     function getUsuarioActual() {
       try {
         return JSON.parse(localStorage.getItem("refugio_usuario"));
@@ -898,7 +903,7 @@
         ? lista
         : lista.filter(m => m.categoria === categoriaFiltro);
 
-      const botones = ['Todos', 'Ropa', 'Envases', 'Juguetes', 'Otros'];
+      const botones = ['Todos', 'Ropa', 'Comederos', 'Juguetes', 'Otros'];
       botones.forEach(cat => {
         const btn = document.getElementById(`btnAcc-${cat}`);
         if (btn) {
@@ -925,7 +930,7 @@
                 <span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold">${escaparHTML(item.precio || 'Gratis')}</span>
               </div>
               <div class="space-y-1 text-xs text-slate-500">
-                <p><i class="fa-solid fa-tag mr-1.5 text-amber-500"></i><strong>Categoría:</strong> ${escaparHTML(item.categoria || 'Accesorio')}</p>
+                <p><i class="fa-solid fa-tag mr-1.5 text-amber-500"></i><strong>Categoría:</strong> ${escaparHTML(item.categoria === 'Comederos' ? 'Comederos / Bebederos' : item.categoria)}</p>
                 <p><i class="fa-solid fa-location-dot mr-1.5 text-amber-500"></i><strong>Ubicación:</strong> ${escaparHTML(item.ubicacion)}</p>
                 <p><i class="fa-solid fa-box-open mr-1.5 text-amber-500"></i><strong>Estado del artículo:</strong> ${escaparHTML(item.edad || 'Nuevo')}</p>
               </div>
@@ -1042,7 +1047,7 @@
       }
 
       const imagenPorDefecto = tipo === 'Accesorio' 
-        ? 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=600&q=80'
+        ? IMG_ROPA_POLERA
         : (especieItem === 'Gato'
             ? IMG_GATO_POCHI
             : IMG_PERRO_LUNA);
