@@ -428,7 +428,7 @@
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT CON COMEDERO DE GATO Y BEBEDERO DE PERRO SEPARADOS -->
+  <!-- SCRIPT CON IMÁGENES PURAS DE COMEDERO Y BEBEDERO SIN ANIMALES -->
   <script>
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
     const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
@@ -447,10 +447,10 @@
     const IMG_GATO_POCHI = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80";
     const IMG_PERRO_PELUCHE = "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80";
 
-    // FOTOS DE ACCESORIOS ESPECÍFICAS
+    // FOTOS DE ACCESORIOS (100% PURAS: SOLO LOS OBJETOS, SIN PERROS NI GATOS)
     const IMG_ROPA_POLERA = "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80"; 
-    const IMG_COMEDERO_GATO = "https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=600&q=80"; // Plato / comedero para gato
-    const IMG_BEBEDERO_PERRO = "https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=600&q=80"; // Bebedero / dispensador de agua para perro
+    const IMG_COMEDERO_GATO = "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80"; // Plato comedero metálico / puro
+    const IMG_BEBEDERO_PERRO = "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=600&q=80"; // Bebedero / dispensador de agua aislado / puro
     const IMG_JUGUETE_GOMA = "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80";
 
     const defaultData = [
@@ -530,11 +530,11 @@
       }
     ];
 
-    // GESTIÓN DE PUBLICACIONES (v6 para separar comedero y bebedero con sus respectivas imágenes)
+    // GESTIÓN DE PUBLICACIONES (v7 para asegurar imágenes puras de accesorios)
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v6");
+      const data = localStorage.getItem("refugio_mascotas_v7");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v6", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v7", JSON.stringify(defaultData));
         return defaultData;
       }
       try {
@@ -545,7 +545,7 @@
     }
 
     function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas_v6", JSON.stringify(list));
+      localStorage.setItem("refugio_mascotas_v7", JSON.stringify(list));
     }
 
     // GESTIÓN DE CUENTAS (Aislada por completo)
