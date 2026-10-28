@@ -304,8 +304,9 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">URL Imagen de la Mascota (Opcional)</label>
-          <input type="url" id="regImagen" placeholder="https://ejemplo.com/foto.jpg" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Foto de la Mascota (Cámara o Archivo)</label>
+          <input type="file" id="regImagenFile" accept="image/*" capture="environment" class="w-full border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500 bg-slate-50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+          <p class="text-xs text-slate-400 mt-1">Puedes tomar una foto directamente con la cámara de tu celular o subir una imagen existente.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -396,7 +397,7 @@
     let tempUserData = null;
     let tempGeneratedPIN = null;
 
-    // Datos iniciales con imágenes reales
+    // Datos iniciales corregidos con imágenes correctas para perros y gatos
     const defaultData = [
       { 
         id: 1, 
@@ -690,7 +691,7 @@
 
       grid.innerHTML = filtrados.map(item => `
         <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-          <img src="${escaparHTML(item.imagen || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80')}" class="w-full h-48 object-cover" alt="${escaparHTML(item.nombre)}">
+          <img src="${escaparHTML(item.imagen || (item.especie === 'Gato' ? 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80' : 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80'))}" class="w-full h-48 object-cover" alt="${escaparHTML(item.nombre)}">
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <div class="flex justify-between items-start mb-1">
@@ -724,7 +725,7 @@
 
       grid.innerHTML = lista.map(item => `
         <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm flex flex-col">
-          ${item.imagen ? `<img src="${escaparHTML(item.imagen)}" class="w-full h-40 object-cover">` : ''}
+          <img src="${escaparHTML(item.imagen || (item.especie === 'Gato' ? 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80' : 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80'))}" class="w-full h-40 object-cover" alt="${escaparHTML(item.nombre)}">
           <div class="p-5 space-y-2">
             <div class="flex justify-between items-start">
               <h3 class="font-bold text-slate-800 text-lg">${escaparHTML(item.nombre)}</h3>
@@ -770,22 +771,37 @@
         return;
       }
 
+      const fileInput = document.getElementById('regImagenFile');
+      
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(uploadEvent) {
+          procesarGuardadoConImagen(uploadEvent.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        procesarGuardadoConImagen(null);
+      }
+    }
+
+    function procesarGuardadoConImagen(imagenBase64) {
+      const tipo = document.getElementById('regTipo').value;
+      const especie = document.getElementById('regEspecie').value;
       const lista = getMascotas();
-      const imgInput = document.getElementById('regImagen').value.trim();
+
+      const imagenPorDefecto = especie === 'Gato'
+        ? 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80'
+        : 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80';
 
       const nuevo = {
         id: Date.now(),
         tipo: tipo,
         nombre: document.getElementById('regNombre').value.trim(),
-        especie: document.getElementById('regEspecie').value,
+        especie: especie,
         ubicacion: document.getElementById('regUbicacion').value.trim(),
         edad: document.getElementById('regEdad').value.trim() || 'Desconocida',
         descripcion: document.getElementById('regDescripcion').value.trim(),
-        imagen: imgInput || (
-          document.getElementById('regEspecie').value === 'Gato'
-            ? 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80'
-            : 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80'
-        )
+        imagen: imagenBase64 || imagenPorDefecto
       };
 
       lista.unshift(nuevo);
