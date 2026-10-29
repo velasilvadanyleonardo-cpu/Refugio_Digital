@@ -428,14 +428,15 @@
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT CON LIMPIEZA DE CACHÉ Y URL DIRECTA GARANTIZADA -->
+  <!-- SCRIPT DEFINITIVO CON BEBEDERO / FUENTE DE AGUA PARA GATOS -->
   <script>
-    // Limpieza automática de versiones guardadas antiguas para forzar la actualización de la foto
-    if (!localStorage.getItem("refugio_v11_actualizado")) {
+    // Limpieza automática de versiones anteriores para asegurar actualización inmediata de la foto
+    if (!localStorage.getItem("refugio_v12_actualizado")) {
       localStorage.removeItem("refugio_mascotas_v8");
       localStorage.removeItem("refugio_mascotas_v9");
       localStorage.removeItem("refugio_mascotas_v10");
-      localStorage.setItem("refugio_v11_actualizado", "true");
+      localStorage.removeItem("refugio_mascotas_v11");
+      localStorage.setItem("refugio_v12_actualizado", "true");
     }
 
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
@@ -457,8 +458,8 @@
 
     // FOTOS DE ACCESORIOS
     const IMG_ROPA_POLERA = "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80"; 
-    // URL estática directa del comedero transparente para gato
-    const IMG_COMEDERO_GATO = "https://images.pexels.com/photos/7725960/pexels-photo-7725960.jpeg?auto=compress&cs=tinysrgb&w=600"; 
+    // Imagen real de Bebedero / Fuente de agua para gatos
+    const IMG_BEBEDERO_GATO = "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80"; 
     const IMG_BEBEDERO_PERRO = "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=600&q=80"; 
     const IMG_JUGUETE_GOMA = "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80";
 
@@ -507,13 +508,13 @@
       {
         id: 102,
         tipo: "Accesorio",
-        nombre: "Comedero Antideslizante para Gato",
+        nombre: "Bebedero Fuente Automática para Gato",
         categoria: "Comederos",
-        precio: "S/. 18.00",
+        precio: "S/. 32.00",
         ubicacion: "Lima Centro",
         edad: "Nuevo",
-        descripcion: "Plato comedero ergonómico y bajo especial para felinos, con base de goma antideslizante.",
-        imagen: IMG_COMEDERO_GATO
+        descripcion: "Bebedero y fuente con filtro continuo de agua purificada, antideslizante y ergonómico para felinos.",
+        imagen: IMG_BEBEDERO_GATO
       },
       {
         id: 104,
@@ -539,11 +540,11 @@
       }
     ];
 
-    // GESTIÓN DE PUBLICACIONES (v11)
+    // GESTIÓN DE PUBLICACIONES (v12)
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v11");
+      const data = localStorage.getItem("refugio_mascotas_v12");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v11", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v12", JSON.stringify(defaultData));
         return defaultData;
       }
       try {
@@ -554,7 +555,7 @@
     }
 
     function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas_v11", JSON.stringify(list));
+      localStorage.setItem("refugio_mascotas_v12", JSON.stringify(list));
     }
 
     // GESTIÓN DE CUENTAS
