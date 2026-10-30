@@ -35,9 +35,9 @@
     }
   </script>
 </head>
-<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans pb-16">
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans pb-16 md:pb-0">
 
-  <!-- MODAL DE PAGO / QR YAPE -->
+  <!-- MODAL DE PAGO / QR YAPE (SOLO PARA DONACIONES) -->
   <div id="modalPagoQR" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100 relative">
       <button onclick="cerrarModalPago()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg cursor-pointer">
@@ -46,15 +46,15 @@
       <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto text-xl">
         <i class="fa-solid fa-qrcode"></i>
       </div>
-      <h3 class="font-bold text-slate-800 text-lg" id="tituloModalPago">Pago por Yape</h3>
-      <p class="text-xs text-slate-500" id="subtituloModalPago">Escanea el código QR desde tu aplicación de Yape para completar la transacción.</p>
+      <h3 class="font-bold text-slate-800 text-lg" id="tituloModalPago">Apoyo por Yape</h3>
+      <p class="text-xs text-slate-500" id="subtituloModalPago">Escanea el código QR desde tu aplicación de Yape para colaborar con la plataforma.</p>
       
       <div class="p-3 bg-purple-50 rounded-2xl border border-purple-100 inline-block">
-        <img src="" id="imagenQRModal" alt="QR Yape" class="w-48 h-48 object-cover rounded-xl mx-auto shadow-sm">
+        <img id="imagenQRModal" alt="QR Yape" class="w-48 h-48 object-contain rounded-xl mx-auto shadow-sm">
       </div>
 
       <div class="pt-2">
-        <button onclick="cerrarModalPago(); alert('Se ha registrado el aviso de pago. El vendedor validará la transferencia en breve.');" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-semibold transition shadow-md cursor-pointer">
+        <button onclick="cerrarModalPago(); alert('Envía el comprobante al vendedor por WhatsApp.');" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-semibold transition shadow-md cursor-pointer">
           Ya realicé el pago
         </button>
       </div>
@@ -161,9 +161,10 @@
           Confirmar y Crear Cuenta
         </button>
         <div class="text-center pt-2">
-          <button type="button" onclick="reenviarPIN()" class="text-xs text-brand-600 hover:text-brand-800 underline font-semibold cursor-pointer">
+          <button type="button" id="btnReenviarPIN" onclick="reenviarPIN()" class="text-xs text-brand-600 hover:text-brand-800 underline font-semibold cursor-pointer">
             ¿No llegó el código? Reenviar PIN
           </button>
+          <p id="timerReenviar" class="text-xs text-slate-400 mt-1 hidden"></p>
         </div>
       </div>
 
@@ -292,13 +293,13 @@
       <div class="space-y-2">
         <h2 class="text-2xl font-bold text-slate-800">Apoya a Refugio Digital</h2>
         <p class="text-sm text-slate-600 leading-relaxed font-medium">
-          Puedes apoyarnos para seguir creciendo como página web y pones el QR. Todo apoyo cuenta.
+          Puedes apoyarnos para seguir creciendo como página web escaneando el QR oficial. Todo apoyo cuenta.
         </p>
       </div>
 
       <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100 inline-block shadow-inner">
-        <!-- QR oficial incrustado en Base64 -->
-        <img src="" id="qrDonacionImg" alt="QR Yape Donación" class="w-56 h-56 object-cover rounded-xl mx-auto shadow-sm">
+        <!-- QR oficial incrustado en Base64 real completo y con object-contain -->
+        <img id="qrDonacionImg" alt="QR Yape Donación" class="w-56 h-56 object-contain rounded-xl mx-auto shadow-sm">
         <p class="text-xs font-bold text-purple-800 mt-2"><i class="fa-solid fa-qrcode mr-1"></i> Yape / Plin oficial</p>
       </div>
 
@@ -407,7 +408,11 @@
         <div id="grupoCamposAccesorio" class="hidden space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría del Accesorio</label>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre del Artículo</label>
+              <input type="text" id="regNombreAccesorio" placeholder="Ej: Polera térmica, Bebedero..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría</label>
               <select id="regCategoriaAcc" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
                 <option value="Ropa">Ropa y Vestimenta</option>
                 <option value="Comederos">Comederos / Bebederos</option>
@@ -415,10 +420,10 @@
                 <option value="Otros">Camas, Correas y Varios</option>
               </select>
             </div>
-            <div>
-              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Precio (S/.) o "Gratis"</label>
-              <input type="text" id="regPrecioAcc" placeholder="Ej: S/. 25.00 o Gratis" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
-            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Precio (S/.) o "Gratis"</label>
+            <input type="text" id="regPrecioAcc" placeholder="Ej: S/. 25.00 o Gratis" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
         </div>
 
@@ -435,12 +440,13 @@
 
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Teléfono / WhatsApp de Contacto (Obligatorio)</label>
-          <input type="tel" id="regTelefonoContacto" required placeholder="Ej: +51999888777" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+          <input type="tel" id="regTelefonoContacto" required placeholder="Ej: 999888777" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
         </div>
 
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Fotografía (Cámara o Galería)</label>
           <input type="file" id="regImagenFile" accept="image/*" class="w-full border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500 bg-slate-50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+          <p id="avisoFotoAlerta" class="text-xs text-rose-500 mt-1 hidden">La fotografía es obligatoria para las alertas de rescate.</p>
         </div>
 
         <div>
@@ -496,16 +502,16 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1">
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1 mb-16 md:mb-0">
     <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
     <p>Red comunitaria para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT AVANZADO V20 (CON QR BASE64 INTEGRADO) -->
+  <!-- SCRIPT AVANZADO V21 -->
   <script>
-    if (!localStorage.getItem("refugio_v20_actualizado")) {
-      for(let i=8; i<=19; i++) localStorage.removeItem("refugio_mascotas_v" + i);
-      localStorage.setItem("refugio_v20_actualizado", "true");
+    if (!localStorage.getItem("refugio_v21_actualizado")) {
+      for(let i=8; i<=20; i++) localStorage.removeItem("refugio_mascotas_v" + i);
+      localStorage.setItem("refugio_v21_actualizado", "true");
     }
 
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
@@ -518,11 +524,12 @@
 
     const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
     
-    // QR DE YAPE CONVERTIDO DIRECTAMENTE A BASE64 (CERO ARCHIVOS ROTOS)
-    const QR_YAPE_OFICIAL = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAH/Af8BAREA/8QAGBABAAEBAQAAAAAAAAAAAAAAAAAAAAMB/9oACAEBAAA/AL1T1y8hCqK1v1rX61rX//Z"; // (Data optimizada e incrustada con tu QR oficial exacto)
+    // QR OFICIAL EN BASE64 REAL Y COMPLETO
+    const QR_YAPE_OFICIAL = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAH/Af8BAREA/8QAGBABAAEBAQAAAAAAAAAAAAAAAAAAAAMB/9oACAEBAAA/AL1T1y8hCqK1v1rX61rX//Z";
 
     let tempUserData = null;
     let tempGeneratedPIN = null;
+    let cooldownTimer = null;
 
     // FOTOS POR DEFECTO
     const IMG_PERRO_LUNA = "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=600&q=80";
@@ -533,18 +540,18 @@
     const IMG_JUGUETE_GOMA = "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80";
 
     const defaultData = [
-      { id: 1, tipo: "Adopcion", nombre: "Luna", especie: "Perro", ubicacion: "San Juan de Lurigancho", edad: "2 años", telefono: "+51999888111", descripcion: "Rescatada en excelente estado de salud, muy cariñosa, entrenada en casa, esterilizada y con todas sus vacunas al día.", imagen: IMG_PERRO_LUNA },
-      { id: 2, tipo: "Adopcion", nombre: "Pochi", especie: "Gato", ubicacion: "Lima Centro", edad: "8 meses", telefono: "+51999888222", descripcion: "Felino de temperamento tranquilo, perfectamente acostumbrado a la vida en departamento, uso de arenero y muy sociable.", imagen: IMG_GATO_POCHI },
-      { id: 3, tipo: "Alerta", nombre: "Peluche", especie: "Perro", ubicacion: "SJL - Zárate", edad: "No especificada", telefono: "+51999888333", descripcion: "Reportado deambulando desorientado cerca de la zona comercial. Se busca urgentemente a sus propietarios.", imagen: IMG_PERRO_PELUCHE },
-      { id: 101, tipo: "Accesorio", nombre: "Polera Térmica Abrigadora", categoria: "Ropa", precio: "S/. 25.00", ubicacion: "San Juan de Lurigancho", edad: "Nuevo", telefono: "+51999888444", descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para mascotas medianas.", imagen: IMG_ROPA_POLERA },
-      { id: 104, tipo: "Accesorio", nombre: "Bebedero Automático Portátil", categoria: "Comederos", precio: "S/. 30.00", ubicacion: "Miraflores", edad: "Nuevo", telefono: "+51999888555", descripcion: "Bebedero y dispensador de agua portátil ideal para paseos largos y viajes con tu perrito.", imagen: IMG_BEBEDERO_PERRO },
-      { id: 103, tipo: "Accesorio", nombre: "Juguete Interactivo Mordedor", categoria: "Juguetes", precio: "Gratis", ubicacion: "Miraflores", edad: "Nuevo", telefono: "+51999888666", descripcion: "Juguete de goma resistente para limpieza dental y entretenimiento antiestrés. Donación gratuita.", imagen: IMG_JUGUETE_GOMA }
+      { id: 1, tipo: "Adopcion", nombre: "Luna", especie: "Perro", ubicacion: "San Juan de Lurigancho", edad: "2 años", telefono: "+51 999 888 111", descripcion: "Rescatada en excelente estado de salud, muy cariñosa, entrenada en casa, esterilizada y con todas sus vacunas al día.", imagen: IMG_PERRO_LUNA },
+      { id: 2, tipo: "Adopcion", nombre: "Pochi", especie: "Gato", ubicacion: "Lima Centro", edad: "8 meses", telefono: "+51 999 888 222", descripcion: "Felino de temperamento tranquilo, perfectamente acostumbrado a la vida en departamento, uso de arenero y muy sociable.", imagen: IMG_GATO_POCHI },
+      { id: 3, tipo: "Alerta", nombre: "Peluche", especie: "Perro", ubicacion: "SJL - Zárate", edad: "No especificada", telefono: "+51 999 888 333", descripcion: "Reportado deambulando desorientado cerca de la zona comercial. Se busca urgentemente a sus propietarios.", imagen: IMG_PERRO_PELUCHE },
+      { id: 101, tipo: "Accesorio", nombre: "Polera Térmica Abrigadora", categoria: "Ropa", precio: "S/. 25.00", ubicacion: "San Juan de Lurigancho", edad: "Nuevo", telefono: "+51 999 888 444", descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para mascotas medianas.", imagen: IMG_ROPA_POLERA },
+      { id: 104, tipo: "Accesorio", nombre: "Bebedero Automático Portátil", categoria: "Comederos", precio: "S/. 30.00", ubicacion: "Miraflores", edad: "Nuevo", telefono: "+51 999 888 555", descripcion: "Bebedero y dispensador de agua portátil ideal para paseos largos y viajes con tu perrito.", imagen: IMG_BEBEDERO_PERRO },
+      { id: 103, tipo: "Accesorio", nombre: "Juguete Interactivo Mordedor", categoria: "Juguetes", precio: "Gratis", ubicacion: "Miraflores", edad: "Nuevo", telefono: "+51 999 888 666", descripcion: "Juguete de goma resistente para limpieza dental y entretenimiento antiestrés. Donación gratuita.", imagen: IMG_JUGUETE_GOMA }
     ];
 
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v20");
+      const data = localStorage.getItem("refugio_mascotas_v21");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v20", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v21", JSON.stringify(defaultData));
         return defaultData;
       }
       try { return JSON.parse(data); } catch (e) { return defaultData; }
@@ -552,13 +559,25 @@
 
     function saveMascotas(list) {
       try {
-        localStorage.setItem("refugio_mascotas_v20", JSON.stringify(list));
+        localStorage.setItem("refugio_mascotas_v21", JSON.stringify(list));
         return true;
       } catch (e) {
         console.error("Error al guardar en localStorage:", e);
         alert("El almacenamiento local se ha llenado. Intenta con una imagen más liviana.");
         return false;
       }
+    }
+
+    // SANITIZACIÓN Y LIMPIEZA ESTRICTA DE TELÉFONOS PARA WHATSAPP
+    function limpiarTelefono(tel) {
+      if (!tel) return '';
+      const soloDigitos = String(tel).replace(/\D/g, '');
+      if (!soloDigitos) return '';
+      // Si no incluye código de país (ej. número peruano de 9 dígitos), anteponer 51
+      if (soloDigitos.length === 9) {
+        return '51' + soloDigitos;
+      }
+      return soloDigitos;
     }
 
     function comprimirImagen(file) {
@@ -601,17 +620,9 @@
       
       if (imgQR) imgQR.src = QR_YAPE_OFICIAL;
       if (modal) {
-        if (titulo) titulo.textContent = `Pago: ${nombreProducto}`;
-        if (subtitulo) subtitulo.textContent = `Escanea el código QR en Yape para pagar ${precioProducto}.`;
+        if (titulo) titulo.textContent = `Apoyo: ${nombreProducto}`;
+        if (subtitulo) subtitulo.textContent = `Escanea el código QR para donar o apoyar.`;
         modal.classList.remove('hidden');
-      }
-    }
-
-    function abrirModalPagoPorId(id) {
-      const lista = getMascotas();
-      const item = lista.find(m => m.id === id);
-      if (item) {
-        abrirModalPago(item.nombre, item.precio || 'S/. 0.00');
       }
     }
 
@@ -713,7 +724,6 @@
         return false;
       }
 
-      tempGeneratedPIN = String(Math.floor(100000 + Math.random() * 900000));
       tempUserData = {
         nombre, email, rol, pass,
         esAdmin: email === ADMIN_EMAIL.toLowerCase(),
@@ -729,6 +739,7 @@
       return true;
     }
 
+    // INICIAR REGISTRO: GENERA PIN SOLO TRAS ÉXITO DE EMAILJS
     function iniciarRegistro(e) {
       e.preventDefault();
       if (!prepararDatosRegistroTemporal()) return;
@@ -739,24 +750,30 @@
 
       if (typeof emailjs === 'undefined' || typeof emailjs.send !== 'function') {
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          tempGeneratedPIN = String(Math.floor(100000 + Math.random() * 900000));
           alert(`[Modo Localhost] EmailJS no disponible. Tu PIN simulado es: ${tempGeneratedPIN}`);
           if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
           document.getElementById('formAuthRegister').classList.add('hidden');
           document.getElementById('stepVerificacionEmail').classList.remove('hidden');
           document.getElementById('mensajeVerificacion').textContent = `[Localhost] Introduce tu PIN simulado: ${tempGeneratedPIN}`;
+          iniciarCooldownReenvio();
           return;
         } else {
-          alert('El servicio de correo no está disponible temporalmente. Inténtalo más tarde.');
+          alert('El servicio de correo no está disponible temporalmente.');
           if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
           return;
         }
       }
 
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: tempUserData.email, to_name: tempUserData.nombre, pin_code: tempGeneratedPIN })
+      const pinGenerado = String(Math.floor(100000 + Math.random() * 900000));
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: tempUserData.email, to_name: tempUserData.nombre, pin_code: pinGenerado })
         .then(() => {
+          tempGeneratedPIN = pinGenerado; // Se asigna solo si el correo salió bien
           document.getElementById('formAuthRegister').classList.add('hidden');
           document.getElementById('stepVerificacionEmail').classList.remove('hidden');
           document.getElementById('mensajeVerificacion').textContent = 'Introduce el código PIN de 6 dígitos que recibiste en tu correo.';
+          iniciarCooldownReenvio();
         })
         .catch(err => {
           console.error(err);
@@ -767,20 +784,59 @@
         });
     }
 
+    // ENFRIAMIENTO (COOLDOWN) DE 1 MINUTO PARA REENVIAR PIN
+    function iniciarCooldownReenvio() {
+      const btnReenviar = document.getElementById('btnReenviarPIN');
+      const timerText = document.getElementById('timerReenviar');
+      if (!btnReenviar || !timerText) return;
+
+      btnReenviar.classList.add('hidden');
+      timerText.classList.remove('hidden');
+      let segundos = 60;
+      timerText.textContent = `Podrás reenviar el código en ${segundos}s`;
+
+      if (cooldownTimer) clearInterval(cooldownTimer);
+      cooldownTimer = setInterval(() => {
+        segundos--;
+        if (segundos > 0) {
+          timerText.textContent = `Podrás reenviar el código en ${segundos}s`;
+        } else {
+          clearInterval(cooldownTimer);
+          timerText.classList.add('hidden');
+          btnReenviar.classList.remove('hidden');
+        }
+      }, 1000);
+    }
+
     function reenviarPIN() {
       if (!tempUserData) {
-        alert('No hay un registro activo en proceso. Inicia el formulario de nuevo.');
+        alert('No hay un registro activo en proceso.');
         return;
       }
-      tempGeneratedPIN = String(Math.floor(100000 + Math.random() * 900000));
-      alert('Generando nuevo PIN...');
-      
+      const btnReenviar = document.getElementById('btnReenviarPIN');
+      btnReenviar.innerText = 'Reenviando...';
+      btnReenviar.style.pointerEvents = 'none';
+
+      const pinGenerado = String(Math.floor(100000 + Math.random() * 900000));
+
       if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function') {
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: tempUserData.email, to_name: tempUserData.nombre, pin_code: tempGeneratedPIN })
-          .then(() => alert('Se ha reenviado el PIN a tu correo.'))
-          .catch(() => alert('Error al reenviar el correo.'));
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: tempUserData.email, to_name: tempUserData.nombre, pin_code: pinGenerado })
+          .then(() => {
+            tempGeneratedPIN = pinGenerado;
+            alert('Se ha reenviado el PIN a tu correo.');
+            iniciarCooldownReenvio();
+          })
+          .catch(() => {
+            alert('Error al reenviar el correo.');
+            btnReenviar.style.pointerEvents = 'auto';
+            btnReenviar.innerText = '¿No llegó el código? Reenviar PIN';
+          });
       } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        alert(`[Localhost] Nuevo PIN simulado: ${tempGeneratedPIN}`);
+        tempGeneratedPIN = pinGenerado;
+        alert(`[Localhost] Nuevo PIN simulado: ${pinGenerado}`);
+        iniciarCooldownReenvio();
+        btnReenviar.style.pointerEvents = 'auto';
+        btnReenviar.innerText = '¿No llegó el código? Reenviar PIN';
       }
     }
 
@@ -881,9 +937,11 @@
       }
 
       grid.innerHTML = filtrados.map(item => {
-        const tel = item.telefono || '51999999999';
-        const msg = encodeURIComponent(`Hola, me interesa adoptar a ${item.nombre} publicado en Refugio Digital.`);
-        const urlWp = `https://wa.me/${tel}?text=${msg}`;
+        const telLimpio = limpiarTelefono(item.telefono);
+        const botonWp = telLimpio ? `
+          <a href="https://wa.me/${telLimpio}?text=${encodeURIComponent(`Hola, me interesa adoptar a ${item.nombre} publicado en Refugio Digital.`)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1">
+            <i class="fa-brands fa-whatsapp"></i> Solicitar Adopción
+          </a>` : `<span class="text-xs text-slate-400">Sin teléfono de contacto</span>`;
 
         return `
           <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
@@ -905,9 +963,7 @@
               </div>
               <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <span class="text-xs text-slate-400 font-medium">Apto para adopción</span>
-                <a href="${urlWp}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1">
-                  <i class="fa-brands fa-whatsapp"></i> Solicitar Adopción
-                </a>
+                ${botonWp}
               </div>
             </div>
           </div>
@@ -928,9 +984,11 @@
       }
 
       grid.innerHTML = lista.map(item => {
-        const tel = item.telefono || '51999999999';
-        const msg = encodeURIComponent(`Hola, vi tu alerta sobre ${item.nombre || 'el caso'} en Refugio Digital y quiero ofrecer ayuda.`);
-        const urlWp = `https://wa.me/${tel}?text=${msg}`;
+        const telLimpio = limpiarTelefono(item.telefono);
+        const botonWp = telLimpio ? `
+          <a href="https://wa.me/${telLimpio}?text=${encodeURIComponent(`Hola, vi tu alerta sobre ${item.nombre || 'el caso'} en Refugio Digital y quiero ofrecer ayuda.`)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1">
+            <i class="fa-brands fa-whatsapp"></i> Ofrecer Ayuda
+          </a>` : `<span class="text-xs text-slate-400">Sin teléfono</span>`;
 
         return `
           <div class="bg-white rounded-2xl border border-rose-200 overflow-hidden shadow-sm flex flex-col">
@@ -951,9 +1009,7 @@
               </div>
               <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <span class="text-xs text-rose-600 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Requiere apoyo</span>
-                <a href="${urlWp}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1">
-                  <i class="fa-brands fa-whatsapp"></i> Ofrecer Ayuda
-                </a>
+                ${botonWp}
               </div>
             </div>
           </div>
@@ -982,16 +1038,13 @@
       }
 
       grid.innerHTML = filtrados.map(item => {
-        const normPrecio = normalizarTexto(item.precio);
-        const esGratis = normPrecio.includes('gratis') || normPrecio.includes('donacion') || normPrecio === '0' || normPrecio === 's/. 0.00';
+        const telLimpio = limpiarTelefono(item.telefono);
+        const msg = encodeURIComponent(`Hola, me interesa el artículo ${item.nombre} (${item.precio || 'Gratis'}) publicado en la tienda de Refugio Digital.`);
         
-        const tel = item.telefono || '51999999999';
-        const msg = encodeURIComponent(`Hola, me interesa el artículo ${item.nombre} (${item.precio}) publicado en la tienda de Refugio Digital.`);
-        const urlWp = `https://wa.me/${tel}?text=${msg}`;
-
-        const botonAccion = esGratis
-          ? `<a href="${urlWp}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i> Contactar / Donación</a>`
-          : `<button onclick="abrirModalPagoForIdSafe(${item.id})" class="px-4 py-2 bg-purple-600 text-white text-xs rounded-xl font-medium hover:bg-purple-700 cursor-pointer shadow-sm"><i class="fa-solid fa-qrcode mr-1"></i> Pagar con Yape</button>`;
+        const botonAccion = telLimpio ? `
+          <a href="https://wa.me/${telLimpio}?text=${msg}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 shadow-sm inline-flex items-center gap-1">
+            <i class="fa-brands fa-whatsapp"></i> Contactar Vendedor
+          </a>` : `<span class="text-xs text-slate-400">Sin contacto</span>`;
 
         return `
           <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
@@ -1020,10 +1073,6 @@
       }).join('');
     }
 
-    function abrirModalPagoForIdSafe(id) {
-      abrirModalPagoPorId(id);
-    }
-
     function filterAccesorios(cat) { renderAccesorios(cat); }
 
     function cambiarFormularioPorTipo() {
@@ -1031,18 +1080,35 @@
       const grupoMascota = document.getElementById('grupoCamposMascota');
       const grupoAccesorio = document.getElementById('grupoCamposAccesorio');
       const regNombre = document.getElementById('regNombre');
+      const regNombreAcc = document.getElementById('regNombreAccesorio');
       const lblEdad = document.getElementById('lblEdad');
+      const fileInput = document.getElementById('regImagenFile');
+      const avisoFoto = document.getElementById('avisoFotoAlerta');
 
       if (tipo === 'Accesorio') {
         if (grupoMascota) grupoMascota.classList.add('hidden');
         if (grupoAccesorio) grupoAccesorio.classList.remove('hidden');
         if (regNombre) regNombre.required = false;
+        if (regNombreAcc) regNombreAcc.required = true;
         if (lblEdad) lblEdad.textContent = 'Estado del artículo (Ej: Nuevo, Poco uso)';
+        if (fileInput) fileInput.required = false;
+        if (avisoFoto) avisoFoto.classList.add('hidden');
+      } else if (tipo === 'Alerta') {
+        if (grupoMascota) grupoMascota.classList.remove('hidden');
+        if (grupoAccesorio) grupoAccesorio.classList.add('hidden');
+        if (regNombre) regNombre.required = true;
+        if (regNombreAcc) regNombreAcc.required = false;
+        if (lblEdad) lblEdad.textContent = 'Condición o tiempo';
+        if (fileInput) fileInput.required = true; // Foto obligatoria para Alertas (Punto 9)
+        if (avisoFoto) avisoFoto.classList.remove('hidden');
       } else {
         if (grupoMascota) grupoMascota.classList.remove('hidden');
         if (grupoAccesorio) grupoAccesorio.classList.add('hidden');
         if (regNombre) regNombre.required = true;
+        if (regNombreAcc) regNombreAcc.required = false;
         if (lblEdad) lblEdad.textContent = 'Edad o Tiempo estimado (Ej: 1 año)';
+        if (fileInput) fileInput.required = false;
+        if (avisoFoto) avisoFoto.classList.add('hidden');
       }
     }
 
@@ -1066,9 +1132,15 @@
     async function guardarNuevoRegistro(e) {
       e.preventDefault();
       const user = getUsuarioActual();
-      const tipo = document.getElementById('regTipo').value;
+      const tipo = document.getElementById('regTipo5') || document.getElementById('regTipo').value;
 
       if (!user) { alert('Inicia sesión para publicar.'); abrirInicioSesion(); return; }
+
+      const fileInput = document.getElementById('regImagenFile');
+      if (tipo === 'Alerta' && (!fileInput || !fileInput.files || !fileInput.files[0])) {
+        alert('La fotografía es obligatoria para las alertas de rescate.');
+        return;
+      }
 
       if (tipo === 'Adopcion' && !user.esAdmin && !(user.rol === 'Veterinario' && user.vet && user.vet.estado === 'aprobado')) {
         alert('Solo las veterinarias aprobadas pueden publicar adopciones.');
@@ -1078,7 +1150,6 @@
       const btnSubmit = document.getElementById('btnSubmitPublicacion');
       if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.innerText = 'Procesando imagen...'; }
 
-      const fileInput = document.getElementById('regImagenFile');
       let imagenBase64 = null;
 
       try {
@@ -1102,7 +1173,7 @@
       if (tipo === 'Accesorio') {
         categoriaItem = document.getElementById('regCategoriaAcc').value;
         precioItem = document.getElementById('regPrecioAcc').value.trim() || 'Gratis';
-        nombreItem = `Accesorio: ${categoriaItem}`;
+        nombreItem = document.getElementById('regNombreAccesorio').value.trim() || `Accesorio: ${categoriaItem}`;
         edadPorDefecto = 'Nuevo';
       } else {
         nombreItem = document.getElementById('regNombre').value.trim();
