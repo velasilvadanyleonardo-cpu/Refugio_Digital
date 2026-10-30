@@ -35,7 +35,7 @@
     }
   </script>
 </head>
-<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col font-sans pb-16 md:pb-0">
 
   <!-- MODAL DE PAGO / QR YAPE -->
   <div id="modalPagoQR" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
@@ -50,12 +50,12 @@
       <p class="text-xs text-slate-500" id="subtituloModalPago">Escanea el código QR desde tu aplicación de Yape para completar la transacción.</p>
       
       <div class="p-3 bg-purple-50 rounded-2xl border border-purple-100 inline-block">
-        <img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=300&q=80" id="imagenQRModal" alt="QR Yape" class="w-48 h-48 object-cover rounded-xl mx-auto shadow-sm">
+        <img src="qr-yape.png" id="imagenQRModal" alt="QR Yape" class="w-48 h-48 object-cover rounded-xl mx-auto shadow-sm">
       </div>
 
       <div class="pt-2">
         <button onclick="cerrarModalPago(); alert('¡Gracias por tu compra/apoyo!');" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-semibold transition shadow-md cursor-pointer">
-          Ya realice el pago
+          Ya realicé el pago
         </button>
       </div>
     </div>
@@ -193,6 +193,16 @@
     </div>
   </header>
 
+  <!-- BARRA DE NAVEGACIÓN MÓVIL (VISIBLE SOLO EN PANTALLAS PEQUEÑAS) -->
+  <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-40 flex justify-around items-center py-2 px-1 text-slate-600 text-xs shadow-lg">
+    <button onclick="showSection('inicio')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-house text-sm"></i><span>Inicio</span></button>
+    <button onclick="showSection('adopciones')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-dog text-sm"></i><span>Adoptar</span></button>
+    <button onclick="showSection('alertas')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-triangle-exclamation text-sm"></i><span>Alertas</span></button>
+    <button onclick="showSection('accesorios')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-bag-shopping text-sm"></i><span>Tienda</span></button>
+    <button onclick="showSection('donar')" class="flex flex-col items-center gap-0.5 text-purple-600 font-bold"><i class="fa-solid fa-heart text-sm"></i><span>Donar</span></button>
+    <button onclick="showSection('reportar')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-plus-circle text-sm"></i><span>Publicar</span></button>
+  </div>
+
   <!-- CONTENIDO PRINCIPAL (SPA) -->
   <main id="mainApp" class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
 
@@ -274,9 +284,9 @@
       </div>
 
       <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100 inline-block shadow-inner">
-        <!-- QR oficial de Yape que enviaste -->
-        <img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=400&q=80" id="qrDonacionImg" alt="QR Yape Donación" class="w-56 h-56 object-cover rounded-xl mx-auto shadow-sm">
-        <p class="text-xs font-bold text-purple-800 mt-2"><i class="fa-solid fa-qrcode mr-1"></i> Yape oficial</p>
+        <!-- QR oficial de Yape local -->
+        <img src="qr-yape.png" id="qrDonacionImg" alt="QR Yape Donación" class="w-56 h-56 object-cover rounded-xl mx-auto shadow-sm">
+        <p class="text-xs font-bold text-purple-800 mt-2"><i class="fa-solid fa-qrcode mr-1"></i> Yape / Plin oficial</p>
       </div>
 
       <p class="text-xs text-slate-400">Gracias de parte de todo el equipo y la comunidad de animalitos rescatados.</p>
@@ -289,10 +299,10 @@
           <h2 class="text-2xl font-bold text-slate-800">Mascotas en Adopción</h2>
           <p class="text-sm text-slate-500">Animales rescatados que cuentan con su ficha de salud e información detallada.</p>
         </div>
-        <div class="flex gap-2">
-          <button onclick="filterPets('Todos')" class="px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white cursor-pointer">Todos</button>
-          <button onclick="filterPets('Perro')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer">Perros</button>
-          <button onclick="filterPets('Gato')" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer">Gatos</button>
+        <div class="flex gap-2" id="botonesFiltroAdop">
+          <button onclick="filterPets('Todos')" id="btnAdop-Todos" class="px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white cursor-pointer transition">Todos</button>
+          <button onclick="filterPets('Perro')" id="btnAdop-Perro" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer transition">Perros</button>
+          <button onclick="filterPets('Gato')" id="btnAdop-Gato" class="px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer transition">Gatos</button>
         </div>
       </div>
 
@@ -347,7 +357,7 @@
     <section id="sec-reportar" class="hidden max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-brand-100 shadow-sm space-y-6">
       <div class="text-center space-y-1">
         <h2 class="text-2xl font-bold text-slate-800">Publicar un Caso o Accesorio</h2>
-        <p class="text-sm text-slate-500">Completa la información detallada y adjunta una fotografía usando la cámara de tu dispositivo.</p>
+        <p class="text-sm text-slate-500">Completa la información detallada y adjunta una fotografía desde tu cámara o galería.</p>
       </div>
 
       <div id="vetNotice" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
@@ -367,8 +377,8 @@
         <div id="grupoCamposMascota" class="space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre o Identificador</label>
-              <input type="text" id="regNombre" placeholder="Ej: Pochi, Sin nombre / Desconocido" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1" id="lblNombre">Nombre o Identificador</label>
+              <input type="text" id="regNombre" required placeholder="Ej: Pochi, Sin nombre / Desconocido" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
             </div>
             <div>
               <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Especie</label>
@@ -393,16 +403,16 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Precio (S/.) o Donación</label>
-              <input type="text" id="regPrecioAcc" placeholder="Ej: S/. 25.00 o Gratis (Donación)" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Precio (S/.) o "Gratis"</label>
+              <input type="text" id="regPrecioAcc" placeholder="Ej: S/. 25.00 o Gratis" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
             </div>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Fotografía (Capturar con Cámara o Archivo)</label>
-          <input type="file" id="regImagenFile" accept="image/*" capture="environment" class="w-full border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500 bg-slate-50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
-          <p class="text-xs text-slate-400 mt-1">Pulsa para abrir la cámara de tu celular y tomar una foto clara del producto o animal.</p>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Fotografía (Cámara o Galería)</label>
+          <input type="file" id="regImagenFile" accept="image/*" class="w-full border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-brand-500 bg-slate-50 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+          <p class="text-xs text-slate-400 mt-1">Sube o selecciona una foto desde tu celular o computadora.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -412,13 +422,13 @@
           </div>
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1" id="lblEdad">Edad / Tiempo o Estado</label>
-            <input type="text" id="regEdad" placeholder="Ej: Nuevo, Poco uso, 1 año" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
+            <input type="text" id="regEdad" placeholder="Ej: Nuevo, 1 año, etc." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Descripción detallada</label>
-          <textarea id="regDescripcion" rows="3" required placeholder="Detalla el estado, tamaño, material, características o datos de contacto..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
+          <textarea id="regDescripcion" rows="3" required placeholder="Detalla el estado, tamaño, material o características..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
         </div>
 
         <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md cursor-pointer">
@@ -469,16 +479,16 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1">
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1 mb-12 md:mb-0">
     <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT CON QR YAPE CORRECTO (V16) -->
+  <!-- SCRIPT AVANZADO V17 -->
   <script>
-    if (!localStorage.getItem("refugio_v16_actualizado")) {
-      for(let i=8; i<=15; i++) localStorage.removeItem("refugio_mascotas_v" + i);
-      localStorage.setItem("refugio_v16_actualizado", "true");
+    if (!localStorage.getItem("refugio_v17_actualizado")) {
+      for(let i=8; i<=16; i++) localStorage.removeItem("refugio_mascotas_v" + i);
+      localStorage.setItem("refugio_v17_actualizado", "true");
     }
 
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
@@ -490,115 +500,83 @@
     }
 
     const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
+    const QR_YAPE_OFICIAL = "qr-yape.png"; // Constante global requerida
     let tempUserData = null;
     let tempGeneratedPIN = null;
 
-    // QR DE YAPE OFICIAL PROPORCIONADO POR EL USUARIO
-    const QR_YAPE_OFICIAL = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"; // Reemplazado con tu imagen de QR Yape real
-
-    // FOTOS DE MASCOTAS
+    // FOTOS POR DEFECTO
     const IMG_PERRO_LUNA = "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=600&q=80";
     const IMG_GATO_POCHI = "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80";
     const IMG_PERRO_PELUCHE = "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80";
-
-    // FOTOS DE ACCESORIOS
     const IMG_ROPA_POLERA = "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80"; 
     const IMG_BEBEDERO_PERRO = "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=600&q=80"; 
     const IMG_JUGUETE_GOMA = "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?auto=format&fit=crop&w=600&q=80";
 
     const defaultData = [
-      { 
-        id: 1, 
-        tipo: "Adopcion", 
-        nombre: "Luna", 
-        especie: "Perro", 
-        ubicacion: "San Juan de Lurigancho", 
-        edad: "2 años", 
-        descripcion: "Rescatada en excelente estado de salud, muy cariñosa, entrenada en casa, esterilizada y con todas sus vacunas al día.",
-        imagen: IMG_PERRO_LUNA
-      },
-      { 
-        id: 2, 
-        tipo: "Adopcion", 
-        nombre: "Pochi", 
-        especie: "Gato", 
-        ubicacion: "Lima Centro", 
-        edad: "8 meses", 
-        descripcion: "Felino de temperamento tranquilo, perfectamente acostumbrado a la vida en departamento, uso de arenero y muy sociable.",
-        imagen: IMG_GATO_POCHI
-      },
-      { 
-        id: 3, 
-        tipo: "Alerta", 
-        nombre: "Peluche", 
-        especie: "Perro", 
-        ubicacion: "SJL - Zárate", 
-        edad: "Desconocida", 
-        descripcion: "Reportado deambulando desorientado cerca de la zona comercial. Se busca urgentemente a sus propietarios o a una familia temporal dispuesta a brindarle refugio.",
-        imagen: IMG_PERRO_PELUCHE
-      },
-      {
-        id: 101,
-        tipo: "Accesorio",
-        nombre: "Polera Térmica Abrigadora",
-        categoria: "Ropa",
-        precio: "S/. 25.00",
-        ubicacion: "San Juan de Lurigancho",
-        edad: "Nuevo",
-        descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para mascotas medianas.",
-        imagen: IMG_ROPA_POLERA
-      },
-      {
-        id: 104,
-        tipo: "Accesorio",
-        nombre: "Bebedero Automático Portátil para Perro",
-        categoria: "Comederos",
-        precio: "S/. 30.00",
-        ubicacion: "Miraflores",
-        edad: "Nuevo",
-        descripcion: "Bebedero y dispensador de agua portátil ideal para paseos largos y viajes con tu perrito.",
-        imagen: IMG_BEBEDERO_PERRO
-      },
-      {
-        id: 103,
-        tipo: "Accesorio",
-        nombre: "Juguete Interactivo Mordedor de Goma",
-        categoria: "Juguetes",
-        precio: "S/. 15.00",
-        ubicacion: "Miraflores",
-        edad: "Nuevo",
-        descripcion: "Juguete de goma resistente para limpieza dental y entretenimiento antiestrés para cachorros y perros adultos.",
-        imagen: IMG_JUGUETE_GOMA
-      }
+      { id: 1, tipo: "Adopcion", nombre: "Luna", especie: "Perro", ubicacion: "San Juan de Lurigancho", edad: "2 años", descripcion: "Rescatada en excelente estado de salud, muy cariñosa, entrenada en casa, esterilizada y con todas sus vacunas al día.", imagen: IMG_PERRO_LUNA },
+      { id: 2, tipo: "Adopcion", nombre: "Pochi", especie: "Gato", ubicacion: "Lima Centro", edad: "8 meses", descripcion: "Felino de temperamento tranquilo, perfectamente acostumbrado a la vida en departamento, uso de arenero y muy sociable.", imagen: IMG_GATO_POCHI },
+      { id: 3, tipo: "Alerta", nombre: "Peluche", especie: "Perro", ubicacion: "SJL - Zárate", edad: "No especificada", descripcion: "Reportado deambulando desorientado cerca de la zona comercial. Se busca urgentemente a sus propietarios.", imagen: IMG_PERRO_PELUCHE },
+      { id: 101, tipo: "Accesorio", nombre: "Polera Térmica Abrigadora", categoria: "Ropa", precio: "S/. 25.00", ubicacion: "San Juan de Lurigancho", edad: "Nuevo", descripcion: "Ropa abrigadora de lana acojinada ideal para temporada de frío. Talla M para mascotas medianas.", imagen: IMG_ROPA_POLERA },
+      { id: 104, tipo: "Accesorio", nombre: "Bebedero Automático Portátil", categoria: "Comederos", precio: "S/. 30.00", ubicacion: "Miraflores", edad: "Nuevo", descripcion: "Bebedero y dispensador de agua portátil ideal para paseos largos y viajes con tu perrito.", imagen: IMG_BEBEDERO_PERRO },
+      { id: 103, tipo: "Accesorio", nombre: "Juguete Interactivo Mordedor", categoria: "Juguetes", precio: "Gratis", ubicacion: "Miraflores", edad: "Nuevo", descripcion: "Juguete de goma resistente para limpieza dental y entretenimiento antiestrés. Donación gratuita.", imagen: IMG_JUGUETE_GOMA }
     ];
 
-    // GESTIÓN DE PUBLICACIONES (v16)
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v16");
+      const data = localStorage.getItem("refugio_mascotas_v17");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v16", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v17", JSON.stringify(defaultData));
         return defaultData;
       }
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        return defaultData;
-      }
+      try { return JSON.parse(data); } catch (e) { return defaultData; }
     }
 
     function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas_v16", JSON.stringify(list));
+      try {
+        localStorage.setItem("refugio_mascotas_v17", JSON.stringify(list));
+        return true;
+      } catch (e) {
+        console.error("Error al guardar en localStorage (cuota superada):", e);
+        alert("El almacenamiento local se ha llenado debido al tamaño de la imagen. Intenta con una imagen más liviana.");
+        return false;
+      }
     }
 
-    // FUNCIONES DEL MODAL DE PAGO QR YAPE
+    // COMPRESOR DE IMÁGENES CON CANVAS (Ancho máx 800px, JPEG 70%)
+    function comprimirImagen(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const MAX_WIDTH = 800;
+
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     function abrirModalPago(nombreProducto, precioProducto) {
       const modal = document.getElementById('modalPagoQR');
       const titulo = document.getElementById('tituloModalPago');
       const subtitulo = document.getElementById('subtituloModalPago');
       const imgQR = document.getElementById('imagenQRModal');
       
-      if (imgQR) imgQR.src = "[cite: 7] https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"; // Enlace directo a tu QR oficial de Yape
-
+      if (imgQR) imgQR.src = QR_YAPE_OFICIAL;
       if (modal) {
         if (titulo) titulo.textContent = `Pago: ${nombreProducto}`;
         if (subtitulo) subtitulo.textContent = `Escanea el código QR en Yape para pagar ${precioProducto}.`;
@@ -611,21 +589,12 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    // GESTIÓN DE CUENTAS
     function getUsuarioActual() {
-      try {
-        return JSON.parse(localStorage.getItem("refugio_usuario"));
-      } catch (e) {
-        return null;
-      }
+      try { return JSON.parse(localStorage.getItem("refugio_usuario")); } catch (e) { return null; }
     }
 
     function getUsersDatabase() {
-      try {
-        return JSON.parse(localStorage.getItem("refugio_cuentas")) || [];
-      } catch (e) {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem("refugio_cuentas")) || []; } catch (e) { return []; }
     }
 
     function saveUserDatabase(users) {
@@ -634,15 +603,10 @@
 
     function escaparHTML(valor) {
       return String(valor ?? '').replace(/[&<>"']/g, c => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[c]));
     }
 
-    // AUTENTICACIÓN Y REGISTRO
     function switchAuthTab(tab) {
       const formLogin = document.getElementById('formAuthLogin');
       const formReg = document.getElementById('formAuthRegister');
@@ -651,7 +615,6 @@
       const tabRegBtn = document.getElementById('tabRegBtn');
 
       if (stepVerify) stepVerify.classList.add('hidden');
-
       if (tab === 'login') {
         if (formLogin) formLogin.classList.remove('hidden');
         if (formReg) formReg.classList.add('hidden');
@@ -667,21 +630,15 @@
 
     function procesarLogin(e) {
       e.preventDefault();
-      const emailInput = document.getElementById('loginEmail');
-      const passInput = document.getElementById('loginPass');
-      if (!emailInput || !passInput) return;
-
-      const email = emailInput.value.trim().toLowerCase();
-      const pass = passInput.value;
-
-      const db = getUsersDatabase();
-      const match = db.find(u => u.email && u.email.toLowerCase() === email && u.pass === pass);
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPass').value;
+      const match = getUsersDatabase().find(u => u.email && u.email.toLowerCase() === email && u.pass === pass);
 
       if (match) {
         localStorage.setItem("refugio_usuario", JSON.stringify(match));
         desbloquearApp();
       } else {
-        alert("Correo o contraseña incorrectos. Si eres nuevo, por favor crea una cuenta.");
+        alert("Correo o contraseña incorrectos.");
       }
     }
 
@@ -689,7 +646,6 @@
       const selectRol = document.getElementById('regRolUser');
       const campos = document.getElementById('camposVeterinaria');
       if (!selectRol || !campos) return;
-
       const esVet = selectRol.value === 'Veterinario';
       campos.classList.toggle('hidden', !esVet);
       ['regClinica','regColegiatura','regTelefonoVet','regUbicacionVet'].forEach(id => {
@@ -700,29 +656,18 @@
 
     function iniciarRegistro(e) {
       e.preventDefault();
-      const emailInput = document.getElementById('regEmailUser');
-      const nombreInput = document.getElementById('regNombreUser');
-      const rolInput = document.getElementById('regRolUser');
-      const passInput = document.getElementById('regPassUser');
-
-      if (!emailInput || !nombreInput || !rolInput || !passInput) return;
-
-      const email = emailInput.value.trim().toLowerCase();
-      const nombre = nombreInput.value.trim();
-      const rol = rolInput.value;
-      const pass = passInput.value;
+      const email = document.getElementById('regEmailUser').value.trim().toLowerCase();
+      const nombre = document.getElementById('regNombreUser').value.trim();
+      const rol = document.getElementById('regRolUser').value;
+      const pass = document.getElementById('regPassUser').value;
       const db = getUsersDatabase();
 
       if (db.some(u => u.email && u.email.toLowerCase() === email)) {
-        alert('Ya existe una cuenta con ese correo. Inicia sesión o utiliza otro correo.');
+        alert('Ya existe una cuenta con ese correo.');
         return;
       }
       if (pass.length < 8) {
         alert('La contraseña debe tener al menos 8 caracteres.');
-        return;
-      }
-      if (rol === 'Veterinario' && (!document.getElementById('regClinica').value.trim() || !document.getElementById('regColegiatura').value.trim() || !document.getElementById('regTelefonoVet').value.trim() || !document.getElementById('regUbicacionVet').value.trim())) {
-        alert('Completa los datos profesionales obligatorios para solicitar una cuenta veterinaria.');
         return;
       }
 
@@ -741,82 +686,37 @@
       };
 
       const submitBtn = e.target.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.innerText : '';
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Enviando código...';
-      }
-      const templateParams = { to_email: email, to_name: nombre, pin_code: tempGeneratedPIN };
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Enviando código...'; }
 
-      if (typeof emailjs === 'undefined' || !emailjs || typeof emailjs.send !== 'function') {
-        alert('No se pudo conectar con el servicio de correo. Revisa la conexión e inténtalo nuevamente.');
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerText = originalText;
-        }
-        tempGeneratedPIN = null;
-        tempUserData = null;
-        return;
-      }
-
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: email, to_name: nombre, pin_code: tempGeneratedPIN })
         .then(() => {
-          const formReg = document.getElementById('formAuthRegister');
-          const stepVerify = document.getElementById('stepVerificacionEmail');
-          const msgVerify = document.getElementById('mensajeVerificacion');
-          const inputPin = document.getElementById('inputPIN');
-
-          if (formReg) formReg.classList.add('hidden');
-          if (stepVerify) stepVerify.classList.remove('hidden');
-          if (msgVerify) msgVerify.textContent = 'Revisa tu correo electrónico e introduce el código de 6 dígitos que recibiste. No compartas ese código.';
-          if (inputPin) {
-            inputPin.value = '';
-            inputPin.focus();
-          }
+          document.getElementById('formAuthRegister').classList.add('hidden');
+          document.getElementById('stepVerificacionEmail').classList.remove('hidden');
+          document.getElementById('mensajeVerificacion').textContent = 'Introduce el código PIN de 6 dígitos que recibiste en tu correo.';
         })
-        .catch(error => {
-          console.error('Error al enviar EmailJS:', error);
-          alert('No se pudo enviar el código. Verifica la configuración de EmailJS y vuelve a intentarlo.');
-          tempGeneratedPIN = null;
-          tempUserData = null;
-        })
-        .finally(() => {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = originalText;
-          }
+        .catch(err => {
+          alert('Error al enviar correo de verificación.');
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Enviar Código de Verificación'; }
         });
     }
 
     function confirmarPIN() {
-      const inputPin = document.getElementById('inputPIN');
-      if (!inputPin) return;
-      const input = inputPin.value.trim();
-
+      const input = document.getElementById('inputPIN').value.trim();
       if (input === tempGeneratedPIN) {
         const db = getUsersDatabase();
-        if (!tempUserData || db.some(u => u.email && u.email.toLowerCase() === tempUserData.email)) {
-          alert('No se pudo completar el registro. Vuelve a iniciar el proceso.');
-          return;
-        }
         db.push(tempUserData);
         saveUserDatabase(db);
         localStorage.setItem("refugio_usuario", JSON.stringify(tempUserData));
-        const mensaje = tempUserData.rol === 'Veterinario'
-          ? 'Correo verificado. Tu solicitud veterinaria quedó pendiente de revisión; mientras tanto, no podrás publicar adopciones.'
-          : 'Correo verificado con éxito. Tu cuenta ha sido creada.';
-        alert(mensaje);
-        tempGeneratedPIN = null;
-        tempUserData = null;
+        alert('¡Cuenta creada y verificada con éxito!');
+        tempGeneratedPIN = null; tempUserData = null;
         desbloquearApp();
       } else {
-        alert("El código PIN ingresado es incorrecto. Por favor verifica el código recibido.");
+        alert("PIN incorrecto.");
       }
     }
 
     function desbloquearApp() {
-      const authWall = document.getElementById('authWall');
-      if (authWall) authWall.classList.add('hidden');
+      document.getElementById('authWall').classList.add('hidden');
       actualizarBotonSesion();
       showSection('inicio');
     }
@@ -830,7 +730,6 @@
       const area = document.getElementById('authNavArea');
       if (!area) return;
       const user = getUsuarioActual();
-
       if (user) {
         area.innerHTML = `
           <div class="flex items-center gap-3">
@@ -838,30 +737,22 @@
             ${user.esAdmin ? '<button onclick="showSection(\'admin\')" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg cursor-pointer">Admin</button>' : ''}
             <span class="text-xs font-medium text-slate-600 hidden sm:inline">${escaparHTML(user.nombre)}</span>
             <button onclick="cerrarSesion()" class="text-xs text-rose-500 hover:text-rose-700 font-semibold cursor-pointer">Salir</button>
-          </div>
-        `;
+          </div>`;
       } else {
         area.innerHTML = `<button onclick="abrirInicioSesion()" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg cursor-pointer">Iniciar sesión</button>`;
       }
     }
 
     function abrirInicioSesion() {
-      const authWall = document.getElementById('authWall');
-      if (authWall) authWall.classList.remove('hidden');
+      document.getElementById('authWall').classList.remove('hidden');
       switchAuthTab('login');
     }
 
-    // CONTROL DE VISTAS
     function showSection(secId) {
       const user = getUsuarioActual();
-      if (!user) {
-        const authWall = document.getElementById('authWall');
-        if (authWall) authWall.classList.remove('hidden');
-        return;
-      }
+      if (!user) { document.getElementById('authWall').classList.remove('hidden'); return; }
 
-      const secciones = ['inicio', 'adopciones', 'alertas', 'accesorios', 'veterinarias', 'reportar', 'admin', 'donar'];
-      secciones.forEach(id => {
+      ['inicio', 'adopciones', 'alertas', 'accesorios', 'veterinarias', 'reportar', 'admin', 'donar'].forEach(id => {
         const el = document.getElementById(`sec-${id}`);
         if (el) el.classList.add('hidden');
       });
@@ -875,29 +766,32 @@
       if (secId === 'veterinarias') renderVeterinarias();
       if (secId === 'reportar') verificarPermisoTipo();
       if (secId === 'donar') {
-        const qrDonar = document.getElementById('qrDonacionImg');
-        if (qrDonar) qrDonar.src = "[cite: 7] https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"; // Asignar QR correcto en sección donar
+        const qr = document.getElementById('qrDonacionImg');
+        if (qr) qr.src = QR_YAPE_OFICIAL;
       }
       if (secId === 'admin') {
-        if (!user.esAdmin) {
-          alert('Acceso exclusivo para el administrador.');
-          showSection('inicio');
-          return;
-        }
-        renderAdminTable();
-        renderTablaVeterinariasAdmin();
+        if (!user.esAdmin) { alert('Acceso exclusivo para el administrador.'); showSection('inicio'); return; }
+        renderAdminTable(); renderTablaVeterinariasAdmin();
       }
     }
 
-    // RENDERIZADOS
+    // RENDERIZADO ADOPCIONES CON BOTÓN ACTIVO
     function renderAdopciones(filtro) {
       const grid = document.getElementById('gridAdopciones');
       if (!grid) return;
       const lista = getMascotas().filter(m => m.tipo === "Adopcion");
+      const filtrados = filtro === 'Todos' ? lista : lista.filter(m => m.especie === filtro);
 
-      const filtrados = filtro === 'Todos'
-        ? lista
-        : lista.filter(m => m.especie === filtro);
+      ['Todos', 'Perro', 'Gato'].forEach(cat => {
+        const btn = document.getElementById(`btnAdop-${cat}`);
+        if (btn) {
+          if (cat === filtro) {
+            btn.className = "px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white cursor-pointer transition";
+          } else {
+            btn.className = "px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer transition";
+          }
+        }
+      });
 
       if (filtrados.length === 0) {
         grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay mascotas en adopción en este momento.</p>`;
@@ -924,16 +818,14 @@
             </div>
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Apto para adopción</span>
-              <button onclick="alert('Solicitud de adopción enviada con éxito a la veterinaria responsable.')" class="px-4 py-2 bg-brand-600 text-white text-xs rounded-xl font-medium hover:bg-brand-700 cursor-pointer shadow-sm">Solicitar Adopción</button>
+              <button onclick="alert('Solicitud de adopción enviada con éxito.')" class="px-4 py-2 bg-brand-600 text-white text-xs rounded-xl font-medium hover:bg-brand-700 cursor-pointer shadow-sm">Solicitar Adopción</button>
             </div>
           </div>
         </div>
       `).join('');
     }
 
-    function filterPets(especie) {
-      renderAdopciones(especie);
-    }
+    function filterPets(especie) { renderAdopciones(especie); }
 
     function renderAlertas() {
       const grid = document.getElementById('gridAlertas');
@@ -941,7 +833,7 @@
       const lista = getMascotas().filter(m => m.tipo === "Alerta");
 
       if (lista.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay alertas activas registradas.</p>`;
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay alertas activas.</p>`;
         return;
       }
 
@@ -951,22 +843,20 @@
           <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
             <div class="space-y-2">
               <div class="flex justify-between items-start">
-                <h3 class="font-bold text-slate-800 text-lg">${escaparHTML(item.nombre)}</h3>
+                <h3 class="font-bold text-slate-800 text-lg">${escaparHTML(item.nombre || 'Caso sin nombre')}</h3>
                 <span class="px-2.5 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">Alerta Urgente</span>
               </div>
               <div class="space-y-1 text-xs text-slate-500">
-                <p><i class="fa-solid fa-paw mr-1.5 text-rose-500"></i><strong>Especie:</strong> ${escaparHTML(item.especie)}</p>
-                <p><i class="fa-solid fa-location-dot mr-1.5 text-rose-500"></i><strong>Lugar del reporte:</strong> ${escaparHTML(item.ubicacion)}</p>
-                <p><i class="fa-solid fa-clock mr-1.5 text-rose-500"></i><strong>Condición física / Edad:</strong> ${escaparHTML(item.edad || 'No especificada')}</p>
+                <p><i class="fa-solid fa-location-dot mr-1.5 text-rose-500"></i><strong>Lugar:</strong> ${escaparHTML(item.ubicacion)}</p>
+                <p><i class="fa-solid fa-clock mr-1.5 text-rose-500"></i><strong>Condición:</strong> ${escaparHTML(item.edad || 'No especificada')}</p>
               </div>
               <div class="pt-2 border-t border-slate-100">
-                <p class="text-xs font-semibold uppercase text-slate-400 mb-1">Detalles específicos del caso:</p>
                 <p class="text-sm text-slate-600 leading-relaxed">${escaparHTML(item.descripcion)}</p>
               </div>
             </div>
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
               <span class="text-xs text-rose-600 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Requiere apoyo</span>
-              <button onclick="alert('Gracias por tu interés en ayudar. Comunícate al punto de referencia indicado para brindar asistencia.')" class="px-4 py-2 bg-rose-600 text-white text-xs rounded-xl font-medium hover:bg-rose-700 cursor-pointer shadow-sm">Ofrecer Ayuda</button>
+              <button onclick="alert('Gracias por tu interés en ayudar.')" class="px-4 py-2 bg-rose-600 text-white text-xs rounded-xl font-medium hover:bg-rose-700 cursor-pointer shadow-sm">Ofrecer Ayuda</button>
             </div>
           </div>
         </div>
@@ -977,76 +867,78 @@
       const grid = document.getElementById('gridAccesorios');
       if (!grid) return;
       const lista = getMascotas().filter(m => m.tipo === "Accesorio");
+      const filtrados = categoriaFiltro === 'Todos' ? lista : lista.filter(m => m.categoria === categoriaFiltro);
 
-      const filtrados = categoriaFiltro === 'Todos'
-        ? lista
-        : lista.filter(m => m.categoria === categoriaFiltro);
-
-      const botones = ['Todos', 'Ropa', 'Comederos', 'Juguetes', 'Otros'];
-      botones.forEach(cat => {
+      ['Todos', 'Ropa', 'Comederos', 'Juguetes', 'Otros'].forEach(cat => {
         const btn = document.getElementById(`btnAcc-${cat}`);
         if (btn) {
-          if (cat === categoriaFiltro) {
-            btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white cursor-pointer transition";
-          } else {
-            btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition";
-          }
+          btn.className = (cat === categoriaFiltro)
+            ? "px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-white cursor-pointer transition"
+            : "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-amber-50 text-slate-600 cursor-pointer transition";
         }
       });
 
       if (filtrados.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay accesorios publicados en esta categoría actualmente.</p>`;
+        grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-8">No hay accesorios en esta categoría.</p>`;
         return;
       }
 
-      grid.innerHTML = filtrados.map(item => `
-        <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
-          <img src="${escaparHTML(item.imagen)}" class="w-full h-52 object-cover" alt="${escaparHTML(item.nombre)}">
-          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-            <div class="space-y-2">
-              <div class="flex justify-between items-start">
-                <h3 class="font-bold text-slate-800 text-base">${escaparHTML(item.nombre)}</h3>
-                <span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold">${escaparHTML(item.precio || 'Gratis')}</span>
+      grid.innerHTML = filtrados.map(item => {
+        const precioLower = (item.precio || '').toLowerCase();
+        const esGratis = precioLower.includes('gratis') || precioLower.includes('donacion') || precioLower === '0' || precioLower === 's/. 0.00';
+        
+        const botonAccion = esGratis
+          ? `<button onclick="alert('Este artículo es gratuito/donación. Comunícate al punto indicado.')" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 cursor-pointer shadow-sm"><i class="fa-solid fa-hand-holding-heart mr-1"></i> Contactar / Donación</button>`
+          : `<button onclick="abrirModalPago('${escaparHTML(item.nombre)}', '${escaparHTML(item.precio)}')" class="px-4 py-2 bg-purple-600 text-white text-xs rounded-xl font-medium hover:bg-purple-700 cursor-pointer shadow-sm"><i class="fa-solid fa-qrcode mr-1"></i> Pagar con Yape</button>`;
+
+        return `
+          <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
+            <img src="${escaparHTML(item.imagen)}" class="w-full h-52 object-cover" alt="${escaparHTML(item.nombre)}">
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <div class="flex justify-between items-start">
+                  <h3 class="font-bold text-slate-800 text-base">${escaparHTML(item.nombre)}</h3>
+                  <span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold">${escaparHTML(item.precio || 'Gratis')}</span>
+                </div>
+                <div class="space-y-1 text-xs text-slate-500">
+                  <p><i class="fa-solid fa-location-dot mr-1.5 text-amber-500"></i><strong>Ubicación:</strong> ${escaparHTML(item.ubicacion)}</p>
+                  <p><i class="fa-solid fa-box-open mr-1.5 text-amber-500"></i><strong>Estado:</strong> ${escaparHTML(item.edad || 'Nuevo')}</p>
+                </div>
+                <div class="pt-2 border-t border-slate-100">
+                  <p class="text-sm text-slate-600 leading-relaxed">${escaparHTML(item.descripcion)}</p>
+                </div>
               </div>
-              <div class="space-y-1 text-xs text-slate-500">
-                <p><i class="fa-solid fa-tag mr-1.5 text-amber-500"></i><strong>Categoría:</strong> ${escaparHTML(item.categoria === 'Comederos' ? 'Comederos / Bebederos' : item.categoria)}</p>
-                <p><i class="fa-solid fa-location-dot mr-1.5 text-amber-500"></i><strong>Ubicación:</strong> ${escaparHTML(item.ubicacion)}</p>
-                <p><i class="fa-solid fa-box-open mr-1.5 text-amber-500"></i><strong>Estado del artículo:</strong> ${escaparHTML(item.edad || 'Nuevo')}</p>
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-xs text-slate-400">Disponible</span>
+                ${botonAccion}
               </div>
-              <div class="pt-2 border-t border-slate-100">
-                <p class="text-xs font-semibold uppercase text-slate-400 mb-1">Descripción del producto:</p>
-                <p class="text-sm text-slate-600 leading-relaxed">${escaparHTML(item.descripcion)}</p>
-              </div>
-            </div>
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-xs text-slate-400">Disponible</span>
-              <button onclick="abrirModalPago('${escaparHTML(item.nombre)}', '${escaparHTML(item.precio || 'S/. 0.00')}');" class="px-4 py-2 bg-purple-600 text-white text-xs rounded-xl font-medium hover:bg-purple-700 cursor-pointer shadow-sm"><i class="fa-solid fa-qrcode mr-1"></i> Pagar con Yape</button>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    function filterAccesorios(cat) {
-      renderAccesorios(cat);
-    }
+    function filterAccesorios(cat) { renderAccesorios(cat); }
 
+    // VALIDACIÓN DINÁMICA DE CAMPOS SEGÚN TIPO
     function cambiarFormularioPorTipo() {
-      const tipoEl = document.getElementById('regTipo');
+      const tipo = document.getElementById('regTipo').value;
       const grupoMascota = document.getElementById('grupoCamposMascota');
       const grupoAccesorio = document.getElementById('grupoCamposAccesorio');
+      const regNombre = document.getElementById('regNombre');
+      const lblNombre = document.getElementById('lblNombre');
       const lblEdad = document.getElementById('lblEdad');
-      if (!tipoEl) return;
 
-      const tipo = tipoEl.value;
       if (tipo === 'Accesorio') {
         if (grupoMascota) grupoMascota.classList.add('hidden');
         if (grupoAccesorio) grupoAccesorio.classList.remove('hidden');
-        if (lblEdad) lblEdad.textContent = 'Estado del artículo';
+        if (regNombre) regNombre.required = false; // Desactivar required para evitar bloqueo
+        if (lblEdad) lblEdad.textContent = 'Estado del artículo (Ej: Nuevo, Poco uso)';
       } else {
         if (grupoMascota) grupoMascota.classList.remove('hidden');
         if (grupoAccesorio) grupoAccesorio.classList.add('hidden');
-        if (lblEdad) lblEdad.textContent = 'Edad o Tiempo estimado';
+        if (regNombre) regNombre.required = true;
+        if (lblEdad) lblEdad.textContent = 'Edad o Tiempo estimado (Ej: 1 año)';
       }
     }
 
@@ -1057,83 +949,59 @@
       if (!selectTipo) return;
 
       if (user && ((user.rol === 'Veterinario' && user.vet && user.vet.estado === 'aprobado') || user.esAdmin)) {
-        const optionAdop = selectTipo.querySelector('option[value="Adopcion"]');
-        if (optionAdop) optionAdop.disabled = false;
+        selectTipo.querySelector('option[value="Adopcion"]').disabled = false;
         if (notice) notice.classList.add('hidden');
       } else {
         selectTipo.value = "Alerta";
-        const optionAdop = selectTipo.querySelector('option[value="Adopcion"]');
-        if (optionAdop) optionAdop.disabled = true;
+        selectTipo.querySelector('option[value="Adopcion"]').disabled = true;
         if (notice) notice.classList.remove('hidden');
       }
       cambiarFormularioPorTipo();
     }
 
-    function guardarNuevoRegistro(e) {
+    // GUARDADO SEGURO CON COMPRESIÓN DE IMAGEN
+    async function guardarNuevoRegistro(e) {
       e.preventDefault();
       const user = getUsuarioActual();
-      const tipoEl = document.getElementById('regTipo');
-      if (!tipoEl) return;
-      const tipo = tipoEl.value;
+      const tipo = document.getElementById('regTipo').value;
 
-      if (!user) {
-        alert('Inicia sesión para publicar.');
-        abrirInicioSesion();
-        return;
-      }
+      if (!user) { alert('Inicia sesión para publicar.'); abrirInicioSesion(); return; }
 
-      if (tipo === 'Adopcion' && !user.esAdmin &&
-          !(user.rol === 'Veterinario' && user.vet && user.vet.estado === 'aprobado')) {
-        alert('Únicamente las veterinarias registradas pueden publicar animales en adopción.');
+      if (tipo === 'Adopcion' && !user.esAdmin && !(user.rol === 'Veterinario' && user.vet && user.vet.estado === 'aprobado')) {
+        alert('Solo las veterinarias aprobadas pueden publicar adopciones.');
         return;
       }
 
       const fileInput = document.getElementById('regImagenFile');
-      
+      let imagenBase64 = null;
+
       if (fileInput && fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(uploadEvent) {
-          procesarGuardadoConImagen(uploadEvent.target.result);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        procesarGuardadoConImagen(null);
+        // Comprimir imagen para no reventar el localStorage
+        imagenBase64 = await comprimirImagen(fileInput.files[0]);
       }
-    }
 
-    function procesarGuardadoConImagen(imagenBase64) {
-      const tipoEl = document.getElementById('regTipo');
-      if (!tipoEl) return;
-      const tipo = tipoEl.value;
       const lista = getMascotas();
-
       let nombreItem = '';
       let especieItem = 'Perro';
       let categoriaItem = 'Otros';
       let precioItem = '';
+      let edadPorDefecto = 'No especificada';
 
       if (tipo === 'Accesorio') {
-        const catAcc = document.getElementById('regCategoriaAcc');
-        const precioAcc = document.getElementById('regPrecioAcc');
-        categoriaItem = catAcc ? catAcc.value : 'Otros';
-        precioItem = (precioAcc ? precioAcc.value.trim() : '') || 'Gratis';
+        categoriaItem = document.getElementById('regCategoriaAcc').value;
+        precioItem = document.getElementById('regPrecioAcc').value.trim() || 'Gratis';
         nombreItem = `Accesorio: ${categoriaItem}`;
+        edadPorDefecto = 'Nuevo';
       } else {
-        const regNom = document.getElementById('regNombre');
-        const regEsp = document.getElementById('regEspecie');
-        nombreItem = regNom ? regNom.value.trim() : '';
-        especieItem = regEsp ? regEsp.value : 'Perro';
+        nombreItem = document.getElementById('regNombre').value.trim();
+        especieItem = document.getElementById('regEspecie').value;
       }
 
       const imagenPorDefecto = tipo === 'Accesorio' 
-        ? IMG_ROPA_POLERA
-        : (especieItem === 'Gato'
-            ? IMG_GATO_POCHI
-            : IMG_PERRO_LUNA);
+        ? IMG_ROPA_POLERA 
+        : (especieItem === 'Gato' ? IMG_GATO_POCHI : IMG_PERRO_LUNA);
 
-      const ubicacionEl = document.getElementById('regUbicacion');
-      const edadEl = document.getElementById('regEdad');
-      const descEl = document.getElementById('regDescripcion');
+      const edadInput = document.getElementById('regEdad').value.trim();
 
       const nuevo = {
         id: Date.now(),
@@ -1142,42 +1010,33 @@
         especie: especieItem,
         categoria: categoriaItem,
         precio: precioItem,
-        ubicacion: ubicacionEl ? ubicacionEl.value.trim() : '',
-        edad: (edadEl ? edadEl.value.trim() : '') || 'Nuevo',
-        descripcion: descEl ? descEl.value.trim() : '',
+        ubicacion: document.getElementById('regUbicacion').value.trim(),
+        edad: edadInput || edadPorDefecto,
+        descripcion: document.getElementById('regDescripcion').value.trim(),
         imagen: imagenBase64 || imagenPorDefecto
       };
 
       lista.unshift(nuevo);
-      saveMascotas(lista);
+      
+      // Intentar guardar con manejo de try/catch
+      const guardadoExitoso = saveMascotas(lista);
 
-      const formReg = document.getElementById('formNuevoRegistro');
-      if (formReg) formReg.reset();
-      alert('¡Publicación creada con éxito!');
-
-      if (nuevo.tipo === 'Adopcion') {
-        showSection('adopciones');
-      } else if (nuevo.tipo === 'Accesorio') {
-        showSection('accesorios');
-      } else {
-        showSection('alertas');
+      if (guardadoExitoso) {
+        document.getElementById('formNuevoRegistro').reset();
+        alert('¡Publicación creada con éxito!');
+        if (tipo === 'Adopcion') showSection('adopciones');
+        else if (tipo === 'Accesorio') showSection('accesorios');
+        else showSection('alertas');
       }
     }
 
     function renderVeterinarias() {
       const grid = document.getElementById('gridVeterinarias');
       if (!grid) return;
-      const vets = getUsersDatabase().filter(
-        u => u.rol === 'Veterinario' && u.vet && u.vet.estado === 'aprobado'
-      );
+      const vets = getUsersDatabase().filter(u => u.rol === 'Veterinario' && u.vet && u.vet.estado === 'aprobado');
 
       if (!vets.length) {
-        grid.innerHTML = `
-          <div class="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center">
-            <i class="fa-solid fa-user-doctor text-3xl text-slate-300"></i>
-            <p class="mt-3 font-semibold text-slate-700">Todavía no hay perfiles veterinarios verificados</p>
-            <p class="mt-1 text-sm text-slate-500">Las cuentas aparecerán aquí cuando el administrador revise y apruebe sus credenciales.</p>
-          </div>`;
+        grid.innerHTML = `<div class="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center text-slate-500">No hay perfiles veterinarios verificados por el momento.</div>`;
         return;
       }
 
@@ -1187,89 +1046,56 @@
             <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl">
               <i class="fa-solid fa-user-doctor"></i>
             </div>
-            <div class="min-w-0">
+            <div>
               <h3 class="font-bold text-slate-800">${escaparHTML(v.nombre)}</h3>
-              <p class="text-sm text-slate-500">${escaparHTML(v.vet.clinica || 'Consultorio veterinario')}</p>
+              <p class="text-sm text-slate-500">${escaparHTML(v.vet.clinica)}</p>
             </div>
           </div>
           <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-            <i class="fa-solid fa-circle-check"></i> Perfil revisado
+            <i class="fa-solid fa-circle-check"></i> Verificada
           </span>
-          <p class="text-sm text-slate-600"><i class="fa-solid fa-id-card mr-2 text-slate-400"></i>Colegiatura: ${escaparHTML(v.vet.colegiatura || 'No indicada')}</p>
-          <p class="text-sm text-slate-600"><i class="fa-solid fa-location-dot mr-2 text-slate-400"></i>${escaparHTML(v.vet.ubicacion || 'Ubicación no indicada')}</p>
-          <p class="text-sm text-slate-600"><i class="fa-solid fa-phone mr-2 text-slate-400"></i>${escaparHTML(v.vet.telefono || 'Contacto no indicado')}</p>
-          <p class="text-xs text-slate-500">${escaparHTML(v.email)}</p>
-          ${v.vet.prueba ? `<a class="inline-block text-sm text-brand-700 underline break-all" href="${escaparHTML(v.vet.prueba)}" target="_blank" rel="noopener noreferrer">Ver referencia profesional</a>` : ''}
+          <p class="text-sm text-slate-600"><i class="fa-solid fa-id-card mr-2 text-slate-400"></i>Colegiatura: ${escaparHTML(v.vet.colegiatura)}</p>
+          <p class="text-sm text-slate-600"><i class="fa-solid fa-location-dot mr-2 text-slate-400"></i>${escaparHTML(v.vet.ubicacion)}</p>
+          <p class="text-sm text-slate-600"><i class="fa-solid fa-phone mr-2 text-slate-400"></i>${escaparHTML(v.vet.telefono)}</p>
         </article>`).join('');
     }
 
     function renderTablaVeterinariasAdmin() {
       const tbody = document.getElementById('tablaVeterinariasAdmin');
       if (!tbody) return;
-
       const vets = getUsersDatabase().filter(u => u.rol === 'Veterinario');
 
       if (!vets.length) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay solicitudes veterinarias.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay solicitudes.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = vets.map(v => {
-        const estado = v.vet?.estado || 'pendiente';
-
-        return `<tr>
+      tbody.innerHTML = vets.map(v => `
+        <tr>
           <td class="p-3">
             <div class="font-semibold">${escaparHTML(v.nombre)}</div>
-            <div class="text-xs text-slate-500">${escaparHTML(v.vet?.clinica || 'Sin clínica indicada')}</div>
-            <div class="text-xs text-slate-500">${escaparHTML(v.email)}</div>
-            ${v.vet?.prueba ? `<a class="text-xs text-brand-700 underline" href="${escaparHTML(v.vet.prueba)}" target="_blank" rel="noopener noreferrer">Ver documento/referencia</a>` : ''}
+            <div class="text-xs text-slate-500">${escaparHTML(v.vet?.clinica)}</div>
           </td>
-          <td class="p-3">${escaparHTML(v.vet?.colegiatura || 'No indicada')}</td>
-          <td class="p-3">${escaparHTML(v.vet?.telefono || '—')}<br>${escaparHTML(v.vet?.ubicacion || '')}</td>
-          <td class="p-3">
-            <span class="rounded-full px-2 py-1 text-xs ${estado === 'aprobado' ? 'bg-emerald-100 text-emerald-700' : estado === 'rechazado' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'}">
-              ${estado === 'aprobado' ? 'Aprobada' : estado === 'rechazado' ? 'Rechazada' : 'Pendiente'}
-            </span>
+          <td class="p-3">${escaparHTML(v.vet?.colegiatura)}</td>
+          <td class="p-3">${escaparHTML(v.vet?.telefono)}</td>
+          <td class="p-3"><span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-800">${escaparHTML(v.vet?.estado)}</span></td>
+          <td class="p-3 flex gap-2">
+            <button onclick="actualizarEstadoVet('${encodeURIComponent(v.email)}','aprobado')" class="text-xs text-emerald-700 font-bold cursor-pointer">Aprobar</button>
+            <button onclick="actualizarEstadoVet('${encodeURIComponent(v.email)}','rechazado')" class="text-xs text-rose-700 font-bold cursor-pointer">Rechazar</button>
           </td>
-          <td class="p-3">
-            <div class="flex flex-wrap gap-2">
-              <button onclick="actualizarEstadoVeterinario('${encodeURIComponent(v.email)}','aprobado')" class="text-xs font-semibold text-emerald-700 cursor-pointer">Aprobar</button>
-              <button onclick="actualizarEstadoVeterinario('${encodeURIComponent(v.email)}','rechazado')" class="text-xs font-semibold text-rose-700 cursor-pointer">Rechazar</button>
-            </div>
-          </td>
-        </tr>`;
-      }).join('');
+        </tr>`).join('');
     }
 
-    function actualizarEstadoVeterinario(emailCodificado, estado) {
-      const actual = getUsuarioActual();
-
-      if (!actual || !actual.esAdmin) {
-        alert('Acceso exclusivo para el administrador.');
-        return;
-      }
-
-      const email = decodeURIComponent(emailCodificado);
+    function actualizarEstadoVet(emailEnc, estado) {
+      const email = decodeURIComponent(emailEnc);
       const db = getUsersDatabase();
-      const vet = db.find(u => u.email && u.email.toLowerCase() === email.toLowerCase() && u.rol === 'Veterinario');
-
-      if (!vet || !vet.vet) {
-        alert('No se encontró la solicitud veterinaria.');
-        return;
+      const vet = db.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (vet && vet.vet) {
+        vet.vet.estado = estado;
+        saveUserDatabase(db);
+        renderTablaVeterinariasAdmin();
+        alert(`Estado actualizado a: ${estado}`);
       }
-
-      vet.vet.estado = estado;
-      saveUserDatabase(db);
-
-      const sesion = getUsuarioActual();
-      if (sesion && sesion.email && sesion.email.toLowerCase() === email.toLowerCase()) {
-        localStorage.setItem('refugio_usuario', JSON.stringify(vet));
-      }
-
-      renderTablaVeterinariasAdmin();
-      alert(estado === 'aprobado'
-        ? 'Perfil veterinario aprobado.'
-        : 'Solicitud veterinaria marcada como rechazada.');
     }
 
     function renderAdminTable() {
@@ -1277,45 +1103,37 @@
       if (!tbody) return;
       const lista = getMascotas();
 
-      if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros guardados.</td></tr>`;
+      if (!lista.length) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay publicaciones.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = lista.map(item => `
         <tr class="hover:bg-slate-50">
           <td class="p-4 font-medium text-slate-800">${escaparHTML(item.nombre)}</td>
-          <td class="p-4">
-            <span class="px-2 py-0.5 rounded text-xs ${item.tipo === 'Adopcion' ? 'bg-sky-100 text-sky-700' : item.tipo === 'Accesorio' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}">${escaparHTML(item.tipo)}</span>
-          </td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-xs bg-slate-100">${escaparHTML(item.tipo)}</span></td>
           <td class="p-4 text-slate-500">${escaparHTML(item.ubicacion)}</td>
           <td class="p-4 text-right">
-            <button onclick="eliminarMascota(${item.id})" class="text-rose-500 hover:text-rose-700 text-xs font-semibold cursor-pointer">Eliminar</button>
+            <button onclick="eliminarRegistro(${item.id})" class="text-rose-500 hover:text-rose-700 text-xs font-semibold cursor-pointer">Eliminar</button>
           </td>
-        </tr>
-      `).join('');
+        </tr>`).join('');
     }
 
-    function eliminarMascota(id) {
-      if (confirm("¿Estás seguro de que deseas eliminar este registro?")) {
-        let lista = getMascotas();
-        lista = lista.filter(m => m.id !== id);
+    function eliminarRegistro(id) {
+      if (confirm("¿Deseas eliminar este registro?")) {
+        let lista = getMascotas().filter(m => m.id !== id);
         saveMascotas(lista);
         renderAdminTable();
       }
     }
 
-    // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       mostrarCamposVeterinaria();
       actualizarBotonSesion();
-      const user = getUsuarioActual();
-
-      if (user) {
+      if (getUsuarioActual()) {
         desbloquearApp();
       } else {
-        const authWall = document.getElementById('authWall');
-        if (authWall) authWall.classList.remove('hidden');
+        document.getElementById('authWall').classList.remove('hidden');
       }
     });
   </script>
