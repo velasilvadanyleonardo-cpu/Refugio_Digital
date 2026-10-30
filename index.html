@@ -114,7 +114,7 @@
         </div>
         <div id="camposVeterinaria" class="hidden space-y-3 rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
           <p class="text-sm font-bold text-emerald-900"><i class="fa-solid fa-user-doctor mr-1"></i> Datos para verificar la cuenta veterinaria</p>
-          <p class="text-xs text-slate-600">Estos datos ayudan a revisar la solicitud. La cuenta no se mostrará como verificada hasta que el administrador revise la información.</p>
+          <p class="text-xs text-slate-600">Estos datos ayudan a revisar la solicitud. La cuenta no se mostrará como revisada hasta que el administrador apruebe la información.</p>
           <div>
             <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Nombre de la clínica o consultorio</label>
             <input type="text" id="regClinica" placeholder="Ej.: Clínica Veterinaria Huellitas" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
@@ -134,7 +134,7 @@
             </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Enlace a perfil profesional o documento (opcional)</label>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Enlace a perfil profesional o documento (https://...)</label>
             <input type="url" id="regPruebaVet" placeholder="https://..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
           </div>
         </div>
@@ -142,7 +142,7 @@
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Contraseña</label>
           <input type="password" id="regPassUser" required minlength="8" placeholder="Mínimo 8 caracteres" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500">
         </div>
-        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md cursor-pointer">
+        <button type="submit" id="btnSubmitRegistro" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md cursor-pointer">
           Enviar Código de Verificación
         </button>
       </form>
@@ -193,12 +193,12 @@
     </div>
   </header>
 
-  <!-- BARRA DE NAVEGACIÓN MÓVIL (VISIBLE SOLO EN PANTALLAS PEQUEÑAS) -->
+  <!-- BARRA DE NAVEGACIÓN MÓVIL (INCLUYE VETERINARIAS) -->
   <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-40 flex justify-around items-center py-2 px-1 text-slate-600 text-xs shadow-lg">
-    <button onclick="showSection('inicio')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-house text-sm"></i><span>Inicio</span></button>
     <button onclick="showSection('adopciones')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-dog text-sm"></i><span>Adoptar</span></button>
     <button onclick="showSection('alertas')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-triangle-exclamation text-sm"></i><span>Alertas</span></button>
     <button onclick="showSection('accesorios')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-bag-shopping text-sm"></i><span>Tienda</span></button>
+    <button onclick="showSection('veterinarias')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-user-doctor text-sm"></i><span>Vets</span></button>
     <button onclick="showSection('donar')" class="flex flex-col items-center gap-0.5 text-purple-600 font-bold"><i class="fa-solid fa-heart text-sm"></i><span>Donar</span></button>
     <button onclick="showSection('reportar')" class="flex flex-col items-center gap-0.5 hover:text-brand-600"><i class="fa-solid fa-plus-circle text-sm"></i><span>Publicar</span></button>
   </div>
@@ -253,12 +253,12 @@
           <p class="text-sm text-slate-500">Reportes específicos de mascotas perdidas o en situación de riesgo.</p>
         </div>
 
-        <div onclick="showSection('accesorios')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition space-y-3">
-          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
-            <i class="fa-solid fa-shirt"></i>
+        <div onclick="showSection('veterinarias')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition space-y-3">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-user-doctor"></i>
           </div>
-          <h3 class="font-bold text-slate-800 text-lg">Accesorios y Tienda</h3>
-          <p class="text-sm text-slate-500">Ropa, comederos, bebederos, juguetes interactivos y correas.</p>
+          <h3 class="font-bold text-slate-800 text-lg">Veterinarias</h3>
+          <p class="text-sm text-slate-500">Encuentra perfiles y profesionales revisados por la administración.</p>
         </div>
 
         <div onclick="showSection('donar')" class="cursor-pointer bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-purple-200 transition space-y-3">
@@ -346,7 +346,7 @@
     <!-- SECCIÓN: VETERINARIAS VERIFICADAS -->
     <section id="sec-veterinarias" class="hidden space-y-6">
       <div class="border-b border-slate-200 pb-4">
-        <h2 class="text-2xl font-bold text-slate-800">Veterinarias Verificadas</h2>
+        <h2 class="text-2xl font-bold text-slate-800">Veterinarias Revisadas</h2>
         <p class="text-sm text-slate-500">Perfiles profesionales revisados detalladamente por la administración de Refugio Digital.</p>
       </div>
       <div id="gridVeterinarias" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -361,7 +361,7 @@
       </div>
 
       <div id="vetNotice" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
-        <i class="fa-solid fa-circle-info mr-1"></i> Nota: La opción de <strong>"Mascota en Adopción"</strong> está habilitada únicamente para cuentas de <strong>Veterinaria</strong> o Administrador.
+        <i class="fa-solid fa-circle-info mr-1"></i> Nota: La opción de <strong>"Mascota en Adopción"</strong> está habilitada únicamente para cuentas de <strong>Veterinaria</strong> aprobadas o Administrador.
       </div>
 
       <form id="formNuevoRegistro" onsubmit="guardarNuevoRegistro(event)" class="space-y-4">
@@ -431,7 +431,7 @@
           <textarea id="regDescripcion" rows="3" required placeholder="Detalla el estado, tamaño, material o características..." class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500"></textarea>
         </div>
 
-        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md cursor-pointer">
+        <button type="submit" id="btnSubmitPublicacion" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium transition shadow-md cursor-pointer">
           Publicar Registro Detallado
         </button>
       </form>
@@ -479,28 +479,28 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1 mb-12 md:mb-0">
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 space-y-1 mb-16 md:mb-0">
     <p class="font-medium text-slate-500">Refugio Digital &copy; 2026</p>
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT AVANZADO V17 -->
+  <!-- SCRIPT AVANZADO V18 -->
   <script>
-    if (!localStorage.getItem("refugio_v17_actualizado")) {
-      for(let i=8; i<=16; i++) localStorage.removeItem("refugio_mascotas_v" + i);
-      localStorage.setItem("refugio_v17_actualizado", "true");
+    if (!localStorage.getItem("refugio_v18_actualizado")) {
+      for(let i=8; i<=17; i++) localStorage.removeItem("refugio_mascotas_v" + i);
+      localStorage.setItem("refugio_v18_actualizado", "true");
     }
 
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
     const EMAILJS_SERVICE_ID  = "service_ed8dvbu";
     const EMAILJS_TEMPLATE_ID = "template_qzi7zxc";
 
-    if (typeof emailjs !== 'undefined') {
+    if (typeof emailjs !== 'undefined' && typeof emailjs.init === 'function') {
       emailjs.init(EMAILJS_PUBLIC_KEY);
     }
 
     const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
-    const QR_YAPE_OFICIAL = "qr-yape.png"; // Constante global requerida
+    const QR_YAPE_OFICIAL = "qr-yape.png";
     let tempUserData = null;
     let tempGeneratedPIN = null;
 
@@ -522,9 +522,9 @@
     ];
 
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v17");
+      const data = localStorage.getItem("refugio_mascotas_v18");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v17", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v18", JSON.stringify(defaultData));
         return defaultData;
       }
       try { return JSON.parse(data); } catch (e) { return defaultData; }
@@ -532,7 +532,7 @@
 
     function saveMascotas(list) {
       try {
-        localStorage.setItem("refugio_mascotas_v17", JSON.stringify(list));
+        localStorage.setItem("refugio_mascotas_v18", JSON.stringify(list));
         return true;
       } catch (e) {
         console.error("Error al guardar en localStorage (cuota superada):", e);
@@ -541,9 +541,9 @@
       }
     }
 
-    // COMPRESOR DE IMÁGENES CON CANVAS (Ancho máx 800px, JPEG 70%)
+    // COMPRESOR ROBUSTO CON CANVAS, FONDO BLANCO Y GESTIÓN DE ERRORES
     function comprimirImagen(file) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = function(e) {
           const img = new Image();
@@ -561,10 +561,19 @@
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
+            // Pintar fondo blanco para evitar fondo negro en PNG transparentes
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, width, height);
             ctx.drawImage(img, 0, 0, width, height);
             resolve(canvas.toDataURL('image/jpeg', 0.7));
           };
+          img.onerror = function() {
+            reject(new Error('El archivo no pudo ser decodificado como imagen.'));
+          };
           img.src = e.target.result;
+        };
+        reader.onerror = function() {
+          reject(new Error('Error al leer el archivo.'));
         };
         reader.readAsDataURL(file);
       });
@@ -581,6 +590,15 @@
         if (titulo) titulo.textContent = `Pago: ${nombreProducto}`;
         if (subtitulo) subtitulo.textContent = `Escanea el código QR en Yape para pagar ${precioProducto}.`;
         modal.classList.remove('hidden');
+      }
+    }
+
+    // PAGO SEGURO POR ID (BLINDADO CONTRA INYECCIÓN DE COMILLAS)
+    function abrirModalPagoPorId(id) {
+      const lista = getMascotas();
+      const item = lista.find(m => m.id === id);
+      if (item) {
+        abrirModalPago(item.nombre, item.precio || 'S/. 0.00');
       }
     }
 
@@ -605,6 +623,10 @@
       return String(valor ?? '').replace(/[&<>"']/g, c => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[c]));
+    }
+
+    function normalizarTexto(str) {
+      return (str || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
 
     function switchAuthTab(tab) {
@@ -654,6 +676,7 @@
       });
     }
 
+    // REGISTRO ROBUSTO CON CONTROL DE BLOQUEADORES Y .FINALLY
     function iniciarRegistro(e) {
       e.preventDefault();
       const email = document.getElementById('regEmailUser').value.trim().toLowerCase();
@@ -685,8 +708,18 @@
         } : null
       };
 
-      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const submitBtn = document.getElementById('btnSubmitRegistro');
+      const originalText = submitBtn ? submitBtn.innerText : '';
       if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Enviando código...'; }
+
+      if (typeof emailjs === 'undefined' || typeof emailjs.send !== 'function') {
+        alert('El servicio de correo está bloqueado o no disponible. Simulación de código PIN completada.');
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
+        document.getElementById('formAuthRegister').classList.add('hidden');
+        document.getElementById('stepVerificacionEmail').classList.remove('hidden');
+        document.getElementById('mensajeVerificacion').textContent = `[Modo Offline/Bloqueador] Tu PIN simulado es: ${tempGeneratedPIN}`;
+        return;
+      }
 
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: email, to_name: nombre, pin_code: tempGeneratedPIN })
         .then(() => {
@@ -695,8 +728,11 @@
           document.getElementById('mensajeVerificacion').textContent = 'Introduce el código PIN de 6 dígitos que recibiste en tu correo.';
         })
         .catch(err => {
-          alert('Error al enviar correo de verificación.');
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Enviar Código de Verificación'; }
+          console.error(err);
+          alert('No se pudo enviar el correo de verificación. Verifica tu conexión.');
+        })
+        .finally(() => {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
         });
     }
 
@@ -749,6 +785,7 @@
     }
 
     function showSection(secId) {
+      window.scrollTo(0, 0); // Scroll automático al inicio de página (Punto 9)
       const user = getUsuarioActual();
       if (!user) { document.getElementById('authWall').classList.remove('hidden'); return; }
 
@@ -775,7 +812,6 @@
       }
     }
 
-    // RENDERIZADO ADOPCIONES CON BOTÓN ACTIVO
     function renderAdopciones(filtro) {
       const grid = document.getElementById('gridAdopciones');
       if (!grid) return;
@@ -785,11 +821,9 @@
       ['Todos', 'Perro', 'Gato'].forEach(cat => {
         const btn = document.getElementById(`btnAdop-${cat}`);
         if (btn) {
-          if (cat === filtro) {
-            btn.className = "px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white cursor-pointer transition";
-          } else {
-            btn.className = "px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer transition";
-          }
+          btn.className = (cat === filtro)
+            ? "px-4 py-1.5 rounded-lg text-sm bg-brand-600 text-white cursor-pointer transition"
+            : "px-4 py-1.5 rounded-lg text-sm bg-slate-100 hover:bg-brand-50 text-slate-600 cursor-pointer transition";
         }
       });
 
@@ -884,12 +918,12 @@
       }
 
       grid.innerHTML = filtrados.map(item => {
-        const precioLower = (item.precio || '').toLowerCase();
-        const esGratis = precioLower.includes('gratis') || precioLower.includes('donacion') || precioLower === '0' || precioLower === 's/. 0.00';
+        const normPrecio = normalizarTexto(item.precio);
+        const esGratis = normPrecio.includes('gratis') || normPrecio.includes('donacion') || normPrecio === '0' || normPrecio === 's/. 0.00';
         
         const botonAccion = esGratis
-          ? `<button onclick="alert('Este artículo es gratuito/donación. Comunícate al punto indicado.')" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 cursor-pointer shadow-sm"><i class="fa-solid fa-hand-holding-heart mr-1"></i> Contactar / Donación</button>`
-          : `<button onclick="abrirModalPago('${escaparHTML(item.nombre)}', '${escaparHTML(item.precio)}')" class="px-4 py-2 bg-purple-600 text-white text-xs rounded-xl font-medium hover:bg-purple-700 cursor-pointer shadow-sm"><i class="fa-solid fa-qrcode mr-1"></i> Pagar con Yape</button>`;
+          ? `<button onclick="alert('Este artículo es gratuito / donación. Comunícate al punto de referencia indicado.')" class="px-4 py-2 bg-emerald-600 text-white text-xs rounded-xl font-medium hover:bg-emerald-700 cursor-pointer shadow-sm"><i class="fa-solid fa-hand-holding-heart mr-1"></i> Contactar / Donación</button>`
+          : `<button onclick="abrirModalPagoForIdSafe(${item.id})" class="px-4 py-2 bg-purple-600 text-white text-xs rounded-xl font-medium hover:bg-purple-700 cursor-pointer shadow-sm"><i class="fa-solid fa-qrcode mr-1"></i> Pagar con Yape</button>`;
 
         return `
           <div class="bg-white rounded-2xl border border-amber-100 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col">
@@ -918,21 +952,23 @@
       }).join('');
     }
 
+    function abrirModalPagoForIdSafe(id) {
+      abrirModalPagoPorId(id);
+    }
+
     function filterAccesorios(cat) { renderAccesorios(cat); }
 
-    // VALIDACIÓN DINÁMICA DE CAMPOS SEGÚN TIPO
     function cambiarFormularioPorTipo() {
       const tipo = document.getElementById('regTipo').value;
       const grupoMascota = document.getElementById('grupoCamposMascota');
       const grupoAccesorio = document.getElementById('grupoCamposAccesorio');
       const regNombre = document.getElementById('regNombre');
-      const lblNombre = document.getElementById('lblNombre');
       const lblEdad = document.getElementById('lblEdad');
 
       if (tipo === 'Accesorio') {
         if (grupoMascota) grupoMascota.classList.add('hidden');
         if (grupoAccesorio) grupoAccesorio.classList.remove('hidden');
-        if (regNombre) regNombre.required = false; // Desactivar required para evitar bloqueo
+        if (regNombre) regNombre.required = false;
         if (lblEdad) lblEdad.textContent = 'Estado del artículo (Ej: Nuevo, Poco uso)';
       } else {
         if (grupoMascota) grupoMascota.classList.remove('hidden');
@@ -959,7 +995,7 @@
       cambiarFormularioPorTipo();
     }
 
-    // GUARDADO SEGURO CON COMPRESIÓN DE IMAGEN
+    // GUARDADO SEGURO CON PROTECCIÓN CONTRA DOBLE CLIC Y COMPRESIÓN
     async function guardarNuevoRegistro(e) {
       e.preventDefault();
       const user = getUsuarioActual();
@@ -972,12 +1008,21 @@
         return;
       }
 
+      const btnSubmit = document.getElementById('btnSubmitPublicacion');
+      if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.innerText = 'Procesando imagen...'; }
+
       const fileInput = document.getElementById('regImagenFile');
       let imagenBase64 = null;
 
-      if (fileInput && fileInput.files && fileInput.files[0]) {
-        // Comprimir imagen para no reventar el localStorage
-        imagenBase64 = await comprimirImagen(fileInput.files[0]);
+      try {
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+          imagenBase64 = await comprimirImagen(fileInput.files[0]);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('No se pudo procesar la imagen seleccionada. Intenta con otro archivo.');
+        if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerText = 'Publicar Registro Detallado'; }
+        return;
       }
 
       const lista = getMascotas();
@@ -1017,9 +1062,9 @@
       };
 
       lista.unshift(nuevo);
-      
-      // Intentar guardar con manejo de try/catch
       const guardadoExitoso = saveMascotas(lista);
+
+      if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerText = 'Publicar Registro Detallado'; }
 
       if (guardadoExitoso) {
         document.getElementById('formNuevoRegistro').reset();
@@ -1036,7 +1081,7 @@
       const vets = getUsersDatabase().filter(u => u.rol === 'Veterinario' && u.vet && u.vet.estado === 'aprobado');
 
       if (!vets.length) {
-        grid.innerHTML = `<div class="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center text-slate-500">No hay perfiles veterinarios verificados por el momento.</div>`;
+        grid.innerHTML = `<div class="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center text-slate-500">No hay perfiles veterinarios revisados por el momento.</div>`;
         return;
       }
 
@@ -1052,7 +1097,7 @@
             </div>
           </div>
           <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-            <i class="fa-solid fa-circle-check"></i> Verificada
+            <i class="fa-solid fa-circle-check"></i> Perfil revisado
           </span>
           <p class="text-sm text-slate-600"><i class="fa-solid fa-id-card mr-2 text-slate-400"></i>Colegiatura: ${escaparHTML(v.vet.colegiatura)}</p>
           <p class="text-sm text-slate-600"><i class="fa-solid fa-location-dot mr-2 text-slate-400"></i>${escaparHTML(v.vet.ubicacion)}</p>
@@ -1070,11 +1115,16 @@
         return;
       }
 
-      tbody.innerHTML = vets.map(v => `
-        <tr>
+      tbody.innerHTML = vets.map(v => {
+        const pruebaLink = (v.vet?.prueba && v.vet.prueba.startsWith('https://'))
+          ? `<a class="text-xs text-brand-700 underline block mt-1" href="${escaparHTML(v.vet.prueba)}" target="_blank" rel="noopener noreferrer">Ver evidencia / perfil</a>`
+          : '';
+
+        return `<tr>
           <td class="p-3">
             <div class="font-semibold">${escaparHTML(v.nombre)}</div>
             <div class="text-xs text-slate-500">${escaparHTML(v.vet?.clinica)}</div>
+            ${pruebaLink}
           </td>
           <td class="p-3">${escaparHTML(v.vet?.colegiatura)}</td>
           <td class="p-3">${escaparHTML(v.vet?.telefono)}</td>
@@ -1083,16 +1133,30 @@
             <button onclick="actualizarEstadoVet('${encodeURIComponent(v.email)}','aprobado')" class="text-xs text-emerald-700 font-bold cursor-pointer">Aprobar</button>
             <button onclick="actualizarEstadoVet('${encodeURIComponent(v.email)}','rechazado')" class="text-xs text-rose-700 font-bold cursor-pointer">Rechazar</button>
           </td>
-        </tr>`).join('');
+        </tr>`;
+      }).join('');
     }
 
+    // ACTUALIZACIÓN DE ESTADO VET CON CONTROL ADMIN Y SINCRONIZACIÓN DE SESIÓN
     function actualizarEstadoVet(emailEnc, estado) {
+      const actual = getUsuarioActual();
+      if (!actual || !actual.esAdmin) {
+        alert('Acceso exclusivo para el administrador.');
+        return;
+      }
+
       const email = decodeURIComponent(emailEnc);
       const db = getUsersDatabase();
       const vet = db.find(u => u.email.toLowerCase() === email.toLowerCase());
       if (vet && vet.vet) {
         vet.vet.estado = estado;
         saveUserDatabase(db);
+
+        // Si el usuario actual es el veterinario modificado, actualiza su sesión activa
+        if (actual.email.toLowerCase() === vet.email.toLowerCase()) {
+          localStorage.setItem('refugio_usuario', JSON.stringify(vet));
+        }
+
         renderTablaVeterinariasAdmin();
         alert(`Estado actualizado a: ${estado}`);
       }
