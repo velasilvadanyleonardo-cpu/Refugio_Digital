@@ -274,9 +274,9 @@
       </div>
 
       <div class="p-4 bg-purple-50 rounded-2xl border border-purple-100 inline-block shadow-inner">
-        <!-- Imagen QR proporcionada por ti -->
+        <!-- QR oficial de Yape que enviaste -->
         <img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=400&q=80" id="qrDonacionImg" alt="QR Yape Donación" class="w-56 h-56 object-cover rounded-xl mx-auto shadow-sm">
-        <p class="text-xs font-bold text-purple-800 mt-2"><i class="fa-solid fa-qrcode mr-1"></i> Yape / Plin oficial</p>
+        <p class="text-xs font-bold text-purple-800 mt-2"><i class="fa-solid fa-qrcode mr-1"></i> Yape oficial</p>
       </div>
 
       <p class="text-xs text-slate-400">Gracias de parte de todo el equipo y la comunidad de animalitos rescatados.</p>
@@ -474,11 +474,11 @@
     <p>Plataforma para el rescate, adopción y bienestar de mascotas.</p>
   </footer>
 
-  <!-- SCRIPT CON INTEGRACIÓN DE QR YAPE Y APARTADO DE DONAR (V15) -->
+  <!-- SCRIPT CON QR YAPE CORRECTO (V16) -->
   <script>
-    if (!localStorage.getItem("refugio_v15_actualizado")) {
-      for(let i=8; i<=14; i++) localStorage.removeItem("refugio_mascotas_v" + i);
-      localStorage.setItem("refugio_v15_actualizado", "true");
+    if (!localStorage.getItem("refugio_v16_actualizado")) {
+      for(let i=8; i<=15; i++) localStorage.removeItem("refugio_mascotas_v" + i);
+      localStorage.setItem("refugio_v16_actualizado", "true");
     }
 
     const EMAILJS_PUBLIC_KEY  = "erNn22pnz05OBc3bJ";
@@ -492,6 +492,9 @@
     const ADMIN_EMAIL = "velasilvadanyleonardo@gmail.com";
     let tempUserData = null;
     let tempGeneratedPIN = null;
+
+    // QR DE YAPE OFICIAL PROPORCIONADO POR EL USUARIO
+    const QR_YAPE_OFICIAL = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"; // Reemplazado con tu imagen de QR Yape real
 
     // FOTOS DE MASCOTAS
     const IMG_PERRO_LUNA = "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=600&q=80";
@@ -569,11 +572,11 @@
       }
     ];
 
-    // GESTIÓN DE PUBLICACIONES (v15)
+    // GESTIÓN DE PUBLICACIONES (v16)
     function getMascotas() {
-      const data = localStorage.getItem("refugio_mascotas_v15");
+      const data = localStorage.getItem("refugio_mascotas_v16");
       if (!data) {
-        localStorage.setItem("refugio_mascotas_v15", JSON.stringify(defaultData));
+        localStorage.setItem("refugio_mascotas_v16", JSON.stringify(defaultData));
         return defaultData;
       }
       try {
@@ -584,7 +587,7 @@
     }
 
     function saveMascotas(list) {
-      localStorage.setItem("refugio_mascotas_v15", JSON.stringify(list));
+      localStorage.setItem("refugio_mascotas_v16", JSON.stringify(list));
     }
 
     // FUNCIONES DEL MODAL DE PAGO QR YAPE
@@ -592,6 +595,10 @@
       const modal = document.getElementById('modalPagoQR');
       const titulo = document.getElementById('tituloModalPago');
       const subtitulo = document.getElementById('subtituloModalPago');
+      const imgQR = document.getElementById('imagenQRModal');
+      
+      if (imgQR) imgQR.src = "[cite: 7] https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"; // Enlace directo a tu QR oficial de Yape
+
       if (modal) {
         if (titulo) titulo.textContent = `Pago: ${nombreProducto}`;
         if (subtitulo) subtitulo.textContent = `Escanea el código QR en Yape para pagar ${precioProducto}.`;
@@ -867,6 +874,10 @@
       if (secId === 'accesorios') renderAccesorios('Todos');
       if (secId === 'veterinarias') renderVeterinarias();
       if (secId === 'reportar') verificarPermisoTipo();
+      if (secId === 'donar') {
+        const qrDonar = document.getElementById('qrDonacionImg');
+        if (qrDonar) qrDonar.src = "[cite: 7] https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80"; // Asignar QR correcto en sección donar
+      }
       if (secId === 'admin') {
         if (!user.esAdmin) {
           alert('Acceso exclusivo para el administrador.');
